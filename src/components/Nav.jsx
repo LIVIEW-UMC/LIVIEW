@@ -1,43 +1,35 @@
 import styled from 'styled-components';
 import colors from '../styles/colors';
-import Search from '../assets/Search';
 import User from '../assets/User';
-import Setting from '../assets/Setting';
+import Logo from '../assets/Logo';
 import Alarm from '../assets/Alarm';
-import Map from '../assets/Map';
+import MoreOption from '../assets/MoreOption';
+import Search from '../assets/Search';
 
 function Nav() {
   return (
     <NavContainer>
-      <Menu>
-        <MenuItem>
-          <Map />
-          <Location>
-            울산광역시,
-            <br />
-            남구 대학로 23
-          </Location>
-        </MenuItem>
-        <MenuItem>
-          <div>메인화면</div>
-        </MenuItem>
-        <MenuItem>
-          <div>지도상 표기</div>
-        </MenuItem>
-      </Menu>
-      <Logo>LIVIEW</Logo>
+      <MainContent>
+        <Logo />
+        <LogoName>LIVIEW</LogoName>
+        <Home>홈</Home>
+        <Map>지도 만들기</Map>
+      </MainContent>
+      <SearchTab>
+        <SearchInput type="text" placeholder="검색" />
+        <SearchIcon>
+          <Search />
+        </SearchIcon>
+      </SearchTab>
       <Content>
         <ContentItem>
-          <Search />
+          <Alarm />
         </ContentItem>
         <ContentItem>
           <User />
         </ContentItem>
         <ContentItem>
-          <Setting />
-        </ContentItem>
-        <ContentItem>
-          <Alarm />
+          <MoreOption />
         </ContentItem>
       </Content>
     </NavContainer>
@@ -48,42 +40,59 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 70px;
+  height: 62px;
   box-sizing: border-box;
-  padding: 16px 17px;
+  padding: 8px 17px;
+  align-items: center;
 `;
 
-const Menu = styled.div`
+const MainContent = styled.div`
+  font-family: 'KNU20TRUTH-Regular';
+  width: 272px;
   display: flex;
   justify-content: space-between;
-  width: 282px;
-  height: 100%;
-  font-family: 'Pretendard-SemiBold';
-`;
-
-const MenuItem = styled.div`
-  display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100%;
 `;
 
-const Location = styled.div`
-  margin-left: 8px;
-  font-size: 12px;
-  color: ${colors.gray};
-`;
-
-const Logo = styled.div`
-  font-family: 'Kavoon-Regular';
-  font-size: 50px;
+const LogoName = styled.div`
+  font-size: 25px;
+  line-height: 15px;
   color: ${colors.mainColor};
+`;
+
+const Home = styled.div`
+  font-size: 15px;
+`;
+
+const Map = styled.div`
+  font-size: 15px;
+`;
+
+const SearchTab = styled.form`
+  position: relative;
+`;
+
+const SearchInput = styled.input`
+  width: 795px;
+  height: 31px;
+  padding-left: 50px;
+  border-radius: 30px;
+  border: none;
+  font-family: 'Pretendard-Regular';
+  font-size: 15px;
+  background-color: ${colors.lightGray};
+`;
+
+const SearchIcon = styled.div`
+  position: absolute;
+  top: 7px;
+  left: 20px;
 `;
 
 const Content = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 276px;
+  width: 144px;
   height: 100%;
 `;
 
