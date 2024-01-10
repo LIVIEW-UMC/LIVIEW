@@ -21,7 +21,10 @@ function Footer() {
       </FooterItem>
       <Hr />
       <FooterItem>
-        <Copyright>umc_5th @2023.자동일상기록어플</Copyright>
+        <Copyright>
+          umc_5th @2023.
+          <CopyrightName>자동일상기록어플</CopyrightName>
+        </Copyright>
         <Contact>
           <div>사이트 담당자</div>
           <div>개발 동기</div>
@@ -40,7 +43,7 @@ const FooterContainer = styled.div`
   width: 100%;
   height: 192px;
   padding: 33px;
-  background-color: ${colors.gray};
+  background-color: ${colors.mainDarkColor};
   color: white;
   box-sizing: border-box;
   position: absolute;
@@ -74,6 +77,11 @@ const Hr = styled.div`
 const Copyright = styled.div`
   font-family: 'Kavoon-Regular';
   font-size: 18px;
+  display: flex;
+`;
+
+const CopyrightName = styled.div`
+  font-family: 'Pretendard-SemiBold';
 `;
 
 const Contact = styled.div`
