@@ -134,6 +134,10 @@ table {
   border-spacing: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 @font-face {
   font-family: "Kavoon-Regular";
   font-weight: normal;
