@@ -46,8 +46,6 @@ const FooterContainer = styled.div`
   background-color: ${colors.mainDarkColor};
   color: white;
   box-sizing: border-box;
-  position: absolute;
-  bottom: 0;
 `;
 
 const FooterItem = styled.div`
