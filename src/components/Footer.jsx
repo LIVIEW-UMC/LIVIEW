@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import Youtube from '../assets/Youtube';
-import Facebook from '../assets/Facebook';
-import Twitter from '../assets/Twitter';
-import Instagram from '../assets/Instagram';
-import Linkedin from '../assets/Linkedin';
+import Youtube from '../assets/icon/Youtube';
+import Facebook from '../assets/icon/Facebook';
+import Twitter from '../assets/icon/Twitter';
+import Instagram from '../assets/icon/Instagram';
+import Linkedin from '../assets/icon/Linkedin';
 import colors from '../styles/colors';
 
 function Footer() {
