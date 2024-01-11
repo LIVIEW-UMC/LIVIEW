@@ -23,5 +23,8 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/function-component-definition': 'off',
+    'react/no-array-index-key': 'off',
+    'react/prop-types': 'off',
+    'operator-linebreak': 'off'
   },
 };
