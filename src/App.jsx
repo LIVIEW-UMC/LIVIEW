@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Nav from './components/header/Nav';
 import Footer from './components/Footer';
-// import SettingsSidebar from './components/SettingsSidebar';
 import Main from './pages/Main';
+import Settings from './pages/Settings';
 
 const App = () => (
   <div className="App">
@@ -12,7 +12,7 @@ const App = () => (
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
-        {/* <SettingsSidebar /> */}
+        <Route path="/settings" element={<Settings />} />
       </Routes>
       <Footer />
     </BrowserRouter>

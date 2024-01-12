@@ -13,7 +13,7 @@ function SettingsSidebar() {
 }
 
 const SettingsSidebarContainer = styled.div`
-  position: absolute;
+  position: fixed;
   width: 160px;
   height: 90vh;
   padding: 20px 30px 0px 10px;
