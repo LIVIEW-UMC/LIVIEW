@@ -6,11 +6,13 @@ function ClickedPost() {
     <ClickedPostContainer>
       <Title>조회한 게시물 확인 페이지</Title>
       <SubTitle>클릭을 통해 확인한 최근 게시물들이 기록되어 있습니다</SubTitle>
-      <ButtonContainer>
-        <DeleteAll>전체 삭제하기</DeleteAll>
-        <Delete>게시물 3개 삭제</Delete>
-      </ButtonContainer>
-      <DeleteNum>3개 선택됨</DeleteNum>
+      <DeleteContainer>
+        <ButtonContainer>
+          <DeleteAll>전체 삭제하기</DeleteAll>
+          <Delete>게시물 3개 삭제</Delete>
+        </ButtonContainer>
+        <DeleteNum>3개 선택됨</DeleteNum>
+      </DeleteContainer>
       <PostDiv />
       <Posts />
     </ClickedPostContainer>
@@ -18,7 +20,6 @@ function ClickedPost() {
 }
 
 const ClickedPostContainer = styled.div`
-  position: absolute;
   margin-left: 410px;
   margin-top: 60px;
 `;
@@ -39,10 +40,16 @@ const SubTitle = styled.div`
   font-weight: 400;
 `;
 
-const ButtonContainer = styled.div`
-  position: relative;
+const DeleteContainer = styled.div`
+  width: 481px;
   display: flex;
+  justify-content: space-between;
   margin-top: 40px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
 `;
 const DeleteAll = styled.button`
   padding: 5px 15px;
@@ -81,11 +88,10 @@ const Delete = styled.button`
 `;
 
 const DeleteNum = styled.div`
-  position: absolute;
   font-family: 'KNU20TRUTH-Regular';
   font-size: 15px;
-  margin-left: 415px;
-  top: 105px;
+  display: flex;
+  align-items: flex-end;
 `;
 
 const PostDiv = styled.div`

@@ -23,12 +23,9 @@ const GalleryContainer = styled.div`
 const Post = styled.img`
   width: 155px;
   height: 216px;
-  flex-shrink: 0;
   border-radius: 10px;
-  background: #d9d9d9;
-
   margin-bottom: 10px;
-  opacity: 0.8;
+  object-fit: cover;
 `;
 
 export default Posts;

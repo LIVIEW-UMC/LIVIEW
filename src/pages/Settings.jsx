@@ -13,6 +13,8 @@ function Settings() {
 
 const SettingsContainer = styled.div`
   position: relative;
+  width: 100%;
   min-height: 100vh;
+  z-index: -1;
 `;
 export default Settings;
