@@ -25,6 +25,7 @@ module.exports = {
     'react/function-component-definition': 'off',
     'react/no-array-index-key': 'off',
     'react/prop-types': 'off',
-    'operator-linebreak': 'off'
+    'operator-linebreak': 'off',
+    'linebreak-style': 'off',
   },
 };
