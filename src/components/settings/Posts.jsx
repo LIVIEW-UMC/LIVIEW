@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import check from '../../assets/check.svg';
+import check from '../../assets/icon/check.svg';
 
 const imageContext = require.context('../../assets/dummy', false, /\.(jpg)$/);
 
