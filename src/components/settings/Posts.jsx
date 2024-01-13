@@ -29,6 +29,7 @@ function Posts({ onCheckboxChange }) {
       {images.map((image, index) => (
         <ImagesContainer key={index + 1}>
           <Post src={image} alt={`img-${index}`} />
+          <PostsOverlay isChecked={checkBox[index]} />
           <PostsCheckbox onClick={() => handleCheckbox(index)} isChecked={checkBox[index]} />
         </ImagesContainer>
       ))}
@@ -43,6 +44,16 @@ const PostsContainer = styled.div`
 
 const ImagesContainer = styled.div`
   position: relative;
+`;
+
+const PostsOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 95%;
+  height: 95%;
+  border-radius: 10px;
+  background-color: ${({ isChecked }) => (isChecked ? 'rgba(186, 186, 186, 0.5)' : 'transparent')};
 `;
 
 const PostsCheckbox = styled.div`
