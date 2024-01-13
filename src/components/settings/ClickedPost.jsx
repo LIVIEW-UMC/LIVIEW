@@ -1,20 +1,33 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Posts from './Posts';
 
 function ClickedPost() {
+  const [selectedCount, setSelectedCount] = useState(0);
+
+  const handleCheckbox = (count) => {
+    setSelectedCount(count);
+  };
+
+  // 전제 삭제 (나중에 추가)
+  const handleDeleteAll = () => {};
+
+  // 선택한 post 삭제 (나중에 추가)
+  const handleDeleteSelected = () => {};
+
   return (
     <ClickedPostContainer>
       <Title>조회한 게시물 확인 페이지</Title>
       <SubTitle>클릭을 통해 확인한 최근 게시물들이 기록되어 있습니다</SubTitle>
       <DeleteContainer>
         <ButtonContainer>
-          <DeleteAll>전체 삭제하기</DeleteAll>
-          <Delete>게시물 3개 삭제</Delete>
+          <DeleteAll onClick={handleDeleteAll}>전체 삭제하기</DeleteAll>
+          {selectedCount > 0 && <Delete onClick={handleDeleteSelected}>{`게시물 ${selectedCount}개 삭제`}</Delete>}
         </ButtonContainer>
-        <DeleteNum>3개 선택됨</DeleteNum>
+        <DeleteNum>{selectedCount > 0 && `${selectedCount}개 선택됨`}</DeleteNum>
       </DeleteContainer>
       <PostDiv />
-      <Posts />
+      <Posts onCheckboxChange={handleCheckbox} />
     </ClickedPostContainer>
   );
 }

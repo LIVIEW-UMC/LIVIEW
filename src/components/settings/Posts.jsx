@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import check from '../../assets/check.svg';
 
 const imageContext = require.context('../../assets/dummy', false, /\.(jpg)$/);
 
-function Posts() {
+function Posts({ onCheckboxChange }) {
   const images = imageContext.keys().map(imageContext);
   const [checkBox, setCheckBox] = useState({});
 
+  // 체크박스 선택 변경, 만약 prev[index]가 true라면, 해당 함수 호출 시 false로 변경
   const handleCheckbox = (index) => {
-    setCheckBox((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
+    setCheckBox((prev) => {
+      const updatedCheckBox = {
+        ...prev,
+        [index]: !prev[index],
+      };
+
+      // 선택된 체크박수 개수를 onCheckboxChange로 전달
+      const selectedCount = Object.values(updatedCheckBox).filter((isChecked) => isChecked).length;
+      onCheckboxChange(selectedCount);
+
+      return updatedCheckBox;
+    });
   };
 
   return (
@@ -26,7 +35,6 @@ function Posts() {
     </PostsContainer>
   );
 }
-
 const PostsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -42,11 +50,13 @@ const PostsCheckbox = styled.div`
   width: 28px;
   height: 28px;
   top: 180px;
-  left: 118px;
+  left: 120px;
   background-color: ${({ isChecked }) => (isChecked ? '#2655FF' : '#989898')};
   border-radius: 5px;
   background-image: url(${check});
-  background-size: cover;
+  background-size: 70% 70%;
+  background-position: center;
+  background-repeat: no-repeat;
   cursor: pointer;
 `;
 
