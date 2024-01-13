@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import SettingsSidebar from '../components/settings/SettingsSidebar';
-import ClickedPost from '../components/settings/ClickedPost';
+import ClickedPost from '../components/settings/ClickedPost/ClickedPost';
 
-function Settings() {
+function ClickedPostPage() {
   return (
     <SettingsContainer>
       <SettingsSidebar />
@@ -12,8 +12,9 @@ function Settings() {
 }
 
 const SettingsContainer = styled.div`
+  display: flex;
   position: relative;
   width: 100%;
   min-height: 100vh;
 `;
-export default Settings;
+export default ClickedPostPage;

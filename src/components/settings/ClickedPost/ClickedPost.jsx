@@ -33,7 +33,6 @@ function ClickedPost() {
 }
 
 const ClickedPostContainer = styled.div`
-  position: absolute;
   margin-left: 410px;
   margin-top: 60px;
 `;
@@ -55,7 +54,7 @@ const SubTitle = styled.div`
 `;
 
 const DeleteContainer = styled.div`
-  width: 481px;
+  width: 800px;
   display: flex;
   justify-content: space-between;
   margin-top: 40px;

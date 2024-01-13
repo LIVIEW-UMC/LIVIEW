@@ -4,7 +4,7 @@ import './App.css';
 import Nav from './components/header/Nav';
 import Footer from './components/Footer';
 import Main from './pages/Main';
-import Settings from './pages/Settings';
+import ClickedPostPage from './pages/ClickedPostPage';
 
 const App = () => (
   <div className="App">
@@ -12,7 +12,7 @@ const App = () => (
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/clickedpostpage" element={<ClickedPostPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
