@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import check from '../../../assets/icon/check.svg';
+import EmptyPost from '../../../assets/icon/EmptyPost.svg';
+// import EmptyHole from '../../../assets/icon/EmptyHole.svg';
 
 const imageContext = require.context('../../../assets/dummy', false, /\.(jpg)$/);
 
@@ -23,7 +25,9 @@ function Posts({ onCheckboxChange }) {
       return updatedCheckBox;
     });
   };
-
+  if (images.length === 0) {
+    return <EmptyPostsContainer>아직 조회한 게시물이 없습니다!</EmptyPostsContainer>;
+  }
   return (
     <PostsContainer>
       {images.map((image, index) => (
@@ -77,6 +81,24 @@ const Post = styled.img`
   border-radius: 10px;
   margin-bottom: 10px;
   object-fit: cover;
+`;
+
+const EmptyPostsContainer = styled.div`
+  width: 155px;
+  height: 216px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  object-fit: cover;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 10px;
+  color: #a4a4a4;
+  font-family: 'KNU20TRUTH-Regular';
+  background-image: url(${EmptyPost});
 `;
 
 export default Posts;
