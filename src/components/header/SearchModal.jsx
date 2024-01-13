@@ -77,7 +77,7 @@ const SearchModalContainer = styled.div`
   position: absolute;
   top: 50px;
   left: 0px;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const RecentSearch = styled.div`

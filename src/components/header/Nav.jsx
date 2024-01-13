@@ -115,14 +115,14 @@ const SearchInput = styled.input`
   font-size: 15px;
   background-color: ${colors.lightGray};
   position: relative;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const SearchIcon = styled.div`
   position: absolute;
   top: 7px;
   left: 20px;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const Content = styled.div`
@@ -147,6 +147,7 @@ const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 `;
 
 export default Nav;
