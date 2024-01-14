@@ -25,9 +25,12 @@ function Posts({ onCheckboxChange }) {
       return updatedCheckBox;
     });
   };
+
+  // 확인한 post가 하나도 없을 때
   if (images.length === 0) {
     return <EmptyPostsContainer>아직 조회한 게시물이 없습니다!</EmptyPostsContainer>;
   }
+
   return (
     <PostsContainer>
       {images.map((image, index) => (
