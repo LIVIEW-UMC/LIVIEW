@@ -5,6 +5,7 @@ import Nav from './components/header/Nav';
 import Footer from './components/Footer';
 // import SettingsSidebar from './components/SettingsSidebar';
 import Main from './pages/Main';
+import Mypage from './pages/Mypage';
 
 const App = () => (
   <div className="App">
@@ -13,6 +14,7 @@ const App = () => (
       <Routes>
         <Route path="/" element={<Main />} />
         {/* <SettingsSidebar /> */}
+        <Route path="/mypage" element={<Mypage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
