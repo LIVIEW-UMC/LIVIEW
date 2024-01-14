@@ -8,6 +8,10 @@ const colors = {
   profileEmailColor: '#A4A4A4',
   followerProfileEditColor: '#262626',
   profileEditBackgroundColor: '#EDEDED',
+  sortBackgroundColor: '#FFFFFF',
+  sortOptontBackgroundColor: '#EEEEEE',
+  sortOptontBorderColor: '#7FC1FF',
+  postInfoColor: '#545454',
 };
 
 export default colors;
