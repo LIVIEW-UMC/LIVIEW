@@ -5,6 +5,7 @@ import Nav from './components/header/Nav';
 import Footer from './components/Footer';
 import Main from './pages/Main';
 import ClickedPostPage from './pages/ClickedPostPage';
+import Mypage from './pages/MyPage';
 
 const App = () => (
   <div className="App">
@@ -13,6 +14,8 @@ const App = () => (
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/clickedpostpage" element={<ClickedPostPage />} />
+        {/* <SettingsSidebar /> */}
+        <Route path="/mypage" element={<Mypage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
