@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import Youtube from '../assets/icon/Youtube';
-import Facebook from '../assets/icon/Facebook';
-import Twitter from '../assets/icon/Twitter';
-import Instagram from '../assets/icon/Instagram';
-import Linkedin from '../assets/icon/Linkedin';
-import colors from '../styles/colors';
+import Youtube from '../../assets/icon/Youtube';
+import Facebook from '../../assets/icon/Facebook';
+import Twitter from '../../assets/icon/Twitter';
+import Instagram from '../../assets/icon/Instagram';
+import Linkedin from '../../assets/icon/Linkedin';
+import colors from '../../styles/colors';
 
 function Footer() {
   return (

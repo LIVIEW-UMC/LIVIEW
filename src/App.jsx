@@ -2,28 +2,20 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Nav from './components/header/Nav';
-import Footer from './components/Footer';
-<<<<<<< Updated upstream
-import Main from './pages/Main';
+import Footer from './components/main/Footer';
+// import Main from './pages/Main';
+import ProfileEditPage from './components/main/ProfileEditPage';
 
 const App = () => (
   <div className="App">
     <BrowserRouter>
       <Nav />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<ProfileEditPage />} />
       </Routes>
       <Footer />
+      {/* <ProfileEditPage /> */}
     </BrowserRouter>
-=======
-import ProfileEditPage from './components/ProfileEditPage';
-
-const App = () => (
-  <div className="App">
-    <Nav />
-    <Footer />
-    <ProfileEditPage />
->>>>>>> Stashed changes
   </div>
 );
 

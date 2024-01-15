@@ -23,12 +23,9 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/function-component-definition': 'off',
-<<<<<<< Updated upstream
     'react/no-array-index-key': 'off',
     'react/prop-types': 'off',
-    'operator-linebreak': 'off'
-=======
-    'linebreak-style': ['error', 'unix'],
->>>>>>> Stashed changes
-  },
-};
+    'operator-linebreak': 'off',
+    'linebreak-style': ['error', 'unix']
+}
+}
