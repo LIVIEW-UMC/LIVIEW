@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-// eslint-disable-next-line import/no-unresolved
-import basicImage from './assets/profile/basic.png';
+import basicImage from '../assets/profile/basic.png';
 import SettingsSidebar from '../components/settings/SettingsSidebar';
 
 const ProfileEditPage = () => {
@@ -56,8 +55,8 @@ const ProfileEditPage = () => {
 
   return (
     <All>
+      <SettingsSidebar />
       <Container>
-        <SettingsSidebar />
         <ProfileTitleContainer>
           <Tilte>프로필 수정</Tilte>
           <Content>본인의 기록을 비공개로 설정하면 다른사람들이 본인의 게시물을 볼 수 없어요!!</Content>
@@ -140,16 +139,13 @@ const All = styled.div``;
 
 const Container = styled.div`
   position: relative;
-  width: 100%; /* 최대 너비 설정 */
-  max-width: 1000px; /* 최대 너비 설정 */
-  min-width: 600px; /* 최소 너비 설정 */
-  margin: 0 auto; /* 가운데 정렬을 위한 margin 설정 */
+  width: 100%;
+  max-width: 1000px;
+  min-width: 600px;
+  margin: 0 auto;
   display: inline-block;
-  flex-direction: column; /* 세로 방향으로 정렬 */
   padding-left: 500px;
   margin-bottom: 20px;
-  align-items: top;
-  justify-content: top;
 `;
 
 const ProfileTitleContainer = styled.div`
@@ -177,10 +173,8 @@ const Content = styled.div`
 
 const PhotoText = styled.div`
   display: block;
-  top: 10px; // 상단 여백 조절
-  // font-size: 14px;
-  // color: #333;
-  margin-top: 40px; // 수정된 부분
+  top: 10px;
+  margin-top: 40px;
   margin-bottom: 10px;
   margin-left: 8px;
   font-family: 'KNU20TRUTH-Regular';
@@ -261,19 +255,12 @@ const NameInput = styled.input`
   border-radius: 15px;
   border-width: 2px;
   font-family: 'KNU20TRUTH-Regular';
-  //font-weight: normal;
   font-size: 15px;
-  //font-width: 80px;
-  //font-height: 18px;
-  //padding: 10px, 130px, 10px, 10px;
   width: 220px;
   height: 30px;
   top: 454px;
   left: 411px;
   gap: 10px;
-  //margin-top: 20px;
-  // align-items: left;
-  // justify-content: left;
 `;
 
 const LastNameInput = styled.input`
@@ -282,11 +269,7 @@ const LastNameInput = styled.input`
   border-radius: 15px;
   border-width: 2px;
   font-family: 'KNU20TRUTH-Regular';
-  //font-weight: 2px;
   font-size: 15px;
-  //font-width: 80px;
-  //font-height: 18px;
-  //padding: 10px, 130px, 10px, 10px;
   width: 220px;
   height: 30px;
   top: 454px;
@@ -295,14 +278,14 @@ const LastNameInput = styled.input`
 `;
 
 const IntroductionContainer = styled.div`
-  top: 120px; // 이름 input 하단에 위치하도록 조절
+  top: 120px;
   left: 0;
   right: 0;
   font-size: 15px;
   color: #333;
   margin-top: 50px;
-  width: 476px; /* 고정된 Width 값으로 조절 */
-  height: 147px; /* 고정된 Height 값으로 조절 */
+  width: 476px;
+  height: 147px;
 `;
 
 const IntroductionText = styled.div`
