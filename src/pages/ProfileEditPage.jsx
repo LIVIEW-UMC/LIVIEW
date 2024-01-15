@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 // eslint-disable-next-line import/no-unresolved
 import basicImage from './assets/profile/basic.png';
-import SettingsSidebar from './SettingsSidebar';
+import SettingsSidebar from '../components/settings/SettingsSidebar';
 
 const ProfileEditPage = () => {
   const [profileImage, setProfileImage] = useState(basicImage);
