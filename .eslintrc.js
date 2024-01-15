@@ -26,6 +26,6 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'react/prop-types': 'off',
     'operator-linebreak': 'off',
-    'linebreak-style': ['error', 'unix']
-}
-}
+    'linebreak-style': ['error', 'unix'],
+  },
+};
