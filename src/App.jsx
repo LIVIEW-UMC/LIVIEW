@@ -7,7 +7,6 @@ import Main from './pages/Main';
 import ClickedPostPage from './pages/ClickedPostPage';
 import Mypage from './pages/MyPage';
 import ProfileEditPage from './pages/ProfileEditPage';
-import Login from './components/login/login';
 
 const App = () => (
   <div className="App">
@@ -18,7 +17,6 @@ const App = () => (
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/clickedpost" element={<ClickedPostPage />} />
         <Route path="/profile" element={<ProfileEditPage />} />
-        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </BrowserRouter>
