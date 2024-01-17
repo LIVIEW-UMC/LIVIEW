@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MasonryInfiniteGrid } from '@egjs/react-infinitegrid';
 import colors from '../../styles/colors';
@@ -13,26 +13,39 @@ function Initial() {
 
   const [isButtonVisible, setButtonVisible] = useState(true);
 
-  const downBtnClick = () => {
-    const viewportHeight = window.innerHeight;
-    const documentHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-    const scrollTo = documentHeight - viewportHeight - 192;
+  const downTargetRef = useRef(null);
 
+  const downBtnClick = () => {
+    downTargetRef.current.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      setButtonVisible(false);
+    }, 1500);
+  };
+
+  const UpBtnClick = () => {
     window.scroll({
-      top: scrollTo,
+      top: 0,
       left: 0,
       behavior: 'smooth',
     });
-    setButtonVisible(false);
+    setTimeout(() => {
+      setButtonVisible(true);
+    }, 1500);
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    const handleWheel = (event) => {
-      event.preventDefault();
+    window.scroll(0, 0);
+    const handleWheel = (e) => {
+      if (e.deltaY > 0) {
+        e.preventDefault();
+        downBtnClick();
+      } else if (e.deltaY < 0) {
+        e.preventDefault();
+        UpBtnClick();
+      }
     };
 
-    document.addEventListener('wheel', handleWheel, { passive: false });
+    // document.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       document.removeEventListener('wheel', handleWheel);
@@ -78,7 +91,7 @@ function Initial() {
           <DownArrow />
         </DownBtn>
       )}
-      <JoinIntroduction>
+      <JoinIntroduction ref={downTargetRef}>
         <PerLine>가입하여 더 많은</PerLine>
         <PerLine>기록을 자동으로</PerLine>
         <PerLine>남겨보세요</PerLine>
@@ -163,8 +176,9 @@ const JoinIntroduction = styled.div`
   align-items: center;
   color: white;
   position: absolute;
-  top: 1254px;
+  top: 800px;
   left: 140px;
+  padding-top: 300px;
   z-index: 1;
 `;
 
