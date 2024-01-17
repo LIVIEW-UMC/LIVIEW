@@ -5,12 +5,16 @@ function Login() {
 }
 
 const LoginContainer = styled.div`
-  width: 500px;
-  height: 727px;
+  position: absolute;
+  top: 1080px;
+  left: 1050px;
+
+  width: 440px;
+  height: 667px;
   border-radius: 20px;
   background: #fff;
   box-shadow: 0px 4px 6.8px 3px rgba(0, 0, 0, 0.25);
 
-  background: linear-gradient(#ffffff 92%, #e9e9e9 50%);
+  background: linear-gradient(#ffffff 93%, #e9e9e9 50%);
 `;
 export default Login;
