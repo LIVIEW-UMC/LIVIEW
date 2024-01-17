@@ -45,7 +45,7 @@ function Initial() {
       }
     };
 
-    // document.addEventListener('wheel', handleWheel, { passive: false });
+    document.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       document.removeEventListener('wheel', handleWheel);
