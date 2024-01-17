@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import TabNavigator from '../components/main/TabNavigator';
+import Initial from '../components/main/Initial';
 
 function Main() {
   return (
     <MainContainer>
-      <TabNavigator />
+      <Initial />
     </MainContainer>
   );
 }

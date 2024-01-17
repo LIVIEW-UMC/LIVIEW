@@ -27,5 +27,9 @@ module.exports = {
     'react/prop-types': 'off',
     'operator-linebreak': 'off',
     'linebreak-style': 'off',
+    'react/jsx-curly-brace-presence': 'off',
+    'no-nested-ternary': 'off',
+    'react/jsx-one-expression-per-line': 'off',
+    'max-len': 'off'
   },
 };
