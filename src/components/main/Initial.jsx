@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { MasonryInfiniteGrid } from '@egjs/react-infinitegrid';
 import colors from '../../styles/colors';
 import homeRoute from '../../assets/homeRoute.png';
@@ -11,26 +11,22 @@ const imageContext = require.context('../../assets/main', false, /\.(png)$/);
 function Initial() {
   const images = imageContext.keys().map(imageContext);
 
-  const [isButtonVisible, setButtonVisible] = useState(true);
+  const [isScrollDown, setScrollDown] = useState(false);
 
   const downTargetRef = useRef(null);
 
-  const downBtnClick = () => {
+  const scrollDown = () => {
     downTargetRef.current.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-      setButtonVisible(false);
-    }, 1500);
+    setScrollDown(true);
   };
 
-  const UpBtnClick = () => {
+  const scrollUp = () => {
     window.scroll({
       top: 0,
       left: 0,
       behavior: 'smooth',
     });
-    setTimeout(() => {
-      setButtonVisible(true);
-    }, 1500);
+    setScrollDown(false);
   };
 
   useEffect(() => {
@@ -38,10 +34,10 @@ function Initial() {
     const handleWheel = (e) => {
       if (e.deltaY > 0) {
         e.preventDefault();
-        downBtnClick();
+        scrollDown();
       } else if (e.deltaY < 0) {
         e.preventDefault();
-        UpBtnClick();
+        scrollUp();
       }
     };
 
@@ -86,11 +82,9 @@ function Initial() {
           ))}
         </MasonryInfiniteGrid>
       </GalleryContainer>
-      {isButtonVisible && (
-        <DownBtn onClick={downBtnClick}>
-          <DownArrow />
-        </DownBtn>
-      )}
+      <DownBtn onClick={scrollDown} isScrollDown={isScrollDown}>
+        <DownArrow />
+      </DownBtn>
       <JoinIntroduction ref={downTargetRef}>
         <PerLine>가입하여 더 많은</PerLine>
         <PerLine>기록을 자동으로</PerLine>
@@ -152,10 +146,22 @@ const GalleryItem = styled.img`
   border-radius: 15px;
 `;
 
+const DownBtnMove = keyframes`
+    100% {
+        transform: translateY(-30px);
+    }
+`;
+
 const DownBtn = styled.div`
   position: fixed;
   bottom: 20px;
   z-index: 1;
+  animation: ${DownBtnMove} 1s 2s infinite cubic-bezier(0.4, 0, 1, 1) alternate;
+  visibility: ${(props) => (props.isScrollDown ? 'hidden' : 'visible')};
+  opacity: ${(props) => (props.isScrollDown ? 0 : 1)};
+  transition:
+    visibility 1.5s,
+    opacity 1.5s;
 `;
 
 const Shadow = styled.div`
