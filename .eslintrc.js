@@ -30,6 +30,9 @@ module.exports = {
     'react/jsx-curly-brace-presence': 'off',
     'no-nested-ternary': 'off',
     'react/jsx-one-expression-per-line': 'off',
-    'max-len': 'off'
+    'max-len': 'off',
+    'object-curly-newline': 'off',
+    'implicit-arrow-linebreak': 'off',
+    'function-paren-newline': 'off'
   },
 };
