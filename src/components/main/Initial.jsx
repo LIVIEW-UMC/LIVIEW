@@ -174,7 +174,7 @@ const Shadow = styled.div`
 
 const JoinIntroduction = styled.div`
   font-family: JalnanGothicTTF-Regular;
-  font-size: 40px;
+  font-size: 50px;
   line-height: 181%;
   letter-spacing: 3.6px;
   display: flex;
@@ -183,8 +183,8 @@ const JoinIntroduction = styled.div`
   color: white;
   position: absolute;
   top: 800px;
-  left: 140px;
-  padding-top: 300px;
+  left: 120px;
+  padding-top: 250px;
   z-index: 1;
 `;
 
