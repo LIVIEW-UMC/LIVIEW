@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 import CheckMark from '../../assets/icon/CheckMark';
 
-function SortModal() {
+function SortModal({ Name }) {
   const [selectedOption, setSelectedOption] = useState('option1');
 
   const handleOptionSelect = (option) => {
@@ -11,7 +11,12 @@ function SortModal() {
   };
 
   return (
-    <SortModalContainer>
+    <SortModalContainer
+      className={Name}
+      onClick={(event) => {
+        event.stopPropagation();
+      }}
+    >
       <Sort>정렬기준</Sort>
       <SortOptionCotainer onClick={() => handleOptionSelect('option1')}>
         <SortOption>지역별 분류</SortOption>
@@ -36,13 +41,12 @@ const SortModalContainer = styled.div`
   border-radius: 10px;
   box-shadow: 1px 1px 5.9px 0px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
-  position: absolute;
-  top: 100%;
-  left: 40px;
   display: flex;
   flex-direction: column;
-  z-index: 1;
+  position: relative;
+  z-index: 9999;
   background-color: ${colors.sortBackgroundColor};
+  cursor: auto;
 `;
 
 const Sort = styled.div`

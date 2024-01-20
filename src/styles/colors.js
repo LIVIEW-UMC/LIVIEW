@@ -14,6 +14,13 @@ const colors = {
   sortOptontBackgroundColor: '#EEEEEE',
   sortOptontBorderColor: '#7FC1FF',
   postInfoColor: '#545454',
+  commentColor: '#3b3b3b',
+  replyLikeColor: '#787878',
+  lineColor: '#D9D9D9',
+  inputColoer: '#F0F0F0',
+  commentInputColor: '#878787',
+  classNameColor: '#515151',
+  filesNumColor: '#E60023',
 };
 
 export default colors;

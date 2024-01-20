@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Photo from '../../assets/icon/Photo';
 import colors from '../../styles/colors';
 
 function PhotoPost({ photosrc, alt }) {
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageSize({ width: img.width, height: img.height });
-    };
-    img.src = photosrc;
-  }, []);
   return (
     <PostContainer>
-      <StyledImageWrapper>
-        <StyledImage src={photosrc} alt={alt} width={imageSize.width} height={imageSize.height} />
-      </StyledImageWrapper>
+      <StyledImage src={photosrc} alt={alt} />
       <PostTitle>소세지 여행</PostTitle>
       <PostInfoContainer>
         <IconContainer>
@@ -30,50 +18,39 @@ function PhotoPost({ photosrc, alt }) {
   );
 }
 const PostContainer = styled.div`
-  width: 251px;
-  height: 288px;
+  width: 153px;
+  height: 173.5px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const StyledImageWrapper = styled.div`
-  width: 251px;
-  height: 228px;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-`;
-
 const StyledImage = styled.img`
-  width: ${(props) => (props.width < props.height ? '100%' : 'auto')};
-  height: ${(props) => (props.width < props.height ? 'auto' : '100%')};
+  width: 153px;
+  height: 139px;
   object-fit: cover;
-  object-position: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  border-radius: 6.07px;
+  overflow: hidden;
 `;
 
 const PostTitle = styled.div`
-  width: 245px;
-  height: 21px;
-  margin: 6px;
+  width: 153px;
+  height: 12px;
+  margin: 3px;
   display: flex;
   align-items: center;
   font-family: KNU20TRUTH-Regular;
-  font-size: 20px;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 15px;
   letter-spacing: 0em;
   text-align: left;
 `;
 
 const PostInfoContainer = styled.div`
-  width: 251px;
-  height: 27px;
-  padding: 11px 6px 0px 6px;
+  width: 153px;
+  height: 16.5px;
+  padding: 6.5px 3.64px 0px 3.64px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -81,20 +58,20 @@ const PostInfoContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
-  height: 16px;
+  height: 10px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2.5px;
 `;
 
 const PostInfo = styled.div`
-  height: 16px;
+  height: 10px;
   display: flex;
   align-items: center;
   font-family: Roboto;
-  font-size: 13px;
+  font-size: 8px;
   font-weight: 600;
-  line-height: 16px;
+  line-height: 10px;
   letter-spacing: 0em;
   text-align: left;
   color: ${colors.postInfoColor};
