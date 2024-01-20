@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { useState, useEffect, useRef } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { MasonryInfiniteGrid } from '@egjs/react-infinitegrid';
 import colors from '../../styles/colors';
 import homeRoute from '../../assets/homeRoute.png';
@@ -11,25 +11,34 @@ const imageContext = require.context('../../assets/main', false, /\.(png)$/);
 function Initial() {
   const images = imageContext.keys().map(imageContext);
 
-  const [isButtonVisible, setButtonVisible] = useState(true);
+  const [isScrollDown, setScrollDown] = useState(false);
 
-  const downBtnClick = () => {
-    const viewportHeight = window.innerHeight;
-    const documentHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-    const scrollTo = documentHeight - viewportHeight - 192;
+  const downTargetRef = useRef(null);
 
+  const scrollDown = () => {
+    downTargetRef.current.scrollIntoView({ behavior: 'smooth' });
+    setScrollDown(true);
+  };
+
+  const scrollUp = () => {
     window.scroll({
-      top: scrollTo,
+      top: 0,
       left: 0,
       behavior: 'smooth',
     });
-    setButtonVisible(false);
+    setScrollDown(false);
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    const handleWheel = (event) => {
-      event.preventDefault();
+    window.scroll(0, 0);
+    const handleWheel = (e) => {
+      if (e.deltaY > 0) {
+        e.preventDefault();
+        scrollDown();
+      } else if (e.deltaY < 0) {
+        e.preventDefault();
+        scrollUp();
+      }
     };
 
     document.addEventListener('wheel', handleWheel, { passive: false });
@@ -73,12 +82,10 @@ function Initial() {
           ))}
         </MasonryInfiniteGrid>
       </GalleryContainer>
-      {isButtonVisible && (
-        <DownBtn onClick={downBtnClick}>
-          <DownArrow />
-        </DownBtn>
-      )}
-      <JoinIntroduction>
+      <DownBtn onClick={scrollDown} isScrollDown={isScrollDown}>
+        <DownArrow />
+      </DownBtn>
+      <JoinIntroduction ref={downTargetRef}>
         <PerLine>가입하여 더 많은</PerLine>
         <PerLine>기록을 자동으로</PerLine>
         <PerLine>남겨보세요</PerLine>
@@ -139,10 +146,22 @@ const GalleryItem = styled.img`
   border-radius: 15px;
 `;
 
+const DownBtnMove = keyframes`
+    100% {
+        transform: translateY(-30px);
+    }
+`;
+
 const DownBtn = styled.div`
   position: fixed;
   bottom: 20px;
   z-index: 1;
+  animation: ${DownBtnMove} 1s 2s infinite cubic-bezier(0.4, 0, 1, 1) alternate;
+  visibility: ${(props) => (props.isScrollDown ? 'hidden' : 'visible')};
+  opacity: ${(props) => (props.isScrollDown ? 0 : 1)};
+  transition:
+    visibility 1.5s,
+    opacity 1.5s;
 `;
 
 const Shadow = styled.div`
@@ -163,8 +182,9 @@ const JoinIntroduction = styled.div`
   align-items: center;
   color: white;
   position: absolute;
-  top: 1254px;
+  top: 800px;
   left: 140px;
+  padding-top: 300px;
   z-index: 1;
 `;
 
