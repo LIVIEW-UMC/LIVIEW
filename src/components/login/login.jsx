@@ -1,7 +1,12 @@
 import styled from 'styled-components';
+import GoogleLoginButton from './GoogleLoginButton';
 
 function Login() {
-  return <LoginContainer />;
+  return (
+    <LoginContainer>
+      <GoogleLoginButton />
+    </LoginContainer>
+  );
 }
 
 const LoginContainer = styled.div`
@@ -17,4 +22,5 @@ const LoginContainer = styled.div`
 
   background: linear-gradient(#ffffff 93%, #e9e9e9 50%);
 `;
+
 export default Login;
