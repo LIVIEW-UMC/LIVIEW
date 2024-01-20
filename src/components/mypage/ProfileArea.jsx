@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import colors from '../../styles/colors';
-import profileImg from '../../assets/dummy/recent/Ellipse 392 (11).png';
+import profileImg from '../../assets/dummy/IMG_0828.jpg';
 
 function ProfileArea() {
   return (
@@ -25,8 +25,9 @@ const ProfileImg = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  object-fit: cover;
   overflow: hidden;
-  margin: 70px 0px 23px 0px;
+  margin: 190px 0px 23px 0px;
 `;
 
 const ProfileName = styled.div`
@@ -61,7 +62,7 @@ const FollowerProfileEditContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 17px 0px 23px 0px;
+  margin: 17px 0px 56px 0px;
 `;
 
 const Follower = styled.div`
