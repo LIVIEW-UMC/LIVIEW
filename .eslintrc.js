@@ -34,8 +34,13 @@ module.exports = {
     'object-curly-newline': 'off',
     'implicit-arrow-linebreak': 'off',
     'function-paren-newline': 'off',
-    devDependencies: false,
-    optionalDependencies: false,
-    peerDependencies: false,
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: false,
+        optionalDependencies: false,
+        peerDependencies: false,
+      },
+    ],
   },
 };
