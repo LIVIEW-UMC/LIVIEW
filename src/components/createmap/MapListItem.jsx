@@ -4,14 +4,14 @@ import Check from '../../assets/icon/Check';
 
 function MapListItem({ item, setMapItems }) {
   return (
-    <MapListItemContainer isChecked={item.isChecked}>
+    <MapListItemContainer $isChecked={item.isChecked}>
       <CheckBox
         onClick={() => {
           setMapItems((prevItems) =>
             prevItems.map((prevItem) => (prevItem.id === item.id ? { ...prevItem, isChecked: !prevItem.isChecked } : prevItem)),
           );
         }}
-        isChecked={item.isChecked}
+        $isChecked={item.isChecked}
       >
         {item.isChecked && <Check />}
       </CheckBox>
@@ -32,16 +32,16 @@ const MapListItemContainer = styled.div`
   padding: 5px;
   align-items: center;
   gap: 6px;
-  background-color: ${(props) => (props.isChecked ? colors.ivoryGray : 'white')};
+  background-color: ${(props) => (props.$isChecked ? colors.ivoryGray : 'white')};
   border-radius: 10px;
 `;
 
 const CheckBox = styled.div`
   width: 14px;
   height: 14px;
-  border: 1.5px solid ${(props) => (props.isChecked ? colors.mainColor : colors.darkGray)};
+  border: 1.5px solid ${(props) => (props.$isChecked ? colors.mainColor : colors.darkGray)};
   border-radius: 4px;
-  background-color: ${(props) => (props.isChecked ? colors.mainColor : 'white')};
+  background-color: ${(props) => (props.$isChecked ? colors.mainColor : 'white')};
   display: flex;
   justify-content: center;
   align-items: center;
