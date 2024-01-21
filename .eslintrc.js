@@ -42,5 +42,6 @@ module.exports = {
         peerDependencies: false,
       },
     ],
+    'no-plusplus': 'off',
   },
 };
