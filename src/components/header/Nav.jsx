@@ -24,7 +24,9 @@ function Nav() {
           </Link>
         </LogoContainer>
         <Home>홈</Home>
-        <Map>지도 만들기</Map>
+        <Link to="/createmap">
+          <Map>지도 만들기</Map>
+        </Link>
       </MainContent>
       <SearchTab>
         <SearchInput

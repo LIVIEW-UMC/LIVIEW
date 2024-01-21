@@ -8,7 +8,7 @@ import Check from '../../assets/icon/Check';
 import Trash from '../../assets/icon/Trash';
 
 function CreateMapSidebar() {
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const [mapItems, setMapItems] = useState([
     { id: 1, imgSrc: dummy1, name: '부산해커톤 이동동선', expirationPeriod: 30, isChecked: false },
@@ -43,7 +43,7 @@ function CreateMapSidebar() {
   }, [mapItems]);
 
   return (
-    <SidebarContainer showSidebar={showSidebar}>
+    <SidebarContainer $showSidebar={showSidebar}>
       {showSidebar && (
         <ShowSidebar>
           <div>
@@ -62,7 +62,7 @@ function CreateMapSidebar() {
             <Hr />
             <DeleteMap>
               <DeleteMapCount>
-                <CheckBox onClick={allCheckBoxClicked} isAllChecked={isAllChecked}>
+                <CheckBox onClick={allCheckBoxClicked} $isAllChecked={isAllChecked}>
                   {isAllChecked && <Check />}
                 </CheckBox>
                 <div>
@@ -76,7 +76,7 @@ function CreateMapSidebar() {
           </div>
         </ShowSidebar>
       )}
-      <ShowSidebarIcon onClick={() => setShowSidebar((prev) => !prev)} showSidebar={showSidebar}>
+      <ShowSidebarIcon onClick={() => setShowSidebar((prev) => !prev)} $showSidebar={showSidebar}>
         <LeftArrow />
       </ShowSidebarIcon>
     </SidebarContainer>
@@ -95,13 +95,13 @@ const SidebarContainer = styled.div`
   top: 0;
   border-radius: 0px 30px 0px 0px;
   box-shadow: 4px -4px 10px 0px rgba(0, 0, 0, 0.1);
-  font-family: KNU20TRUTH-Regular;
   font-size: 15px;
   line-height: 122%;
   box-sizing: border-box;
   padding: 0px 7px;
-  transform: ${(props) => (props.showSidebar ? 'translateX(0)' : 'translateX(-180px)')};
+  transform: ${(props) => (props.$showSidebar ? 'translateX(0)' : 'translateX(-180px)')};
   transition: all 0.5s;
+  background-color: white;
 `;
 
 const ShowSidebar = styled.div`
@@ -156,7 +156,7 @@ const ShowSidebarIcon = styled.div`
   top: 20px;
   right: 20px;
   display: flex;
-  transform: ${(props) => (props.showSidebar ? 'rotate(0)' : 'rotate(180deg)')};
+  transform: ${(props) => (props.$showSidebar ? 'rotate(0)' : 'rotate(180deg)')};
 `;
 
 const DeleteMap = styled.div`
@@ -175,9 +175,9 @@ const DeleteMapCount = styled.div`
 const CheckBox = styled.div`
   width: 14px;
   height: 14px;
-  border: 1.5px solid ${(props) => (props.isAllChecked ? colors.mainColor : colors.darkGray)};
+  border: 1.5px solid ${(props) => (props.$isAllChecked ? colors.mainColor : colors.darkGray)};
   border-radius: 4px;
-  background-color: ${(props) => (props.isAllChecked ? colors.mainColor : 'white')};
+  background-color: ${(props) => (props.$isAllChecked ? colors.mainColor : 'white')};
   display: flex;
   justify-content: center;
   align-items: center;
