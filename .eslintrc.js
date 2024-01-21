@@ -33,6 +33,7 @@ module.exports = {
     'max-len': 'off',
     'object-curly-newline': 'off',
     'implicit-arrow-linebreak': 'off',
-    'function-paren-newline': 'off'
+    'function-paren-newline': 'off',
+    'no-plusplus': 'off'
   },
 };
