@@ -5,6 +5,8 @@ const colors = {
   lightGray: '#E1E1E1',
   ivoryGray: '#F5F5F5',
   darkGray: '#909090',
+  red: '#CC0000',
+  lightBlue: '#CCE8FF',
   DarkBrownGray: '#464646',
   profilNnameColor: '#393939',
   profileEmailColor: '#A4A4A4',
