@@ -1,16 +1,17 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import basicImage from '../assets/profile/basic.png';
-import SettingsSidebar from '../components/settings/SettingsSidebar';
+import SettingsSidebar from '../SettingsSidebar';
+import basicImage from '../../../assets/profile/basic.png';
 
 const ProfileEditPage = () => {
   const [profileImage, setProfileImage] = useState(basicImage);
   const [name, setName] = useState('민서'); // 기본값으로 설정
   const [lastName, setLastName] = useState('김'); // 기본값으로 설정
-  const [introduction, setIntroduction] = useState('회원님의 이야기를 작성해주세요!!');
+  const [introduction, setIntroduction] = useState('회원님의 이야기를 작성해주세요!! (200자 이내)');
   const [UserEmail, setUserEmail] = useState('l50227697');
   const [UserEmail2, setUserEmail2] = useState('gmail.com');
   const fileInputRef = useRef(null);
+  const maxIntroductionLength = 200;
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
@@ -37,7 +38,14 @@ const ProfileEditPage = () => {
   };
 
   const handleIntroductionChange = (e) => {
-    setIntroduction(e.target.value);
+    const inputIntroduction = e.target.value;
+
+    if (inputIntroduction.length <= maxIntroductionLength) {
+      setIntroduction(inputIntroduction);
+    } else {
+      // Display a warning or handle exceeding character limit as needed
+      console.log('Introduction exceeds character limit');
+    }
   };
 
   const handleUserEmailChange = (e) => {
@@ -100,7 +108,7 @@ const ProfileEditPage = () => {
             onChange={handleIntroductionChange}
             onClick={() => setIntroduction('')}
             onBlur={() => {
-              if (introduction === '') setIntroduction('회원님의 이야기를 작성해주세요!!');
+              if (introduction === '') setIntroduction('회원님의 이야기를 작성해주세요!! (200자 이내)');
             }}
           />
         </IntroductionContainer>
@@ -130,21 +138,25 @@ const ProfileEditPage = () => {
             }}
           />
         </EmailContainer2>
+        <ModifyButton onClick={handleModify}>수정하기</ModifyButton>
       </Container>
-      <ModifyButton onClick={handleModify}>수정하기</ModifyButton>
     </All>
   );
 };
-const All = styled.div``;
+const All = styled.div`
+  display: flex;
+  min-height: 100vh;
+  font-family: 'KNU20TRUTH-Regular';
+`;
 
 const Container = styled.div`
   position: relative;
   width: 100%;
-  max-width: 1000px;
+  max-width: 800px;
   min-width: 600px;
   margin: 0 auto;
-  display: inline-block;
-  padding-left: 500px;
+  margin-bottom: 20px;
+  justify-content: center;
   margin-bottom: 20px;
 `;
 
@@ -156,19 +168,15 @@ const ProfileTitleContainer = styled.div`
 
 const Tilte = styled.div`
   display: block;
-  gap: 16px;
   margin-top: 10px;
   font-size: 30px;
-  font-family: 'KNU20TRUTH-Regular';
 `;
 
 const Content = styled.div`
   display: block;
-  gap: 16px;
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 15px;
   color: #939393;
-  font-family: 'KNU20TRUTH-Regular';
 `;
 
 const PhotoText = styled.div`
@@ -177,7 +185,6 @@ const PhotoText = styled.div`
   margin-top: 40px;
   margin-bottom: 10px;
   margin-left: 8px;
-  font-family: 'KNU20TRUTH-Regular';
   color: #464646;
 `;
 
@@ -212,7 +219,6 @@ const ChangeImageButton = styled.div`
   font-size: 16px;
   margin-top: 100px;
   margin-left: 12px;
-  font-family: 'KNU20TRUTH-Regular';
   
 `;
 
@@ -231,13 +237,11 @@ const NameContainer2 = styled.div`
 const NameText1 = styled.div`
   display: block;
   padding-left: 10px;
-  font-family: 'KNU20TRUTH-Regular';
   color: #464646;
 `;
 
 const NameText2 = styled.div`
   display: block;
-  font-family: 'KNU20TRUTH-Regular';
   color: #464646;
   padding-left: 8px;
 `;
@@ -291,13 +295,12 @@ const IntroductionContainer = styled.div`
 const IntroductionText = styled.div`
   display: block;
   padding-left: 10px;
-  font-family: 'KNU20TRUTH-Regular';
   color: #464646;
 `;
 
 const IntroductionInput = styled.textarea`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === '회원님의 이야기를 작성해주세요!!' ? '#939393' : '#000')};
+  color: ${(props) => (props.value === '회원님의 이야기를 작성해주세요!! (200자 이내)' ? '#939393' : '#000')};
   border-radius: 15px;
   border-width: 2px;
   padding: 5px;
@@ -305,7 +308,7 @@ const IntroductionInput = styled.textarea`
   height: 80%;
   font-weight: 2px;
   font-size: 16px;
-  resize: none; /* 사용자 조절 비활성화 */
+  resize: none;
   font-family: 'KNU20TRUTH-Regular';
 `;
 
@@ -323,7 +326,6 @@ const EmailContainer2 = styled.div`
 
 const EmailText = styled.div`
   display: block;
-  font-family: 'KNU20TRUTH-Regular';
   color: #464646;
   padding-left: 8px;
   margin-top: 20px;
@@ -349,7 +351,6 @@ const SymbolContainer = styled.div`
 `;
 
 const AtSymbol = styled.span`
-  font-family: 'KNU20TRUTH-Regular';
   color: #939393;
 `;
 
@@ -377,12 +378,11 @@ const ModifyButton = styled.button`
   height: 34px;
   display: block;
   text-align: center;
-  justify-content: center;
   font-size: 16px;
-  margin-top: 20px;
+  margin-top: 30px;
   font-family: 'KNU20TRUTH-Regular';
   margin-left: auto;
-  margin-right: 400px;
+  margin-right: 200px;
   margin-bottom: 20px;
 `;
 

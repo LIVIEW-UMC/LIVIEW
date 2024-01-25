@@ -33,8 +33,8 @@ function ClickedPost() {
 }
 
 const ClickedPostContainer = styled.div`
-  margin-left: 410px;
-  margin-top: 60px;
+  margin-left: 250px;
+  margin-top: 70px;
 `;
 
 const Title = styled.div`
