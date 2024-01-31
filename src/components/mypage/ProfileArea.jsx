@@ -2,16 +2,18 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 import profileImg from '../../assets/dummy/IMG_0828.jpg';
 
-function ProfileArea() {
+function ProfileArea({ FollowerClick, FollowingClick }) {
   return (
     <ProfileContainer>
+      <BackgroundImg src={profileImg} alt="profileImg" />
       <ProfileImg src={profileImg} alt="profileImg" />
       <ProfileName>이진성</ProfileName>
       <ProfileEmail>l50227697@gmail.com</ProfileEmail>
-      <FollowerProfileEditContainer>
-        <Follower>팔로워 0</Follower>
+      <FollowProfileEditContainer>
+        <Follow onClick={FollowerClick}>팔로워 12</Follow>
+        <Follow onClick={FollowingClick}>팔로잉 12</Follow>
         <ProfileEdit>프로필 수정</ProfileEdit>
-      </FollowerProfileEditContainer>
+      </FollowProfileEditContainer>
     </ProfileContainer>
   );
 }
@@ -20,7 +22,18 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
+const BackgroundImg = styled.img`
+  width: 100%;
+  height: 230px;
+  position: absolute;
+  z-index: -1;
+  top: 13px;
+  object-fit: cover;
+  overflow: hidden;
+`;
+
 const ProfileImg = styled.img`
   width: 80px;
   height: 80px;
@@ -56,17 +69,17 @@ const ProfileEmail = styled.div`
   color: ${colors.profileEmailColor};
 `;
 
-const FollowerProfileEditContainer = styled.div`
-  width: 164px;
+const FollowProfileEditContainer = styled.div`
+  width: 270px;
   height: 34px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 17px 0px 56px 0px;
+  gap: 24px;
+  margin: 17px 0px 53px 0px;
 `;
 
-const Follower = styled.div`
-  width: 52px;
+const Follow = styled.div`
+  width: 67px;
   height: 18px;
   display: flex;
   align-items: center;
@@ -77,6 +90,7 @@ const Follower = styled.div`
   letter-spacing: 0;
   text-align: left;
   color: ${colors.followerProfileEditColor};
+  cursor: pointer;
 `;
 
 const ProfileEdit = styled.div`

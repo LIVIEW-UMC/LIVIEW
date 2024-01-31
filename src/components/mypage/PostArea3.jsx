@@ -28,8 +28,9 @@ const Container = styled.div`
 
 const Tap = styled.div`
   width: 434px;
-  height: 23px;
+  height: 26px;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
   min-width: ${({ Width }) => Width};
   max-width: ${({ Width }) => Width};
@@ -42,7 +43,7 @@ const Tap = styled.div`
 `;
 
 const PostContainer = styled.div`
-  width: 326px;
+  width: 329.2px;
   height: 100%;
   margin-top: 54px;
   display: flex;

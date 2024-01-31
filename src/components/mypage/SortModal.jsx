@@ -19,16 +19,12 @@ function SortModal({ Name }) {
     >
       <Sort>정렬기준</Sort>
       <SortOptionCotainer onClick={() => handleOptionSelect('option1')}>
-        <SortOption>지역별 분류</SortOption>
+        <SortOption>오래된순 분류</SortOption>
         {selectedOption === 'option1' ? <CheckMark /> : null}
       </SortOptionCotainer>
       <SortOptionCotainer onClick={() => handleOptionSelect('option2')}>
         <SortOption>최신순 분류</SortOption>
         {selectedOption === 'option2' ? <CheckMark /> : null}
-      </SortOptionCotainer>
-      <SortOptionCotainer onClick={() => handleOptionSelect('option3')}>
-        <SortOption>계절별 분류</SortOption>
-        {selectedOption === 'option3' ? <CheckMark /> : null}
       </SortOptionCotainer>
     </SortModalContainer>
   );
@@ -36,7 +32,7 @@ function SortModal({ Name }) {
 
 const SortModalContainer = styled.div`
   width: 131px;
-  height: 138px;
+  height: 114px;
   padding: 11px 5px 30px 5px;
   border-radius: 10px;
   box-shadow: 1px 1px 5.9px 0px rgba(0, 0, 0, 0.25);
@@ -86,10 +82,8 @@ const SortOptionCotainer = styled.div`
 `;
 
 const SortOption = styled.div`
-  width: 68px;
   height: 18px;
   display: flex;
-  justify-content: center;
   align-items: center;
   white-space: nowrap;
   font-family: KNU20TRUTH-Regular;

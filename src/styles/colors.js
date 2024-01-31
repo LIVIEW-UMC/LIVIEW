@@ -12,6 +12,7 @@ const colors = {
   profileEmailColor: '#A4A4A4',
   followerProfileEditColor: '#262626',
   profileEditBackgroundColor: '#EDEDED',
+  sortColor: '#6F6F6F',
   sortBackgroundColor: '#FFFFFF',
   sortOptontBackgroundColor: '#EEEEEE',
   sortOptontBorderColor: '#7FC1FF',
@@ -23,6 +24,11 @@ const colors = {
   commentInputColor: '#878787',
   classNameColor: '#515151',
   filesNumColor: '#E60023',
+  skybule: '#7A97FF',
+  balck: '#282828',
+  mediumGray: '#787878',
+  whiteGray: '#575757',
+  moreWhiteGray: '#A2A2A2',
 };
 
 export default colors;

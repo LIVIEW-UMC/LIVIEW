@@ -1,22 +1,56 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
 import ProfileArea from '../components/mypage/ProfileArea';
 import PostArea1 from '../components/mypage/PostArea1';
 import PostArea2 from '../components/mypage/PostArea2';
 import PostArea3 from '../components/mypage/PostArea3';
+import FollowModal from '../components/mypage/FollowModal';
 
 function MyPage() {
-  const location = useLocation();
-  const minBody = location.pathname === '/mypage';
+  const [follower, setFollower] = useState(false);
 
-  if (minBody) {
-    document.body.style.minWidth = '910px';
-  } else {
-    document.body.style.minWidth = '';
-  }
+  const followerOpen = () => {
+    setFollower(true);
+    document.body.style.cssText = `
+      position: fixed;
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100vw;
+    `;
+  };
+
+  const followerClose = () => {
+    setFollower(false);
+    const scrollY = document.body.style.top;
+    document.body.style.cssText = '';
+    window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+  };
+
+  const [following, setFollowing] = useState(false);
+
+  const followingOpen = () => {
+    setFollowing(true);
+    document.body.style.cssText = `
+    position: fixed;
+    top: -${window.scrollY}px;
+    overflow-y: scroll;
+    width: 100%;
+  `;
+  };
+
+  const followingClose = () => {
+    setFollowing(false);
+    const scrollY = document.body.style.top;
+    document.body.style.cssText = '';
+    window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+  };
+
   return (
     <MyPageContainer>
-      <ProfileArea />
+      {follower ? <FollowModal Close={followerClose} Title="팔로워" /> : null}
+      {following ? <FollowModal Close={followingClose} Title="팔로잉" /> : null}
+
+      <ProfileArea FollowerClick={followerOpen} FollowingClick={followingOpen} />
       <PostArea>
         <PostArea1 />
         <PostArea2 />

@@ -17,11 +17,25 @@ function PostArea2() {
   return (
     <Container>
       <Tap>
-        <TapItem Width="120px" TapState={tapState === 'o'} onClick={() => setTapState('o')}>
-          다른사용자의 게시물
+        <TapItem
+          Width="81px"
+          TapState={tapState === 'o'}
+          onClick={() => {
+            setTapState('o');
+            setClickedFile('');
+          }}
+        >
+          저장한 게시물
         </TapItem>
-        <TapItem Width="39px" TapState={tapState === 's'} onClick={() => setTapState('s')}>
-          저장됨
+        <TapItem
+          Width="55px"
+          TapState={tapState === 's'}
+          onClick={() => {
+            setTapState('s');
+            setClickedFile('');
+          }}
+        >
+          내 게시물
         </TapItem>
       </Tap>
       <FolderPostContainer>
@@ -29,8 +43,16 @@ function PostArea2() {
         <MainContainer>
           <ClassName>폴더</ClassName>
           <FolderContainer>
-            <Folder ClickedFile={clickedFile === Name1} TapState={tapState === 's'} onClick={() => setClickedFile(Name1)} />
-            <Folder ClickedFile={clickedFile === Name2} TapState={tapState === 's'} onClick={() => setClickedFile(Name2)} />
+            <Folder
+              ClickedFile={clickedFile === Name1}
+              TapState={tapState === 's'}
+              onClick={() => setClickedFile(clickedFile === Name1 ? null : Name1)}
+            />
+            <Folder
+              ClickedFile={clickedFile === Name2}
+              TapState={tapState === 's'}
+              onClick={() => setClickedFile(clickedFile === Name2 ? null : Name2)}
+            />
           </FolderContainer>
           <Line mode="h" style={{ marginLeft: '4px' }} />
           <ClassName>분류되지 않은 사진집</ClassName>
@@ -55,8 +77,9 @@ const Container = styled.div`
 `;
 const Tap = styled.div`
   width: 940px;
-  height: 23px;
+  height: 26px;
   display: flex;
+  align-items: flex-end;
   justify-content: space-evenly;
 `;
 
