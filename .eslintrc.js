@@ -34,6 +34,9 @@ module.exports = {
     'object-curly-newline': 'off',
     'implicit-arrow-linebreak': 'off',
     'function-paren-newline': 'off',
-    'no-plusplus': 'off'
+    'no-plusplus': 'off',
+    'no-await-in-loop': 'off',
+    'no-confusing-arrow': 'off',
+    'no-new': 'off',
   },
 };
