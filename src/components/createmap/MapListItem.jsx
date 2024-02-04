@@ -13,7 +13,7 @@ function MapListItem({ item, setMapItems }) {
         }}
         $isChecked={item.isChecked}
       >
-        {item.isChecked && <Check />}
+        {item.isChecked && <Check stroke={'white'} />}
       </CheckBox>
       <Img src={item.imgSrc} alt="지도 초안 대표이미지" />
       <Explain>

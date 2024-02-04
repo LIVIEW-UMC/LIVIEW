@@ -43,5 +43,8 @@ module.exports = {
       },
     ],
     'no-plusplus': 'off',
+    'no-await-in-loop': 'off',
+    'no-confusing-arrow': 'off',
+    'no-new': 'off',
   },
 };

@@ -47,11 +47,7 @@ function CreateMapSidebar() {
       {showSidebar && (
         <ShowSidebar>
           <div>
-            <CreateMap>
-              <MapDraftCount>지도초안({mapItems.length})</MapDraftCount>
-              <CreateMapBtn>새로만들기</CreateMapBtn>
-            </CreateMap>
-            <Hr />
+            <MapDraftCount>지도초안({mapItems.length})</MapDraftCount>
             <MapList>
               {mapItems.map((item) => (
                 <MapListItem key={item.id} item={item} setMapItems={setMapItems} />
@@ -63,7 +59,7 @@ function CreateMapSidebar() {
             <DeleteMap>
               <DeleteMapCount>
                 <CheckBox onClick={allCheckBoxClicked} $isAllChecked={isAllChecked}>
-                  {isAllChecked && <Check />}
+                  {isAllChecked && <Check stroke={'white'} />}
                 </CheckBox>
                 <div>
                   {checkedItemCount}/{mapItems.length}
@@ -112,31 +108,10 @@ const ShowSidebar = styled.div`
 `;
 
 const MapDraftCount = styled.div`
-  width: 90%;
-  padding: 20px 0px;
+  padding: 20px 8px;
   font-size: 15px;
   line-height: 122%;
 `;
-
-const CreateMap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const CreateMapBtn = styled.div`
-  display: flex;
-  width: 206px;
-  height: 28px;
-  box-sizing: border-box;
-  padding: 5px 50px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: 15px;
-  background: ${colors.lightGray};
-`;
-
 const Hr = styled.hr`
   width: 100%;
   height: 1.5px;
