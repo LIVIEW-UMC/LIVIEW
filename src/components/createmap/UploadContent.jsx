@@ -7,17 +7,20 @@ import Cancel from '../../assets/icon/Cancel';
 import MoreOption from '../../assets/icon/MoreOption';
 import AddOptionModal from './AddOptionModal';
 import AlertModal from './AlertModal';
+import EnterMetadata from './EnterMetadata';
 
 function UploadContent() {
   const [fileList, setFileList] = useState([]);
   const [fileImgSrcList, setFileImgSrcList] = useState([]);
   const [fileLabelDragEnter, setFileLabelDragEnter] = useState(false);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [thumbnailIdx, setThumbnailIdx] = useState(0);
 
   const [title, setTitle] = useState('');
   const [titleWarningDisplay, setTitleWarningDisplay] = useState(false);
 
   const [detail, setDetail] = useState('');
+  const [detailWarningDisplay, setDetailWarningDisplay] = useState(false);
 
   const [folder, setFolder] = useState('');
   const [folderOptionList, setFolderOptionList] = useState(['방문 맛집 기록폴더', '대학시절 여행기록']);
@@ -30,13 +33,16 @@ function UploadContent() {
 
   const [isActiveSubmitBtn, setIsActiveSubmitBtn] = useState(false);
 
+  const [isSubmittedForm, setIsSubmittedForm] = useState(false);
+  const [isClickedCreateMap, setIsClickedCreateMap] = useState(false);
+
   useEffect(() => {
-    if (title !== '' && tagList.length !== 0 && fileList.length !== 0) {
+    if (title !== '' && detail !== '' && tagList.length !== 0 && fileList.length !== 0) {
       setIsActiveSubmitBtn(true);
     } else {
       setIsActiveSubmitBtn(false);
     }
-  }, [title, tagList, fileList]);
+  }, [title, detail, tagList, fileList]);
 
   const fileLabelDragEnterHandler = () => {
     setFileLabelDragEnter(true);
@@ -81,7 +87,11 @@ function UploadContent() {
 
     if (data.items) {
       for (let i = 0; i < data.items.length; i++) {
-        if (data.items[i].kind === 'file' && data.items[i].type.startsWith('image/')) {
+        if (
+          (data.items[i].kind === 'file' && data.items[i].type.startsWith('image/png')) ||
+          data.items[i].type.startsWith('image/jpeg') ||
+          data.items[i].type.startsWith('image/jpg')
+        ) {
           dropFileList.push(data.items[i].getAsFile());
         }
       }
@@ -107,18 +117,28 @@ function UploadContent() {
     });
   };
 
-  const deleteUploadedImgHandler = (e, index) => {
+  const deleteUploadedImgHandler = (e, i) => {
     e.preventDefault();
     e.stopPropagation();
 
     const deletedFileList = [...fileList];
-    deletedFileList.splice(index, 1);
+    deletedFileList.splice(i, 1);
 
     const deletedFileImgSrcList = [...fileImgSrcList];
-    deletedFileImgSrcList.splice(index, 1);
+    deletedFileImgSrcList.splice(i, 1);
 
     setFileList(deletedFileList);
     setFileImgSrcList(deletedFileImgSrcList);
+    if (i === thumbnailIdx) {
+      setThumbnailIdx(0);
+    }
+  };
+
+  const selectThumbnailHandler = (e, i) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setThumbnailIdx(i);
   };
 
   const changeTitleHandler = (e) => {
@@ -129,6 +149,17 @@ function UploadContent() {
       setTitleWarningDisplay(true);
     } else {
       setTitleWarningDisplay(false);
+    }
+  };
+
+  const changeDetailHandler = (e) => {
+    const changedDetail = e.target.value;
+    setDetail(changedDetail);
+
+    if (changedDetail === '') {
+      setDetailWarningDisplay(true);
+    } else {
+      setDetailWarningDisplay(false);
     }
   };
 
@@ -154,9 +185,9 @@ function UploadContent() {
     setTagList(newTagList);
   };
 
-  const deleteTagHandler = (index) => {
+  const deleteTagHandler = (i) => {
     const newTagList = [...tagList];
-    newTagList.splice(index, 1);
+    newTagList.splice(i, 1);
     setTagList(newTagList);
 
     if (newTagList.length === 0) {
@@ -177,139 +208,204 @@ function UploadContent() {
     setAddOptionModalOpen(true);
   };
 
+  const formSubmitHandler = (e) => {
+    e.preventDefault();
+    setIsSubmittedForm(true);
+  };
+
+  useEffect(() => {
+    if (fileList.length === 1) {
+      setThumbnailIdx(0);
+    }
+  }, [fileList]);
+
   return (
-    <UploadContentFormContainer
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <UploadContentForm>
-        <UploadImgLabel
-          htmlFor="file"
-          onDragEnter={fileLabelDragEnterHandler}
-          onDragLeave={fileLabelDragLeaveHandler}
-          onDragOver={fileLabelDragOverHandler}
-          onDrop={fileLabelDropHandler}
-          $fileLabelDragEnter={fileLabelDragEnter}
-          $fileList={fileList}
-        >
-          {fileImgSrcList.length !== 0 ? (
-            fileImgSrcList.map((url, index) => (
-              <UploadedImgContainer>
-                <UploadedImg key={index + 1} src={url} alt="업로드한 사진" />
-                <DeleteUploadedImg
-                  onClick={(e) => {
-                    deleteUploadedImgHandler(e, index);
+    <>
+      <CreateMapIntroduction>
+        <IntroductionTitle>{isSubmittedForm ? `제목: ${title}` : '새로운 지도 만들기'}</IntroductionTitle>
+        <IntroductionExplanation>
+          {isSubmittedForm
+            ? isClickedCreateMap
+              ? '생성한 지도는 마이페이지에서 확인 가능합니다'
+              : '사진의 시간, 위치 정보를 입력해주세요. 날짜 및 위치 정보가 없을 경우 현재 시간과 위치를 기반으로 설정가능합니다.'
+            : '대표사진의 위치정보와 시간을 기준으로 사진집을 분류하고 게시합니다.'}
+        </IntroductionExplanation>
+      </CreateMapIntroduction>
+      {!isSubmittedForm && (
+        <UploadContentFormContainer onSubmit={formSubmitHandler}>
+          <UploadContentForm>
+            {!isSubmittedForm && (
+              <UploadImgLabel
+                htmlFor="file"
+                onDragEnter={fileLabelDragEnterHandler}
+                onDragLeave={fileLabelDragLeaveHandler}
+                onDragOver={fileLabelDragOverHandler}
+                onDrop={fileLabelDropHandler}
+                $fileLabelDragEnter={fileLabelDragEnter}
+                $fileList={fileList}
+              >
+                {fileImgSrcList.length !== 0 ? (
+                  fileImgSrcList.map((url, i) => (
+                    <UploadedImgContainer key={i + 1}>
+                      <UploadedImg
+                        key={i + 1}
+                        src={url}
+                        alt="업로드한 사진"
+                        onClick={(e) => {
+                          selectThumbnailHandler(e, i);
+                        }}
+                      />
+                      <DeleteUploadedImg
+                        onClick={(e) => {
+                          deleteUploadedImgHandler(e, i);
+                        }}
+                      >
+                        <Cancel />
+                      </DeleteUploadedImg>
+                      <Thumbnail
+                        onClick={(e) => {
+                          selectThumbnailHandler(e, i);
+                        }}
+                        $isSelected={thumbnailIdx === i}
+                      >
+                        <div>대표</div>
+                      </Thumbnail>
+                    </UploadedImgContainer>
+                  ))
+                ) : (
+                  <UploadContainer>
+                    <UploadImg>
+                      <Upload />
+                      <UploadImgTitle>
+                        파일을 선택하거나 여기로 끌어다
+                        <br /> 놓아주세요.(10장이내)
+                      </UploadImgTitle>
+                    </UploadImg>
+                    <UploadImgNotice>
+                      20MB 미만 고화질 .jpg 파일사용을 권장합니다.(exif 이미지 포멧에서 위치, 시간정보를 불러들이므로 안드로이드 폰으로 촬용한 사진은
+                      위치정보 로딩에 실패할 수 있습니다.)
+                    </UploadImgNotice>
+                  </UploadContainer>
+                )}
+              </UploadImgLabel>
+            )}
+            <UploadImgInput type="file" id="file" accept="image/png, image/jpeg, image/jpg" onChange={uploadImgHandler} multiple />
+            <UploadDetailContainer>
+              <UploadDetail>
+                <UploadDetailLabel htmlFor="title">제목</UploadDetailLabel>
+                <UploadDetailInput type="text" id="title" placeholder="지도의 제목을 작성해주세요." value={title} onChange={changeTitleHandler} />
+                <Notice $display={titleWarningDisplay}>
+                  <Warning />
+                  제목은 필수로 작성해주셔야 합니다.
+                </Notice>
+              </UploadDetail>
+              <UploadDetail>
+                <UploadDetailLabel htmlFor="detail">설명</UploadDetailLabel>
+                <UploadDetailTextarea
+                  id="detail"
+                  placeholder="지도에 대한 자세한 설명을 작성해주세요."
+                  value={detail}
+                  onChange={changeDetailHandler}
+                />
+                <Notice $display={detailWarningDisplay}>
+                  <Warning />
+                  설명은 필수로 작성해주셔야 합니다.
+                </Notice>
+              </UploadDetail>
+              <UploadDetail>
+                <UploadDetailLabel htmlFor="folder">폴더</UploadDetailLabel>
+                <UploadDetailSelect
+                  type="text"
+                  id="folder"
+                  placeholder="폴더 선택"
+                  value={folder}
+                  onChange={(e) => setFolder(e.target.value)}
+                  onClick={clickSelectBoxHandler}
+                  readOnly
+                />
+                <ShowOptionIcon $selectBoxOpen={selectBoxOpen} onClick={clickSelectBoxHandler}>
+                  <MoreOption />
+                </ShowOptionIcon>
+                <OptionContainer $selectBoxOpen={selectBoxOpen}>
+                  {folderOptionList.map((item, i) => (
+                    <Option key={i + 1} onClick={clickOptionHandler}>
+                      {item}
+                    </Option>
+                  ))}
+                  <AddOption onClick={clickAddOptionHandler}>폴더 추가</AddOption>
+                </OptionContainer>
+              </UploadDetail>
+              <UploadDetail>
+                <UploadDetailLabel htmlFor="tag">태그된 주제({tagList.length})개</UploadDetailLabel>
+                <UploadDetailInput
+                  id="tag"
+                  placeholder="태그를 추가해주세요."
+                  value={tagToAdd}
+                  onChange={addTagHandler}
+                  onKeyUp={(e) => {
+                    if (e.key === 'Enter') {
+                      createTagHandler();
+                    }
                   }}
-                >
-                  <Cancel />
-                </DeleteUploadedImg>
-              </UploadedImgContainer>
-            ))
-          ) : (
-            <UploadContainer>
-              <UploadImg>
-                <Upload />
-                <UploadImgTitle>
-                  파일을 선택하거나 여기로 끌어다
-                  <br /> 놓아주세요.(10장이내)
-                </UploadImgTitle>
-              </UploadImg>
-              <UploadImgNotice>
-                20MB 미만 고화질 .jpg 파일사용을 권장합니다.(exif 이미지 포멧에서 위치, 시간정보를 불러들이므로 안드로이드 폰으로 촬용한 사진은
-                위치정보 로딩에 실패할 수 있습니다.)
-              </UploadImgNotice>
-            </UploadContainer>
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+                <TagList>
+                  {tagList.map((item, i) => (
+                    <AddedTag key={i + 1}>
+                      #{item}
+                      <DeleteTag onClick={() => deleteTagHandler(i)}>
+                        <Cancel />
+                      </DeleteTag>
+                    </AddedTag>
+                  ))}
+                  {tagToAdd !== '' && (
+                    <CreateTag onClick={createTagHandler}>
+                      <Tag>#{tagToAdd}</Tag>&nbsp;생성
+                    </CreateTag>
+                  )}
+                </TagList>
+                <Notice $display={tagWarningDisplay}>
+                  <Warning />
+                  최소 한 개 이상의 태그를 하셔야 합니다.
+                </Notice>
+              </UploadDetail>
+            </UploadDetailContainer>
+          </UploadContentForm>
+
+          <UploadContentNotice>
+            불법 촬영 콘텐츠 등을 게시하는 경우 LIVIEW는 한국 전기통신사업법 제22-5(1)조에 따라 해당 콘텐츠의 액세스를 삭제하거나 차단할 수 있으며,
+            사용자는 관련 법률 및 규정에 따라 처벌을 받을 수 있습니다.
+          </UploadContentNotice>
+
+          <SubmitBtn $isActiveSubmitBtn={isActiveSubmitBtn} disabled={!isActiveSubmitBtn}>
+            저장하기
+          </SubmitBtn>
+
+          {addOptionModalOpen && (
+            <AddOptionModal
+              setAddOptionModalOpen={setAddOptionModalOpen}
+              folderOptionList={folderOptionList}
+              setFolderOptionList={setFolderOptionList}
+            />
           )}
-        </UploadImgLabel>
-        <UploadImgInput type="file" id="file" accept="image/*" onChange={uploadImgHandler} multiple />
-        <UploadDetailContainer>
-          <UploadDetail>
-            <UploadDetailLabel htmlFor="title">제목</UploadDetailLabel>
-            <UploadDetailInput type="text" id="title" placeholder="지도의 제목을 작성해주세요." value={title} onChange={changeTitleHandler} />
-            <Notice $display={titleWarningDisplay}>
-              <Warning />
-              제목은 필수로 작성해주셔야 합니다.
-            </Notice>
-          </UploadDetail>
-          <UploadDetail>
-            <UploadDetailLabel htmlFor="detail">설명</UploadDetailLabel>
-            <UploadDetailTextarea
-              id="detail"
-              placeholder="지도에 대한 자세한 설명을 작성해주세요."
-              value={detail}
-              onChange={(e) => setDetail(e.target.value)}
-            />
-          </UploadDetail>
-          <UploadDetail>
-            <UploadDetailLabel htmlFor="folder">폴더</UploadDetailLabel>
-            <UploadDetailSelect
-              type="text"
-              id="folder"
-              placeholder="폴더 선택"
-              value={folder}
-              onChange={(e) => setFolder(e.target.value)}
-              onClick={clickSelectBoxHandler}
-              readOnly
-            />
-            <ShowOptionIcon $selectBoxOpen={selectBoxOpen} onClick={clickSelectBoxHandler}>
-              <MoreOption />
-            </ShowOptionIcon>
-            <OptionContainer $selectBoxOpen={selectBoxOpen}>
-              {folderOptionList.map((item, index) => (
-                <Option key={index + 1} onClick={clickOptionHandler}>
-                  {item}
-                </Option>
-              ))}
-              <AddOption onClick={clickAddOptionHandler}>폴더 추가</AddOption>
-            </OptionContainer>
-          </UploadDetail>
-          <UploadDetail>
-            <UploadDetailLabel htmlFor="tag">태그된 주제({tagList.length})개</UploadDetailLabel>
-            <UploadDetailInput
-              id="tag"
-              placeholder="태그를 추가해주세요."
-              value={tagToAdd}
-              onChange={addTagHandler}
-              onKeyUp={(e) => {
-                if (e.key === 'Enter') {
-                  createTagHandler();
-                }
-              }}
-            />
-            <TagList>
-              {tagList.map((item, index) => (
-                <AddedTag key={index + 1}>
-                  #{item}
-                  <DeleteTag onClick={() => deleteTagHandler(index)}>
-                    <Cancel />
-                  </DeleteTag>
-                </AddedTag>
-              ))}
-              {tagToAdd !== '' && (
-                <CreateTag onClick={createTagHandler}>
-                  <Tag>#{tagToAdd}</Tag>&nbsp;생성
-                </CreateTag>
-              )}
-            </TagList>
-            <Notice $display={tagWarningDisplay}>
-              <Warning />
-              최소 한 개 이상의 태그를 하셔야 합니다.
-            </Notice>
-          </UploadDetail>
-        </UploadDetailContainer>
-      </UploadContentForm>
-      <UploadContentNotice>
-        불법 촬영 콘텐츠 등을 게시하는 경우 LIVIEW는 한국 전기통신사업법 제22-5(1)조에 따라 해당 콘텐츠의 액세스를 삭제하거나 차단할 수 있으며,
-        사용자는 관련 법률 및 규정에 따라 처벌을 받을 수 있습니다.
-      </UploadContentNotice>
-      <SubmitBtn type="submit" value="저장하기" isActiveSubmitBtn={isActiveSubmitBtn} />
-      {addOptionModalOpen && (
-        <AddOptionModal setAddOptionModalOpen={setAddOptionModalOpen} folderOptionList={folderOptionList} setFolderOptionList={setFolderOptionList} />
+          {alertModalOpen && <AlertModal setAlertModalOpen={setAlertModalOpen} />}
+          {(addOptionModalOpen || alertModalOpen) && <Overlay />}
+        </UploadContentFormContainer>
       )}
-      {alertModalOpen && <AlertModal setAlertModalOpen={setAlertModalOpen} />}
-      {(addOptionModalOpen || alertModalOpen) && <Overlay />}
-    </UploadContentFormContainer>
+      {isSubmittedForm && (
+        <EnterMetadata
+          fileList={fileList}
+          fileImgSrcList={fileImgSrcList}
+          thumbnailIdx={thumbnailIdx}
+          isClickedCreateMap={isClickedCreateMap}
+          setIsClickedCreateMap={setIsClickedCreateMap}
+        />
+      )}
+    </>
   );
 }
 
@@ -317,6 +413,26 @@ const UploadContentFormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+`;
+
+const CreateMapIntroduction = styled.div`
+  width: 777px;
+  height: 70px;
+  padding: 30px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const IntroductionTitle = styled.div`
+  font-size: 30px;
+  line-height: 122%;
+`;
+
+const IntroductionExplanation = styled.div`
+  font-size: 15px;
+  line-height: 122%;
+  color: ${colors.darkGray};
 `;
 
 const UploadContentForm = styled.div`
@@ -385,6 +501,19 @@ const DeleteUploadedImg = styled.div`
   right: -4px;
   z-index: 1;
   cursor: pointer;
+`;
+
+const Thumbnail = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  cursor: pointer;
+  background-color: ${(props) => (props.$isSelected ? colors.mainColor : colors.gray)};
+  opacity: ${(props) => (props.$isSelected ? 1 : 0.5)};
+  color: white;
+  font-size: 12px;
+  padding: 2px 3px;
 `;
 
 const UploadedImg = styled.img`
@@ -551,9 +680,10 @@ const UploadContentNotice = styled.div`
   font-size: 10px;
   line-height: 122%;
   color: ${colors.darkGray};
+  margin-top: 5px;
 `;
 
-const SubmitBtn = styled.input`
+const SubmitBtn = styled.button`
   font-family: KNU20TRUTH-Regular;
   display: inline-flex;
   padding: 5px 15px;
@@ -563,9 +693,10 @@ const SubmitBtn = styled.input`
   line-height: 122%;
   border-radius: 10px;
   border: none;
-  background-color: ${(props) => (props.isActiveSubmitBtn ? colors.mainColor : colors.lightGray)};
-  color: ${(props) => (props.isActiveSubmitBtn ? 'white' : 'black')};
+  background-color: ${(props) => (props.$isActiveSubmitBtn ? colors.mainColor : colors.lightGray)};
+  color: ${(props) => (props.$isActiveSubmitBtn ? 'white' : 'black')};
   margin-top: 20px;
+  cursor: pointer;
 `;
 
 const Overlay = styled.div`
