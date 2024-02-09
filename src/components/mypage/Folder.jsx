@@ -3,15 +3,15 @@ import FrontFolder from '../../assets/icon/FrontFolder';
 import BackFolder from '../../assets/icon/BackFolder';
 import colors from '../../styles/colors';
 
-function Folder({ ClickedFile, TapState, onClick }) {
+function Folder({ ClickedFile, TapState, onClick, Own = true }) {
   return (
     <Container onClick={onClick}>
       <FolderContainer>
         <FrontContainer Click={ClickedFile}>
           <FilesNum>8</FilesNum>
-          <FrontFolder Color={TapState ? '#C4D1FF' : '#FFDF8C'} />
+          <FrontFolder Color={Own ? (TapState ? '#C4D1FF' : '#FFDF8C') : '#D9D9D9'} />
         </FrontContainer>
-        <BackFolder Color={TapState ? '#7E8FCC' : '#F3B924'} />
+        <BackFolder Color={Own ? (TapState ? '#7E8FCC' : '#F3B924') : '#999999'} />
       </FolderContainer>
       <FolderName>방문맛집 기록 폴더</FolderName>
     </Container>

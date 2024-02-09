@@ -11,6 +11,8 @@ import CreateMap from './pages/CreateMap';
 import PrivacyPage from './components/settings/privacy/Privacy';
 import RecordPage from './components/settings/record/RecordPage';
 import ServicePage from './components/settings/service/ServicePage';
+import Post from './pages/Post';
+import YourPage from './pages/YourPage';
 
 const App = () => (
   <div className="App">
@@ -25,8 +27,10 @@ const App = () => (
         <Route path="/record" element={<RecordPage />} />
         <Route path="/service" element={<ServicePage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/post" element={<Post />} />
+        <Route path="/yourpage" element={<YourPage />} />
       </Routes>
-      <Footer />
+      {window.location.pathname !== '/post' && <Footer />}
     </BrowserRouter>
   </div>
 );

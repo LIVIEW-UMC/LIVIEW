@@ -43,7 +43,7 @@ const Tap = styled.div`
 `;
 
 const PostContainer = styled.div`
-  width: 329.2px;
+  width: 330px;
   height: 100%;
   margin-top: 54px;
   display: flex;

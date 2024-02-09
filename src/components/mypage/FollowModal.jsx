@@ -9,8 +9,8 @@ function FollowModal({ Close, Title }) {
   const images = imageContext.keys().map(imageContext);
 
   return (
-    <ModalBackground>
-      <ModalContainer>
+    <ModalBackground onClick={Close}>
+      <ModalContainer onClick={(event) => event.stopPropagation()}>
         <ModalTitle>{Title}</ModalTitle>
         <CloseButtonContainer onClick={Close}>
           <CloseButton />
@@ -78,7 +78,7 @@ const FollowNum = styled.div`
   position: absolute;
   top: 45px;
   left: 25px;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard-Regular';
   font-size: 13px;
   font-weight: 600;
   line-height: 15px;
