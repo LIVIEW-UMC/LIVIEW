@@ -1,9 +1,11 @@
 const FilledHeart = () => (
-  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M5.5 10.5L4.7025 9.78065C1.87 7.2357 0 5.55722 0 3.49728C0 1.8188 1.331 0.5 3.025 0.5C3.982 0.5 4.9005 0.941417 5.5 1.63896C6.0995 0.941417 7.018 0.5 7.975 0.5C9.669 0.5 11 1.8188 11 3.49728C11 5.55722 9.13 7.2357 6.2975 9.7861L5.5 10.5Z"
-      fill="#FF0000"
-    />
+  <svg width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ff0000">
+    <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+    <g id="SVGRepo_iconCarrier">
+      <path d="M12 22.59l-9.2-9.12C.43 11.09.43 7.21 2.8 4.83a6.03 6.03 0 0 1 4.29-1.79c1.62 0 3.14.63 4.29 1.79l.62.62.62-.62a6.014 6.014 0 0 1 4.29-1.79c1.62 0 3.14.63 4.29 1.79 2.37 2.38 2.37 6.26 0 8.64L12 22.59z" />
+      <path fill="none" d="M0 0h24v24H0z" />
+    </g>
   </svg>
 );
 
