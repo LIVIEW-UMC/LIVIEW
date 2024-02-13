@@ -75,7 +75,7 @@ const StyledOverlay = styled.div`
   box-sizing: border-box;
   color: white;
   background-color: rgba(154, 154, 154, 0.8);
-  font-family: Pretendard;
+  font-family: 'Pretendard-Regular';
   font-size: 13px;
   font-weight: 600;
   line-height: 16px;

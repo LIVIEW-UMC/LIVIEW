@@ -42,7 +42,7 @@ const UserName = styled.div`
   height: 15px;
   left: 75px;
   position: absolute;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard-Regular';
   font-size: 15px;
   font-weight: 600;
   line-height: 15px;
@@ -60,9 +60,9 @@ const FollowButton = styled.div`
   display: flex;
   align-items: center;
   background-color: #f0f0f0;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Pretendard-Regular';
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 15px;
   letter-spacing: 0em;
   text-align: left;

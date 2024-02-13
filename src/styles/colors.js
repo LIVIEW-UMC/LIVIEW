@@ -29,6 +29,10 @@ const colors = {
   mediumGray: '#787878',
   whiteGray: '#575757',
   moreWhiteGray: '#A2A2A2',
+  balckGray: '#4F4F4F',
+  siver: '#D5D5D5',
+  darkSiver: '#B0B0B0',
+  lightBlack: '#2F2F2FE5',
 };
 
 export default colors;

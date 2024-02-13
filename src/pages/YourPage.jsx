@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ProfileArea from '../components/mypage/ProfileArea';
+import ProfileArea2 from '../components/yourpage/ProfileArea2';
 import PostArea1 from '../components/mypage/PostArea1';
-import PostArea2 from '../components/mypage/PostArea2';
-import PostArea3 from '../components/mypage/PostArea3';
+import PostArea4 from '../components/yourpage/PostArea4';
 import FollowModal from '../components/mypage/FollowModal';
 
-function MyPage() {
+function YourPage() {
   const [follower, setFollower] = useState(false);
 
   const followerOpen = () => {
@@ -50,11 +49,10 @@ function MyPage() {
       {follower ? <FollowModal Close={followerClose} Title="팔로워" /> : null}
       {following ? <FollowModal Close={followingClose} Title="팔로잉" /> : null}
 
-      <ProfileArea FollowerClick={followerOpen} FollowingClick={followingOpen} />
+      <ProfileArea2 FollowerClick={followerOpen} FollowingClick={followingOpen} />
       <PostArea>
         <PostArea1 />
-        <PostArea2 />
-        <PostArea3 />
+        <PostArea4 />
       </PostArea>
     </MyPageContainer>
   );
@@ -74,4 +72,4 @@ const PostArea = styled.div`
   justify-content: center;
 `;
 
-export default MyPage;
+export default YourPage;
