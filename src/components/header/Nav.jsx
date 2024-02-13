@@ -8,9 +8,11 @@ import Alarm from '../../assets/icon/Alarm';
 import MoreOption from '../../assets/icon/MoreOption';
 import Search from '../../assets/icon/Search';
 import SearchModal from './SearchModal';
+import MoreOptionModal from './MoreOptionModal';
 
 function Nav() {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [moreOptionModalOpen, setMoreOptionModalOpen] = useState(false);
 
   return (
     <NavContainer>
@@ -23,26 +25,31 @@ function Nav() {
             <LogoName>LIVIEW</LogoName>
           </Link>
         </LogoContainer>
-        <Home>홈</Home>
-        <Map>지도 만들기</Map>
+        <Link to="/">
+          <Home>홈</Home>
+        </Link>
+        <Link to="/createmap">
+          <Map>지도 만들기</Map>
+        </Link>
       </MainContent>
       <SearchTab>
         <SearchInput
           type="text"
           placeholder="검색"
           onClick={() => {
-            setModalOpen(true);
+            setSearchModalOpen(true);
           }}
+          searchModalOpen={searchModalOpen}
         />
         <SearchIcon>
           <Search />
         </SearchIcon>
-        {modalOpen && (
+        {searchModalOpen && (
           <>
             <SearchModal />
             <Overlay
               onClick={() => {
-                setModalOpen(false);
+                setSearchModalOpen(false);
               }}
             />
           </>
@@ -53,10 +60,28 @@ function Nav() {
           <Alarm />
         </ContentItem>
         <ContentItem>
-          <User />
+          <Link to="/mypage">
+            <User />
+          </Link>
         </ContentItem>
         <ContentItem>
-          <MoreOption />
+          <MoreOptionIcon
+            onClick={() => {
+              setMoreOptionModalOpen(true);
+            }}
+          >
+            <MoreOption />
+          </MoreOptionIcon>
+          {moreOptionModalOpen && (
+            <>
+              <MoreOptionModal setMoreOptionModalOpen={setMoreOptionModalOpen} />
+              <Overlay
+                onClick={() => {
+                  setMoreOptionModalOpen(false);
+                }}
+              />
+            </>
+          )}
         </ContentItem>
       </Content>
     </NavContainer>
@@ -115,7 +140,7 @@ const SearchInput = styled.input`
   font-size: 15px;
   background-color: ${colors.lightGray};
   position: relative;
-  z-index: 1;
+  z-index: ${(props) => (props.searchModalOpen ? 1 : 0)};
 `;
 
 const SearchIcon = styled.div`
@@ -146,7 +171,10 @@ const Overlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const MoreOptionIcon = styled.div`
+  cursor: pointer;
 `;
 
 export default Nav;
