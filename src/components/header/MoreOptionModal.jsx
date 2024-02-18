@@ -1,9 +1,24 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import colors from '../../styles/colors';
 import profile from '../../assets/dummy/IMG_2918.jpg';
 
 function MoreOptionModal({ setMoreOptionModalOpen }) {
+  const navigate = useNavigate();
+  const logoutClick = () => {
+    axios({
+      url: 'https://jin-myserver.shop/auth/logout',
+      method: 'Post',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        'Content-type': 'application/json',
+      },
+    });
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    navigate('/');
+  };
   return (
     <MoreOptionModalContainer
       onClick={() => {
@@ -21,7 +36,7 @@ function MoreOptionModal({ setMoreOptionModalOpen }) {
             </UserInfo>
           </AccountInfo>
         </Link>
-        <Logout>로그아웃</Logout>
+        <Logout onClick={logoutClick}>로그아웃</Logout>
       </Login>
       <Title>설정 더보기</Title>
       <Settings>

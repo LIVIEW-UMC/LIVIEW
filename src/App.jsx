@@ -11,6 +11,7 @@ import CreateMap from './pages/CreateMap';
 import PrivacyPage from './components/settings/privacy/Privacy';
 import RecordPage from './components/settings/record/RecordPage';
 import ServicePage from './components/settings/service/ServicePage';
+import TabNavigator from './components/main/TabNavigator';
 import Post from './pages/Post';
 import YourPage from './pages/YourPage';
 
@@ -20,6 +21,7 @@ const App = () => (
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/home" element={<TabNavigator />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/clickedpost" element={<ClickedPostPage />} />
         <Route path="/profile" element={<ProfileEditPage />} />
