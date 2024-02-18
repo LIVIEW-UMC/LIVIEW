@@ -8,8 +8,9 @@ import MoreOption from '../../assets/icon/MoreOption';
 import AddOptionModal from './AddOptionModal';
 import AlertModal from './AlertModal';
 import EnterMetadata from './EnterMetadata';
+import BASE_URL from '../../config/baseUrl';
 
-function UploadContent() {
+function UploadContent({ setMapItems }) {
   const [fileList, setFileList] = useState([]);
   const [fileImgSrcList, setFileImgSrcList] = useState([]);
   const [fileLabelDragEnter, setFileLabelDragEnter] = useState(false);
@@ -23,7 +24,8 @@ function UploadContent() {
   const [detailWarningDisplay, setDetailWarningDisplay] = useState(false);
 
   const [folder, setFolder] = useState('');
-  const [folderOptionList, setFolderOptionList] = useState(['방문 맛집 기록폴더', '대학시절 여행기록']);
+  const [folderId, setFolderId] = useState(null);
+  const [folderOptionList, setFolderOptionList] = useState([]);
   const [selectBoxOpen, setSelectBoxOpen] = useState(false);
   const [addOptionModalOpen, setAddOptionModalOpen] = useState(false);
 
@@ -32,9 +34,30 @@ function UploadContent() {
   const [tagWarningDisplay, setTagWarningDisplay] = useState(false);
 
   const [isActiveSubmitBtn, setIsActiveSubmitBtn] = useState(false);
+  const [isActiveTemporaryStorageBtn, setIsActiveTemporaryStorageBtn] = useState(false);
 
   const [isSubmittedForm, setIsSubmittedForm] = useState(false);
   const [isClickedCreateMap, setIsClickedCreateMap] = useState(false);
+
+  const [tourId, setTourId] = useState(null);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/tours/folder?owner=true`, {
+      method: 'GET',
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFolderOptionList(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     if (title !== '' && detail !== '' && tagList.length !== 0 && fileList.length !== 0) {
@@ -43,6 +66,20 @@ function UploadContent() {
       setIsActiveSubmitBtn(false);
     }
   }, [title, detail, tagList, fileList]);
+
+  useEffect(() => {
+    if (title !== '' && fileList.length !== 0) {
+      setIsActiveTemporaryStorageBtn(true);
+    } else {
+      setIsActiveTemporaryStorageBtn(false);
+    }
+  }, [title, fileList]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
 
   const fileLabelDragEnterHandler = () => {
     setFileLabelDragEnter(true);
@@ -199,8 +236,9 @@ function UploadContent() {
     setSelectBoxOpen((prev) => !prev);
   };
 
-  const clickOptionHandler = (e) => {
+  const clickOptionHandler = (e, id) => {
     setFolder(e.target.innerText);
+    setFolderId(id);
     setSelectBoxOpen(false);
   };
 
@@ -211,6 +249,80 @@ function UploadContent() {
   const formSubmitHandler = (e) => {
     e.preventDefault();
     setIsSubmittedForm(true);
+  };
+
+  const temporarySubmitHandler = (e) => {
+    e.preventDefault();
+
+    const tourRequestDTO = {
+      title,
+      contents: detail,
+      completeStatus: 'INCOMPLETE',
+      hashtag: tagList,
+      isClassfied: 'false',
+      tourId,
+      folderId: null,
+      size: fileList.length,
+      startDay: null,
+      endDay: null,
+      imageMetadataDTOList: fileList.map((_, id) => ({
+        date: null,
+        imgLocation: null,
+        latitude: null,
+        longitude: null,
+        isThumbnail: id === thumbnailIdx ? 'true' : 'false',
+      })),
+    };
+
+    const formData = new FormData();
+    const json = JSON.stringify(tourRequestDTO);
+    formData.append('tourRequestDTO', new Blob([json], { type: 'application/json' }));
+    fileList.forEach((file) => {
+      formData.append('multipartFileList', file);
+    });
+
+    fetch(`${BASE_URL}/tours`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+      },
+    })
+      .then(() => {
+        fetch(`${BASE_URL}/tours/incompleted/simple`, {
+          method: 'GET',
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setMapItems(data.map((item) => ({ id: item.tourId, imgSrc: item.imageURL, name: item.title, expirationPeriod: 30, isChecked: false })));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setFileList([]);
+    setFileImgSrcList([]);
+    setThumbnailIdx(0);
+    setTitle('');
+    setTitleWarningDisplay(false);
+    setDetail('');
+    setDetailWarningDisplay(false);
+    setFolder('');
+    setFolderId(null);
+    setTagList([]);
+    setTagToAdd('');
+    setTagWarningDisplay(false);
+    setTourId(null);
   };
 
   useEffect(() => {
@@ -232,7 +344,7 @@ function UploadContent() {
         </IntroductionExplanation>
       </CreateMapIntroduction>
       {!isSubmittedForm && (
-        <UploadContentFormContainer onSubmit={formSubmitHandler}>
+        <UploadContentFormContainer>
           <UploadContentForm>
             {!isSubmittedForm && (
               <UploadImgLabel
@@ -293,7 +405,14 @@ function UploadContent() {
             <UploadDetailContainer>
               <UploadDetail>
                 <UploadDetailLabel htmlFor="title">제목</UploadDetailLabel>
-                <UploadDetailInput type="text" id="title" placeholder="지도의 제목을 작성해주세요." value={title} onChange={changeTitleHandler} />
+                <UploadDetailInput
+                  type="text"
+                  id="title"
+                  placeholder="지도의 제목을 작성해주세요."
+                  value={title}
+                  onChange={changeTitleHandler}
+                  onKeyDown={handleKeyDown}
+                />
                 <Notice $display={titleWarningDisplay}>
                   <Warning />
                   제목은 필수로 작성해주셔야 합니다.
@@ -327,9 +446,14 @@ function UploadContent() {
                   <MoreOption />
                 </ShowOptionIcon>
                 <OptionContainer $selectBoxOpen={selectBoxOpen}>
-                  {folderOptionList.map((item, i) => (
-                    <Option key={i + 1} onClick={clickOptionHandler}>
-                      {item}
+                  {folderOptionList.map((item) => (
+                    <Option
+                      key={item.id}
+                      onClick={(e) => {
+                        clickOptionHandler(e, item.id);
+                      }}
+                    >
+                      {item.name}
                     </Option>
                   ))}
                   <AddOption onClick={clickAddOptionHandler}>폴더 추가</AddOption>
@@ -381,9 +505,18 @@ function UploadContent() {
             사용자는 관련 법률 및 규정에 따라 처벌을 받을 수 있습니다.
           </UploadContentNotice>
 
-          <SubmitBtn $isActiveSubmitBtn={isActiveSubmitBtn} disabled={!isActiveSubmitBtn}>
-            저장하기
-          </SubmitBtn>
+          <BtnContainer>
+            <TemporaryStorageBtn
+              $isActiveTemporaryStorageBtn={isActiveTemporaryStorageBtn}
+              disabled={!isActiveTemporaryStorageBtn}
+              onClick={temporarySubmitHandler}
+            >
+              임시저장
+            </TemporaryStorageBtn>
+            <SubmitBtn $isActiveSubmitBtn={isActiveSubmitBtn} disabled={!isActiveSubmitBtn} onClick={formSubmitHandler}>
+              저장하기
+            </SubmitBtn>
+          </BtnContainer>
 
           {addOptionModalOpen && (
             <AddOptionModal
@@ -403,6 +536,15 @@ function UploadContent() {
           thumbnailIdx={thumbnailIdx}
           isClickedCreateMap={isClickedCreateMap}
           setIsClickedCreateMap={setIsClickedCreateMap}
+          tourRequestDTO={{
+            title,
+            contents: detail,
+            completeStatus: 'COMPLETE',
+            hashtag: tagList,
+            isClassfied: folder !== '' ? 'true' : 'false',
+            tourId,
+            folderId,
+          }}
         />
       )}
     </>
@@ -681,6 +823,27 @@ const UploadContentNotice = styled.div`
   line-height: 122%;
   color: ${colors.darkGray};
   margin-top: 5px;
+`;
+
+const BtnContainer = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
+const TemporaryStorageBtn = styled.button`
+  font-family: KNU20TRUTH-Regular;
+  display: inline-flex;
+  padding: 5px 15px;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  line-height: 122%;
+  border-radius: 10px;
+  border: none;
+  background-color: ${(props) => (props.$isActiveTemporaryStorageBtn ? colors.mainColor : colors.lightGray)};
+  color: ${(props) => (props.$isActiveTemporaryStorageBtn ? 'white' : 'black')};
+  margin-top: 20px;
+  cursor: pointer;
 `;
 
 const SubmitBtn = styled.button`

@@ -3,39 +3,71 @@ import styled from 'styled-components';
 import MapListItem from './MapListItem';
 import colors from '../../styles/colors';
 import LeftArrow from '../../assets/icon/LeftArrow';
-import dummy1 from '../../assets/dummy/dummy1.jpg';
 import Check from '../../assets/icon/Check';
 import Trash from '../../assets/icon/Trash';
+import BASE_URL from '../../config/baseUrl';
 
-function CreateMapSidebar() {
+function CreateMapSidebar({ mapItems, setMapItems }) {
   const [showSidebar, setShowSidebar] = useState(false);
-
-  const [mapItems, setMapItems] = useState([
-    { id: 1, imgSrc: dummy1, name: '부산해커톤 이동동선', expirationPeriod: 30, isChecked: false },
-    { id: 2, imgSrc: dummy1, name: '광화문 전시회 동선', expirationPeriod: 26, isChecked: false },
-    { id: 3, imgSrc: dummy1, name: '기차여행 위치기록', expirationPeriod: 13, isChecked: false },
-  ]);
 
   const [checkedItemCount, setCheckedItemCount] = useState(0);
   const [isAllChecked, setIsAllChecked] = useState(false);
+
+  const [writingDraftId, setWritingDraftId] = useState(null);
 
   const allCheckBoxClicked = () => {
     setMapItems((prevItems) =>
       prevItems.map((prevItem) => ({
         ...prevItem,
-        isChecked: checkedItemCount !== mapItems.length,
+        isChecked: checkedItemCount !== 0 ? false : writingDraftId !== prevItem.id,
       })),
     );
   };
 
   const deleteBtnClicked = () => {
+    mapItems
+      .filter((item) => item.isChecked)
+      .forEach((item) => {
+        fetch(`${BASE_URL}/tours/${item.id}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
     setMapItems((prevItems) => prevItems.filter((item) => item.isChecked === false));
   };
 
   useEffect(() => {
+    fetch(`${BASE_URL}/tours/incompleted/simple`, {
+      method: 'GET',
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMapItems(data.map((item) => ({ id: item.tourId, imgSrc: item.imageURL, name: item.title, expirationPeriod: 30, isChecked: false })));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
     const count = mapItems.filter((item) => item.isChecked).length;
     setCheckedItemCount(count);
-    if (count === 3) {
+    if (count === mapItems.length && count !== 0) {
       setIsAllChecked(true);
     } else {
       setIsAllChecked(false);
@@ -50,7 +82,13 @@ function CreateMapSidebar() {
             <MapDraftCount>지도초안({mapItems.length})</MapDraftCount>
             <MapList>
               {mapItems.map((item) => (
-                <MapListItem key={item.id} item={item} setMapItems={setMapItems} />
+                <MapListItem
+                  key={item.id}
+                  item={item}
+                  setMapItems={setMapItems}
+                  writingDraftId={writingDraftId}
+                  setWritingDraftId={setWritingDraftId}
+                />
               ))}
             </MapList>
           </div>
@@ -101,6 +139,7 @@ const SidebarContainer = styled.div`
 `;
 
 const ShowSidebar = styled.div`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
