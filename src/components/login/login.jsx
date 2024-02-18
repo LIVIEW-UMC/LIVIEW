@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import GoogleLoginButton from './GoogleLoginButton';
+import CustomLoginButton from './CustomLoginButton';
 import LoginImg from '../../assets/LoginImg';
 import LoginLogo from '../../assets/LoginLogo';
 
@@ -14,7 +14,7 @@ function Login() {
         <LoginImg />
       </LoginImgContainer>
       <LoginLine />
-      <GoogleLoginButton />
+      <CustomLoginButton />
     </LoginContainer>
   );
 }
