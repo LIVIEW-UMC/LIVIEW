@@ -3,29 +3,101 @@ import styled from 'styled-components';
 import SettingsSidebar from '../SettingsSidebar';
 
 const PrivacyPage = () => {
-  const [checkedInputs, setCheckedInputs] = useState({
-    disableRecord: false,
-    blockEmail: false,
-    autoPrivate: false,
-  });
+  const [blockEmailChecked, setBlockEmailChecked] = useState(false);
+  const [autoPrivateChecked, setAutoPrivateChecked] = useState(false);
+  const [blockEmailSentToServer, setBlockEmailSentToServer] = useState(false);
+  const [autoPrivateSentToServer, setAutoPrivateSentToServer] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
-  const handleCheckboxChange = (name) => {
-    setCheckedInputs((prevValues) => ({
-      ...prevValues,
-      [name]: !prevValues[name],
-    }));
+  const sendCheckboxStateToServer = (name, checked) => {
+    let endpoint;
+    if (name === 'blockEmail') {
+      endpoint = 'https://jin-myserver.shop/users/email-approval';
+    } else if (name === 'autoPrivate') {
+      endpoint = 'https://jin-myserver.shop/users/board-approval';
+    }
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+    };
+
+    if (checked && !blockEmailSentToServer && name === 'blockEmail') {
+      fetch(endpoint, {
+        method: 'PATCH',
+        headers,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('네트워크 응답이 올바르지 않습니다');
+          }
+          console.log('blockEmail 요청 성공');
+        })
+        .catch((error) => {
+          console.error('blockEmail 오류:', error);
+        })
+        .finally(() => {
+          setBlockEmailSentToServer(true);
+        });
+    }
+    if (checked && !autoPrivateSentToServer && name === 'autoPrivate') {
+      fetch(endpoint, {
+        method: 'PATCH',
+        headers,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('네트워크 응답이 올바르지 않습니다');
+          }
+          console.log('autoPrivate 요청 성공');
+        })
+        .catch((error) => {
+          console.error('autoPrivate 오류:', error);
+        })
+        .finally(() => {
+          setAutoPrivateSentToServer(true);
+        });
+    }
   };
 
-  // 나중에 데이터 삭제 내용 추가
-  const handleData = () => {};
+  const handleCheckboxChange = (name) => {
+    if (name === 'blockEmail') {
+      setBlockEmailChecked((prev) => !prev);
+      sendCheckboxStateToServer(name, !blockEmailChecked);
+    } else if (name === 'autoPrivate') {
+      setAutoPrivateChecked((prev) => !prev);
+      sendCheckboxStateToServer(name, !autoPrivateChecked);
+    }
+    setIsModified(true);
+  };
 
-  // 나중에 위치정보 다운 내용 추가
-  const handleDownload = () => {};
+  const handleDataDeletion = () => {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+    };
 
-  //   const handleSubmit = () => {
-  //     // 여기서 checkboxValues를 서버로 전송하는 로직을 추가할 수 있습니다.
-  //     console.log('Sending to server:', checkedInputs);
-  //   };
+    fetch('https://jin-myserver.shop/users/myInfo', {
+      method: 'DELETE',
+      headers,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('네트워크 응답이 올바르지 않습니다');
+        }
+        console.log('데이터 삭제 성공');
+      })
+      .catch((error) => {
+        console.error('오류:', error);
+      });
+  };
+
+  const handleModify = () => {
+    console.log('변경 사항 저장됨!');
+    setIsModified(false);
+  };
 
   return (
     <All>
@@ -37,20 +109,7 @@ const PrivacyPage = () => {
         </TitleContainer>
         <CheckboxContainer>
           <CheckboxLabel>
-            <CheckboxInput type="checkbox" checked={checkedInputs.disableRecord} onChange={() => handleCheckboxChange('disableRecord')} />
-            <CheckboxTextWrapper>
-              <CheckboxText1>조회한 게시물 기록 비활성화하기</CheckboxText1>
-              <CheckboxText2>
-                <div>LIVIEW에서 회원님이 확인한 게시물의 데이터를 저장하지 않기를 원하신다면</div>
-                <div> 왼쪽 체크박스를 눌러 기록저장기능을 끄십시오.</div>
-              </CheckboxText2>
-            </CheckboxTextWrapper>
-          </CheckboxLabel>
-
-          <br />
-
-          <CheckboxLabel>
-            <CheckboxInput type="checkbox" checked={checkedInputs.blockEmail} onChange={() => handleCheckboxChange('blockEmail')} />
+            <CheckboxInput type="checkbox" checked={blockEmailChecked} onChange={() => handleCheckboxChange('blockEmail')} />
             <CheckboxTextWrapper>
               <CheckboxText1>이메일 수신 거부</CheckboxText1>
               <CheckboxText2>
@@ -59,11 +118,8 @@ const PrivacyPage = () => {
               </CheckboxText2>
             </CheckboxTextWrapper>
           </CheckboxLabel>
-
-          <br />
-
           <CheckboxLabel>
-            <CheckboxInput type="checkbox" checked={checkedInputs.autoPrivate} onChange={() => handleCheckboxChange('autoPrivate')} />
+            <CheckboxInput type="checkbox" checked={autoPrivateChecked} onChange={() => handleCheckboxChange('autoPrivate')} />
             <CheckboxTextWrapper>
               <CheckboxText1>업로드한 게시물 자동 비공개처리</CheckboxText1>
               <CheckboxText2>
@@ -72,17 +128,14 @@ const PrivacyPage = () => {
               </CheckboxText2>
             </CheckboxTextWrapper>
           </CheckboxLabel>
-
-          <br />
         </CheckboxContainer>
         <DataContainer>
           <DataText>데이터 및 계정 삭제</DataText>
-          <DataButton onClick={handleData}>데이터 삭제</DataButton>
+          <DataButton onClick={handleDataDeletion}>데이터 삭제</DataButton>
         </DataContainer>
-        <DownloadContainer>
-          <DownloadText>본인 위치정보 파일 다운받기</DownloadText>
-          <DownloadButton onClick={handleDownload}>다운받기</DownloadButton>
-        </DownloadContainer>
+        <ModifyButton onClick={handleModify} style={{ backgroundColor: isModified ? '#2655FF' : '#dcdcdc' }}>
+          저장하기
+        </ModifyButton>
       </Container>
     </All>
   );
@@ -90,42 +143,35 @@ const PrivacyPage = () => {
 
 const All = styled.div`
   display: flex;
-  min-height: 100vh;
   font-family: 'KNU20TRUTH-Regular';
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
 `;
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  display: inline-block;
-  margin-bottom: 20px;
+  width: 777px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 5vh 0px;
 `;
 const TitleContainer = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
 `;
 const Title = styled.div`
-  display: block;
-  gap: 16px;
-  margin-top: 10px;
   font-size: 30px;
 `;
 const Content = styled.div`
-  display: block;
-  gap: 16px;
-  margin-top: 10px;
-  font-size: 12px;
-  color: #939393;
+  margin-top: 8px;
+  font-size: 15px;
+  color: #a4a4a4;
 `;
 
 const CheckboxContainer = styled.div`
-  margin-bottom: 10px;
   display: flex;
-  margin-top: 40px;
+  margin-top: 43px;
   align-items: center;
   flex-direction: column;
   align-items: flex-start;
@@ -134,14 +180,14 @@ const CheckboxContainer = styled.div`
 const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  padding-bottom: 26px;
 `;
 
 const CheckboxInput = styled.input`
-  width: 20px;
-  height: 20px;
-  margin-right: 20px;
-  margin-bottom: 30px;
+  width: 18px;
+  height: 18px;
+  margin-right: 18px;
+  margin-bottom: 10px;
   
   &:checked {
     background-color: #2655FF;
@@ -150,7 +196,6 @@ const CheckboxInput = styled.input`
 const CheckboxTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
 `;
 
 const CheckboxText1 = styled.div`
@@ -159,34 +204,22 @@ const CheckboxText1 = styled.div`
 `;
 
 const CheckboxText2 = styled.div`
-  color: #939393;
+  color: #a4a4a4;
   margin-top: 5px;
+  line-height: 122%;
 `;
 
 const DataContainer = styled.div`
   display: flex;
-  margin-top: 70px;
+  width: 90%;
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
 `;
 
 const DataText = styled.div`
-  margin-right: 10px;
+  margin-left: 15px;
   font-size: 20px;
-`;
-
-const DownloadText = styled.div`
-  margin-right: 10px;
-  font-size: 20px;
-`;
-
-const DownloadContainer = styled.div`
-  display: flex;
-  margin-top: 40px;
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
 const DataButton = styled.div`
@@ -194,26 +227,31 @@ const DataButton = styled.div`
   background-color: #dcdcdc;
   border: none;
   border-radius: 10px;
-  width: 100px;
+  width: 121px;
   height: 34px;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  margin-right: 200px;
+  font-size: 20px;
   color: #5a5a5a;
+  cursor: pointer; /* 수정된 부분: 버튼 스타일을 커서로 변경 */
 `;
 
-const DownloadButton = styled.div`
-  display: flex;
-  background-color: #dcdcdc;
+const ModifyButton = styled.button`
+  background-color: #2655FF;
+  color: #FFFFFF;
   border: none;
+  padding: 5px, 15px, 5px, 15px
+  cursor: pointer;
   border-radius: 10px;
-  width: 90px;
+  width: 99px;
   height: 34px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  margin-right: 200px;
-  color: #5a5a5a;
+  font-size: 20px;
+  font-family: 'KNU20TRUTH-Regular';
+  align-self: flex-end;
+  margin-top: 100px;
 `;
+
 export default PrivacyPage;

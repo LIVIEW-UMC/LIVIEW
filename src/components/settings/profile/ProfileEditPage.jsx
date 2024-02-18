@@ -1,17 +1,49 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import SettingsSidebar from '../SettingsSidebar';
-import basicImage from '../../../assets/profile/basic.png';
+import colors from '../../../styles/colors';
 
 const ProfileEditPage = () => {
-  const [profileImage, setProfileImage] = useState(basicImage);
-  const [name, setName] = useState('민서'); // 기본값으로 설정
-  const [lastName, setLastName] = useState('김'); // 기본값으로 설정
-  const [introduction, setIntroduction] = useState('회원님의 이야기를 작성해주세요!! (200자 이내)');
-  const [UserEmail, setUserEmail] = useState('l50227697');
-  const [UserEmail2, setUserEmail2] = useState('gmail.com');
+  const [profileImage, setProfileImage] = useState();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [UserEmail, setUserEmail] = useState('');
+  const [UserEmail2, setUserEmail2] = useState('');
+  const [isModified, setIsModified] = useState(false);
   const fileInputRef = useRef(null);
   const maxIntroductionLength = 200;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://jin-myserver.shop/users/detail', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('서버에서 데이터를 가져오는데 실패했습니다.');
+        }
+        const data = await response.json();
+        setProfileImage(data.imgUrl);
+        const nameParts = data.name.split('');
+        setLastName(nameParts[0]); // 첫 번째 부분을 성으로 설정
+        setFirstName(nameParts.slice(1).join(' ')); // 나머지 부분을 이름으로 설정
+        const emailParts = data.email.split('@');
+        setUserEmail(emailParts[0]);
+        setUserEmail2(emailParts[1]);
+        setIntroduction(data.introduction || '');
+      } catch (error) {
+        console.error('데이터 가져오기 오류:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
@@ -29,12 +61,46 @@ const ProfileEditPage = () => {
     fileInputRef.current.click();
   };
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
+  const handleFirstNameChange = (e) => {
+    const inputFirstName = e.target.value;
+    const regex = /^[가-힣]*$/;
+
+    if (inputFirstName !== '' && regex.test(inputFirstName)) {
+      setFirstName(inputFirstName);
+      setIsModified(true);
+    } else if (inputFirstName === '') {
+      console.log('이름은 자음+모음으로만 입력 가능합니다.');
+      // 사용자가 입력하지 않은 경우, 원래 이름으로 설정
+      setFirstName(firstName);
+      setIsModified(false);
+    }
+  };
+
+  const handleFirstNameClick = () => {
+    if (firstName === '') {
+      setFirstName(firstName);
+    }
   };
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
+    const inputLastName = e.target.value;
+    const regex = /^[가-힣]*$/;
+
+    if (inputLastName !== '' && regex.test(inputLastName)) {
+      setLastName(inputLastName);
+      setIsModified(true);
+    } else if (inputLastName === '') {
+      console.log('성은 자음+모음으로만 입력 가능합니다.');
+      // 사용자가 입력하지 않은 경우, 원래 성으로 설정
+      setLastName(lastName);
+      setIsModified(false);
+    }
+  };
+
+  const handleLastNameClick = () => {
+    if (lastName === '') {
+      setLastName(lastName);
+    }
   };
 
   const handleIntroductionChange = (e) => {
@@ -43,22 +109,41 @@ const ProfileEditPage = () => {
     if (inputIntroduction.length <= maxIntroductionLength) {
       setIntroduction(inputIntroduction);
     } else {
-      // Display a warning or handle exceeding character limit as needed
       console.log('Introduction exceeds character limit');
+      setIsModified(true);
     }
   };
 
-  const handleUserEmailChange = (e) => {
-    setUserEmail(e.target.value);
-  };
-
-  const handleUserEmailChange2 = (e) => {
-    setUserEmail2(e.target.value);
-  };
-
   const handleModify = () => {
-    // Add logic to save the changes
-    console.log('Changes saved!');
+    if (isModified) {
+      // 수정된 데이터가 있을 때만 서버로 데이터를 전송
+      fetch('https://jin-myserver.shop/users/myInfo', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+        },
+        body: JSON.stringify({
+          userProfile: {
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            introduction,
+          },
+          file: profileImage !== null ? profileImage : undefined,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('서버에 데이터를 보내는데 실패했습니다.');
+          }
+          console.log('서버에 데이터 전송 성공!');
+          setIsModified(false); // 수정 후 수정 여부를 false로 초기화
+        })
+        .catch((error) => {
+          console.error('서버에 데이터 전송 오류:', error);
+        });
+    }
   };
 
   return (
@@ -71,130 +156,109 @@ const ProfileEditPage = () => {
         </ProfileTitleContainer>
         <ProfileImageContainer>
           <ImageContainer>
-            <PhotoText>사진</PhotoText>
+            <ContentText>사진</ContentText>
             <ProfileImage src={profileImage} alt="Profile" />
           </ImageContainer>
           <ChangeImageButton onClick={openFileExplorer}>변경</ChangeImageButton>
         </ProfileImageContainer>
         <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} ref={fileInputRef} />
-        <NameContainer1>
-          <NameText1>이름</NameText1>
-          <NameInput
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            onClick={() => setName('')}
-            onBlur={() => {
-              if (name === '') setName('민서');
-            }}
-          />
-        </NameContainer1>
-        <NameContainer2>
-          <NameText2>성</NameText2>
-          <LastNameInput
-            type="text"
-            value={lastName}
-            onChange={handleLastNameChange}
-            onClick={() => setLastName('')}
-            onBlur={() => {
-              if (lastName === '') setLastName('김');
-            }}
-          />
-        </NameContainer2>
+        <NameContainer>
+          <NameContainer1>
+            <ContentText>이름</ContentText>
+            <NameInput
+              type="text"
+              defaultValue={firstName}
+              onChange={handleFirstNameChange}
+              onClick={handleFirstNameClick}
+              onBlur={() => {
+                if (firstName === '') setFirstName('');
+              }}
+            />
+          </NameContainer1>
+          <NameContainer2>
+            <ContentText>성</ContentText>
+            <LastNameInput
+              type="text"
+              defaultValue={lastName}
+              onChange={handleLastNameChange}
+              onClick={handleLastNameClick}
+              onBlur={() => {
+                if (lastName === '') setLastName('');
+              }}
+            />
+          </NameContainer2>
+        </NameContainer>
         <IntroductionContainer>
-          <IntroductionText>소개</IntroductionText>
+          <ContentText>소개</ContentText>
           <IntroductionInput
-            value={introduction}
+            defaultValue={introduction}
             onChange={handleIntroductionChange}
+            placeholder="회원님의 이야기를 작성해주세요!! (200자 이내)"
             onClick={() => setIntroduction('')}
-            onBlur={() => {
-              if (introduction === '') setIntroduction('회원님의 이야기를 작성해주세요!! (200자 이내)');
-            }}
           />
         </IntroductionContainer>
-        <EmailContainer1>
-          <EmailText>사용자 이메일</EmailText>
-          <UserEmailInput1
-            type="text"
-            value={UserEmail}
-            onChange={handleUserEmailChange}
-            onClick={() => setUserEmail('')}
-            onBlur={() => {
-              if (UserEmail === '') setUserEmail('l50227697');
-            }}
-          />
-        </EmailContainer1>
-        <SymbolContainer>
-          <AtSymbol>@</AtSymbol>
-        </SymbolContainer>
-        <EmailContainer2>
-          <UserEmailInput2
-            type="text"
-            value={UserEmail2}
-            onChange={handleUserEmailChange2}
-            onClick={() => setUserEmail2('')}
-            onBlur={() => {
-              if (UserEmail2 === '') setUserEmail2('gmail.com');
-            }}
-          />
-        </EmailContainer2>
-        <ModifyButton onClick={handleModify}>수정하기</ModifyButton>
+        <EmailContainer>
+          <ContentText>사용자 이메일</ContentText>
+          <EmailInputContainer>
+            <UserEmailInput1 type="text" value={UserEmail} readOnly />
+            <AtSymbol>@</AtSymbol>
+            <UserEmailInput2 type="text" value={UserEmail2} readOnly />
+          </EmailInputContainer>
+        </EmailContainer>
+        <ModifyButton onClick={handleModify} style={{ backgroundColor: isModified ? '#2655FF' : '#dcdcdc' }}>
+          수정하기
+        </ModifyButton>
       </Container>
     </All>
   );
 };
 const All = styled.div`
   display: flex;
-  min-height: 100vh;
   font-family: 'KNU20TRUTH-Regular';
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
 `;
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  justify-content: center;
-  margin-bottom: 20px;
+  width: 777px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 5vh 0px;
 `;
 
 const ProfileTitleContainer = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Tilte = styled.div`
-  display: block;
-  margin-top: 10px;
+  display: flex;
   font-size: 30px;
 `;
 
 const Content = styled.div`
-  display: block;
-  margin-top: 10px;
+  display: flex;
+  margin-top: 8px;
   font-size: 15px;
   color: #939393;
 `;
 
-const PhotoText = styled.div`
-  display: block;
-  top: 10px;
-  margin-top: 40px;
-  margin-bottom: 10px;
-  margin-left: 8px;
-  color: #464646;
+const ContentText = styled.div`
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: black;
 `;
 
 const ImageContainer = styled.div`
   display: block;
+  margin-right: 21px;
 `;
 
 const ProfileImageContainer = styled.div`
   display: flex;
-  gap: 16px;
+  align-items: flex-end;
 `;
 
 const ProfileImage = styled.img`
@@ -205,185 +269,119 @@ const ProfileImage = styled.img`
 `;
 
 const ChangeImageButton = styled.div`
-  background-color: #DCDCDC;
-  border: none;
-  padding: 5px, 15px, 5px, 15px
-  cursor: pointer;
-  border-radius: 10px;
-  width: 65px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  text-align: center;
+  display: inline-flex;
+  padding: 5px 15px;
   justify-content: center;
-  font-size: 16px;
-  margin-top: 100px;
-  margin-left: 12px;
-  
+  align-items: center;
+  font-size: 18px;
+  line-height: 122%;
+  border-radius: 10px;
+  border: none;
+  background-color: #e1e1e1;
+  color: black;
+  cursor: pointer;
+`;
+
+const NameContainer = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const NameContainer1 = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
 `;
 const NameContainer2 = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 20px;
-  margin-left: 10px;
-`;
-
-const NameText1 = styled.div`
-  display: block;
-  padding-left: 10px;
-  color: #464646;
-`;
-
-const NameText2 = styled.div`
-  display: block;
-  color: #464646;
-  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 12px;
 `;
 
 const InputBaseStyles = `
-  display: flex;
-  border: 1px solid #ccc;
-  padding: 8px;
-  margin-top: 10px;
+    height: 38px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1.5px solid #909090;
+    font-family: KNU20TRUTH-Regular;
 `;
 
 const NameInput = styled.input`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === '민서' ? '#939393' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
+  color: ${(props) => (props.value === '' ? '#a4a4a4' : '#000')};
   width: 220px;
-  height: 30px;
-  top: 454px;
-  left: 411px;
-  gap: 10px;
+  padding-left: 10px;
 `;
 
 const LastNameInput = styled.input`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === '김' ? '#939393' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
+  color: ${(props) => (props.value === '' ? '#a4a4a4' : '#000')};
   width: 220px;
-  height: 30px;
-  top: 454px;
-  left: 411px;
-  gap: 10px;
+  padding-left: 10px;
 `;
 
 const IntroductionContainer = styled.div`
-  top: 120px;
-  left: 0;
-  right: 0;
+  display: flex;
+  flex-direction: column;
   font-size: 15px;
   color: #333;
-  margin-top: 50px;
-  width: 476px;
-  height: 147px;
-`;
-
-const IntroductionText = styled.div`
-  display: block;
-  padding-left: 10px;
-  color: #464646;
 `;
 
 const IntroductionInput = styled.textarea`
   ${InputBaseStyles}
+  height: 140px;
   color: ${(props) => (props.value === '회원님의 이야기를 작성해주세요!! (200자 이내)' ? '#939393' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  padding: 5px;
-  width: 100%;
-  height: 80%;
-  font-weight: 2px;
-  font-size: 16px;
+  padding: 10px;
+  width: 453px;
   resize: none;
-  font-family: 'KNU20TRUTH-Regular';
 `;
 
-const EmailContainer1 = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 10px;
+const EmailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
-const EmailContainer2 = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 10px;
-`;
-
-const EmailText = styled.div`
-  display: block;
-  color: #464646;
-  padding-left: 8px;
-  margin-top: 20px;
+const EmailInputContainer = styled.div`
+  display: flex;
+  padding-top: 5px;
+  align-items: center;
+  gap: 5px;
 `;
 
 const UserEmailInput1 = styled.input`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === 'l50227697' ? '#939393' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
-  width: 220px;
-  height: 30px;
-  top: 454px;
-  left: 411px;
-  gap: 10px;
-`;
-
-const SymbolContainer = styled.div`
-  display: inline-block;
-  padding: 0 8px;
-`;
-
-const AtSymbol = styled.span`
   color: #939393;
+  width: 224px;
+  padding-left: 10px;
+  border:;
 `;
 
 const UserEmailInput2 = styled.input`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === 'gmail.com' ? '#939393' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
-  width: 200px;
-  height: 30px;
-  top: 454px;
-  left: 411px;
-  gap: 10px;
+  color: #939393;
+  width: 195px;
+  padding-left: 10px;
+`;
+
+const AtSymbol = styled.div`
+  color: ${colors.gray};
 `;
 
 const ModifyButton = styled.button`
-  background-color: #DCDCDC;
-  border: none;
-  padding: 5px, 15px, 5px, 15px
-  cursor: pointer;
+  font-family: KNU20TRUTH-Regular;
+  width: max-content;
+  display: inline-flex;
+  padding: 5px 15px;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  line-height: 122%;
   border-radius: 10px;
-  width: 90px;
-  height: 34px;
-  display: block;
-  text-align: center;
-  font-size: 16px;
-  margin-top: 30px;
-  font-family: 'KNU20TRUTH-Regular';
-  margin-left: auto;
-  margin-right: 200px;
-  margin-bottom: 20px;
+  border: none;
+  background-color: #e1e1e1;
+  color: black;
+  cursor: pointer;
+  align-self: flex-end;
 `;
 
 export default ProfileEditPage;

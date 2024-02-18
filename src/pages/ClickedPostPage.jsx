@@ -13,8 +13,10 @@ function ClickedPostPage() {
 
 const SettingsContainer = styled.div`
   display: flex;
+  justify-content: center;
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 62px);
 `;
+
 export default ClickedPostPage;

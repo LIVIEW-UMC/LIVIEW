@@ -418,7 +418,7 @@ const UploadContentFormContainer = styled.form`
 const CreateMapIntroduction = styled.div`
   width: 777px;
   height: 70px;
-  padding: 30px 0px;
+  padding: 5vh 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -561,6 +561,7 @@ const UploadDetailTextarea = styled.textarea`
   border-radius: 10px;
   border: 1.5px solid ${colors.darkGray};
   font-family: KNU20TRUTH-Regular;
+  resize: none;
 `;
 
 const UploadDetailSelect = styled.input`

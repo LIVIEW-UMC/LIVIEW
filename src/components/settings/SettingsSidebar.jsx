@@ -9,19 +9,15 @@ function SettingsSidebar() {
       <Contact to="/profile" className={location.pathname === '/profile' ? 'selected' : ''} hoverEffect>
         프로필 수정
       </Contact>
-      <br />
       <Contact to="/record" className={location.pathname === '/record' ? 'selected' : ''} hoverEffect>
         기록 공개여부
       </Contact>
-      <br />
       <Contact to="/clickedpost" className={location.pathname === '/clickedpost' ? 'selected' : ''} hoverEffect>
         조회한 게시물
       </Contact>
-      <br />
       <Contact to="/privacy" className={location.pathname === '/privacy' ? 'selected' : ''} hoverEffect>
         개인정보 및 데이터
       </Contact>
-      <br />
       <Contact to="/service" className={location.pathname === '/service' ? 'selected' : ''} hoverEffect>
         서비스 약관
       </Contact>
@@ -30,18 +26,28 @@ function SettingsSidebar() {
 }
 
 const SettingsSidebarContainer = styled.div`
-  margin-bottom: 10px;
+  width: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
   left: 0;
-  width: 150px;
-  height: 600px;
-  padding: 20px 30px 0px 10px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  offset-y: 0;
+  top: 0;
+  border-radius: 0px 30px 0px 0px;
+  box-shadow: 4px -4px 10px 0px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+  line-height: 122%;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: white;
+  gap: 13px;
 `;
 
 const Contact = styled(Link)`
-  display: inline-block;
-  margin-bottom: 20px;
+  width: max-content;
+  height: 34px;
+  padding: 5px 10px 5px 5px;
+  box-sizing: border-box;
   background-color: transparent;
   border: none;
   font-size: 20px;

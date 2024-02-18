@@ -147,19 +147,17 @@ function ServicePage() {
 
 const All = styled.div`
   display: flex;
-  min-height: 100vh;
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
   font-family: 'KNU20TRUTH-Regular';
 `;
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  justify-content: center;
-  flex-direction: row;
+  width: 777px;
+  display: flex;
+  flex-direction: column;
+  padding: 5vh 0px;
 `;
 
 const Circle = styled.div`
@@ -170,29 +168,26 @@ const Circle = styled.div`
 `;
 
 const TitleContainer = styled.div`
-  display: inline-block;
-  gap: 16px;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  line-height: 122%;
 `;
 
 const Title = styled.div`
-  display: block;
-  gap: 16px;
-  margin-top: 10px;
+  display: flex;
   font-size: 30px;
 `;
 const Content = styled.div`
-  display: block;
-  gap: 16px;
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
   font-size: 15px;
-  color: #939393;
+  color: #a4a4a4;
 `;
 
 const ContentContainer = styled.div`
-  margin-bottom: 10px;
   display: flex;
-  margin-top: 40px;
+  margin-top: 47px;
   align-items: center;
   flex-direction: column;
   align-items: flex-start;
@@ -200,25 +195,21 @@ const ContentContainer = styled.div`
 
 const Box = styled.div`
   flex-direction: column;
+  margin-left: 34.26px;
 `;
 
 const Container1 = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 `;
 
 const Title1 = styled.div`
-  order: 1;
   margin-bottom: 4px;
 `;
 const Content1 = styled.div`
-  order: 2;
   color: #939393;
-  div {
-    margin-bottom: 4px;
-  }
+  line-height: 122%;
 `;
 
 export default ServicePage;
