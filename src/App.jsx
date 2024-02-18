@@ -17,10 +17,10 @@ const App = () => (
     <BrowserRouter>
       <Nav />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<ProfileEditPage />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/clickedpost" element={<ClickedPostPage />} />
-        <Route path="/profile" element={<ProfileEditPage />} />
+        <Route path="/profile" element={<Main />} />
         <Route path="/createmap" element={<CreateMap />} />
         <Route path="/record" element={<RecordPage />} />
         <Route path="/service" element={<ServicePage />} />

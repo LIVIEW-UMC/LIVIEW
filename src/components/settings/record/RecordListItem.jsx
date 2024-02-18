@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import colors from '../../../styles/colors';
 
 const RecordListItem = ({ item, setRecordItems }) => {
   const handleToggle = () => {
@@ -16,12 +15,9 @@ const RecordListItem = ({ item, setRecordItems }) => {
       <Img src={item.imgSrc} alt="기록 대표이미지" />
       <Explain>
         <RecordName>{item.name}</RecordName>
-        <br />
-        <br />
-        <br />
         <DateRange>{item.date}</DateRange>
       </Explain>
-      <Desc>{item.isChecked ? ' 공개' : '비공개'}</Desc>
+      <Desc>{item.isChecked ? ' 공개 ' : '비공개'}</Desc>
       <ToggleContainer onClick={handleToggle}>
         <div className={`toggle-container ${item.isChecked ? 'toggle--checked' : ''}`} />
         <div className={`toggle-circle ${item.isChecked ? 'toggle--checked' : ''}`} />
@@ -37,24 +33,21 @@ const RecordListItem = ({ item, setRecordItems }) => {
 
 const RecordListItemContainer = styled.div`
   display: flex;
-  padding: 5px;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 10px;
+  gap: 14px;
+  margin-bottom: 13px;
 `;
 
 const Img = styled.img`
+  //display: flex;
   width: 134px;
   height: 105px;
   object-fit: cover;
-  padding-left: 0;
-  margin-bottom: 15px;
 `;
 
 const Explain = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
 `;
 
 const RecordName = styled.div`
@@ -63,9 +56,10 @@ const RecordName = styled.div`
 `;
 
 const DateRange = styled.div`
-  font-size: 12px;
+  font-size: 10px;
   line-height: 122%;
-  color: ${colors.darkGray};
+  color: #505050;
+  margin-top: 48px;
 `;
 
 const ToggleContainer = styled.div`
@@ -74,7 +68,7 @@ const ToggleContainer = styled.div`
   align-items: center;
 
   > .toggle-container {
-    width: 50px;
+    width: 51px;
     height: 24px;
     border-radius: 30px;
     background-color: #c8c8c8;
@@ -90,7 +84,7 @@ const ToggleContainer = styled.div`
   > .toggle-circle {
     position: absolute;
     top: 50%;
-    left: 1px;
+    left: 3px;
     transform: translate(0%, -50%);
     width: 22px;
     height: 22px;
@@ -98,35 +92,37 @@ const ToggleContainer = styled.div`
     background-color: #ffffff;
 
     &.toggle--checked {
-      left: 27px;
+      left: 31px;
     }
     transition: left 0.5s ease-in-out;
   }
 `;
 
 const Desc = styled.div`
+  align-items: center;
   text-align: center;
   font-size: 15px;
-  margin-top: 15px;
-  margin-left: 20px;
+  margin-top: 5px;
+  margin-left: 55px;
+  white-space: nowrap;
 `;
 
 const FunctionContainer = styled.div`
   display: flex;
-  flex-direction: row;
   text-align: center;
-  gap: 6px;
-  margin-left: 110px;
+  white-space: nowrap;
 `;
 
-const NumberViews = styled.div``;
+const NumberViews = styled.div`
+  margin-left: 80px;
+`;
 
 const GoodButton = styled.div`
-  margin-left: 30px;
+  margin-left: 55px;
 `;
 
 const NumberComments = styled.div`
-  margin-left: 30px;
+  margin-left: 55px;
 `;
 
 export default RecordListItem;
