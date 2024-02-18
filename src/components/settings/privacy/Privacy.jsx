@@ -144,20 +144,20 @@ const PrivacyPage = () => {
 const All = styled.div`
   display: flex;
   font-family: 'KNU20TRUTH-Regular';
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
 `;
 
 const Container = styled.div`
+  width: 777px;
   display: flex;
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 20px;
   flex-direction: column;
+  gap: 30px;
+  padding: 5vh 0px;
 `;
 const TitleContainer = styled.div`
   display: flex;
-  margin-top: 60px;
   flex-direction: column;
 `;
 const Title = styled.div`
@@ -211,7 +211,8 @@ const CheckboxText2 = styled.div`
 
 const DataContainer = styled.div`
   display: flex;
-  margin-top: 59px;
+  width: 90%;
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
 `;
@@ -231,7 +232,6 @@ const DataButton = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  margin-left: 283px;
   color: #5a5a5a;
   cursor: pointer; /* 수정된 부분: 버튼 스타일을 커서로 변경 */
 `;
@@ -249,11 +249,9 @@ const ModifyButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  margin-top: 200px;
   font-family: 'KNU20TRUTH-Regular';
-  margin-left: auto;
-  margin-right: 100px;
-  margin-bottom: 251px;
+  align-self: flex-end;
+  margin-top: 100px;
 `;
 
 export default PrivacyPage;

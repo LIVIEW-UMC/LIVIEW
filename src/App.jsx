@@ -19,10 +19,10 @@ const App = () => (
     <BrowserRouter>
       <Nav />
       <Routes>
-        <Route path="/" element={<ProfileEditPage />} />
+        <Route path="/" element={<Main />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/clickedpost" element={<ClickedPostPage />} />
-        <Route path="/profile" element={<Main />} />
+        <Route path="/profile" element={<ProfileEditPage />} />
         <Route path="/createmap" element={<CreateMap />} />
         <Route path="/record" element={<RecordPage />} />
         <Route path="/service" element={<ServicePage />} />

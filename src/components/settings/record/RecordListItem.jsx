@@ -12,34 +12,37 @@ const RecordListItem = ({ item, setRecordItems }) => {
 
   return (
     <RecordListItemContainer $isChecked={item.isChecked}>
-      <Img src={item.imgSrc} alt="기록 대표이미지" />
-      <Explain>
-        <RecordName>{item.name}</RecordName>
-        <DateRange>{item.date}</DateRange>
-      </Explain>
-      <Desc>{item.isChecked ? ' 공개 ' : '비공개'}</Desc>
-      <ToggleContainer onClick={handleToggle}>
-        <div className={`toggle-container ${item.isChecked ? 'toggle--checked' : ''}`} />
-        <div className={`toggle-circle ${item.isChecked ? 'toggle--checked' : ''}`} />
-      </ToggleContainer>
-      <FunctionContainer>
-        <NumberViews>{item.hits}</NumberViews>
-        <GoodButton>{item.good}</GoodButton>
-        <NumberComments>{item.comment}</NumberComments>
-      </FunctionContainer>
+      <RecordList>
+        <Img src={item.imgSrc} alt="기록 대표이미지" />
+        <Explain>
+          <RecordName>{item.name}</RecordName>
+          <DateRange>{item.date}</DateRange>
+        </Explain>
+      </RecordList>
+      <PublicContainer>
+        <Desc>{item.isChecked ? ' 공개 ' : '비공개'}</Desc>
+        <ToggleContainer onClick={handleToggle}>
+          <div className={`toggle-container ${item.isChecked ? 'toggle--checked' : ''}`} />
+          <div className={`toggle-circle ${item.isChecked ? 'toggle--checked' : ''}`} />
+        </ToggleContainer>
+      </PublicContainer>
+      <Item>{item.hits}</Item>
+      <Item>{item.good}</Item>
+      <Item>{item.comment}</Item>
     </RecordListItemContainer>
   );
 };
 
 const RecordListItemContainer = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1.5fr 1fr 1fr 1fr;
+`;
+
+const RecordList = styled.div`
   display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 13px;
 `;
 
 const Img = styled.img`
-  //display: flex;
   width: 134px;
   height: 105px;
   object-fit: cover;
@@ -48,6 +51,8 @@ const Img = styled.img`
 const Explain = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 8px 14px;
+  justify-content: space-between;
 `;
 
 const RecordName = styled.div`
@@ -59,13 +64,13 @@ const DateRange = styled.div`
   font-size: 10px;
   line-height: 122%;
   color: #505050;
-  margin-top: 48px;
 `;
 
 const ToggleContainer = styled.div`
   position: relative;
   cursor: pointer;
   align-items: center;
+  height: 30px;
 
   > .toggle-container {
     width: 51px;
@@ -98,31 +103,19 @@ const ToggleContainer = styled.div`
   }
 `;
 
-const Desc = styled.div`
-  align-items: center;
-  text-align: center;
-  font-size: 15px;
-  margin-top: 5px;
-  margin-left: 55px;
-  white-space: nowrap;
-`;
-
-const FunctionContainer = styled.div`
+const PublicContainer = styled.div`
   display: flex;
-  text-align: center;
-  white-space: nowrap;
+  align-items: center;
 `;
 
-const NumberViews = styled.div`
-  margin-left: 80px;
+const Desc = styled.div`
+  font-size: 15px;
+  width: 50%;
 `;
 
-const GoodButton = styled.div`
-  margin-left: 55px;
-`;
-
-const NumberComments = styled.div`
-  margin-left: 55px;
+const Item = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export default RecordListItem;

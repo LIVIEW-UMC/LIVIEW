@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import SettingsSidebar from '../SettingsSidebar';
-// import basicImage from '../../../assets/profile/basic.png';
+import colors from '../../../styles/colors';
 
 const ProfileEditPage = () => {
   const [profileImage, setProfileImage] = useState();
@@ -156,7 +156,7 @@ const ProfileEditPage = () => {
         </ProfileTitleContainer>
         <ProfileImageContainer>
           <ImageContainer>
-            <PhotoText>사진</PhotoText>
+            <ContentText>사진</ContentText>
             <ProfileImage src={profileImage} alt="Profile" />
           </ImageContainer>
           <ChangeImageButton onClick={openFileExplorer}>변경</ChangeImageButton>
@@ -164,7 +164,7 @@ const ProfileEditPage = () => {
         <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} ref={fileInputRef} />
         <NameContainer>
           <NameContainer1>
-            <NameText>이름</NameText>
+            <ContentText>이름</ContentText>
             <NameInput
               type="text"
               defaultValue={firstName}
@@ -176,7 +176,7 @@ const ProfileEditPage = () => {
             />
           </NameContainer1>
           <NameContainer2>
-            <NameText>성</NameText>
+            <ContentText>성</ContentText>
             <LastNameInput
               type="text"
               defaultValue={lastName}
@@ -189,7 +189,7 @@ const ProfileEditPage = () => {
           </NameContainer2>
         </NameContainer>
         <IntroductionContainer>
-          <IntroductionText>소개</IntroductionText>
+          <ContentText>소개</ContentText>
           <IntroductionInput
             defaultValue={introduction}
             onChange={handleIntroductionChange}
@@ -197,16 +197,14 @@ const ProfileEditPage = () => {
             onClick={() => setIntroduction('')}
           />
         </IntroductionContainer>
-        <EmailContainer1>
-          <EmailText>사용자 이메일</EmailText>
-        </EmailContainer1>
-        <EmailContainer2>
-          <UserEmailInput1 type="text" value={UserEmail} readOnly />
-          <SymbolContainer>
+        <EmailContainer>
+          <ContentText>사용자 이메일</ContentText>
+          <EmailInputContainer>
+            <UserEmailInput1 type="text" value={UserEmail} readOnly />
             <AtSymbol>@</AtSymbol>
-          </SymbolContainer>
-          <UserEmailInput2 type="text" value={UserEmail2} readOnly />
-        </EmailContainer2>
+            <UserEmailInput2 type="text" value={UserEmail2} readOnly />
+          </EmailInputContainer>
+        </EmailContainer>
         <ModifyButton onClick={handleModify} style={{ backgroundColor: isModified ? '#2655FF' : '#dcdcdc' }}>
           수정하기
         </ModifyButton>
@@ -217,21 +215,21 @@ const ProfileEditPage = () => {
 const All = styled.div`
   display: flex;
   font-family: 'KNU20TRUTH-Regular';
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
 `;
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  justify-content: center;
-  margin-bottom: 20px;
+  width: 777px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 5vh 0px;
 `;
 
 const ProfileTitleContainer = styled.div`
   display: flex;
-  margin-top: 60px;
   flex-direction: column;
 `;
 
@@ -247,12 +245,10 @@ const Content = styled.div`
   color: #939393;
 `;
 
-const PhotoText = styled.div`
-  display: flex;
-  margin-top: 48px;
+const ContentText = styled.div`
   margin-bottom: 8px;
-  font-size: 20px;
-  color: #464646;
+  font-size: 15px;
+  color: black;
 `;
 
 const ImageContainer = styled.div`
@@ -262,6 +258,7 @@ const ImageContainer = styled.div`
 
 const ProfileImageContainer = styled.div`
   display: flex;
+  align-items: flex-end;
 `;
 
 const ProfileImage = styled.img`
@@ -272,24 +269,22 @@ const ProfileImage = styled.img`
 `;
 
 const ChangeImageButton = styled.div`
-  display: flex;
-  background-color: #DCDCDC;
-  padding: 5px, 15px
-  cursor: pointer;
-  border-radius: 10px;
-  width: 65px;
-  height: 34px;
-  align-items: center;
+  display: inline-flex;
+  padding: 5px 15px;
   justify-content: center;
-  font-size: 20px;
-  margin-top: 120px;
-  
+  align-items: center;
+  font-size: 18px;
+  line-height: 122%;
+  border-radius: 10px;
+  border: none;
+  background-color: #e1e1e1;
+  color: black;
+  cursor: pointer;
 `;
 
 const NameContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 40px;
 `;
 
 const NameContainer1 = styled.div`
@@ -302,134 +297,91 @@ const NameContainer2 = styled.div`
   padding-left: 12px;
 `;
 
-const NameText = styled.div`
-  font-size: 20px;
-  padding-left: 2px;
-  padding-bottom: 5px;
-  color: #4f4f4f;
-`;
-
 const InputBaseStyles = `
-  display: flex;
-  border: 2px solid #939393;
-  margin-top: 5px;
+    height: 38px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1.5px solid #909090;
+    font-family: KNU20TRUTH-Regular;
 `;
 
 const NameInput = styled.input`
   ${InputBaseStyles}
   color: ${(props) => (props.value === '' ? '#a4a4a4' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
   width: 220px;
-  height: 38px;
   padding-left: 10px;
 `;
 
 const LastNameInput = styled.input`
   ${InputBaseStyles}
   color: ${(props) => (props.value === '' ? '#a4a4a4' : '#000')};
-  border-radius: 15px;
-  border-width: 2px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
   width: 220px;
-  height: 38px;
   padding-left: 10px;
 `;
 
 const IntroductionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  top: 120px;
   font-size: 15px;
   color: #333;
-  margin-top: 49px;
-`;
-
-const IntroductionText = styled.div`
-  font-size: 20px;
-  padding-left: 1px;
-  padding-bottom: 5px;
-  color: #4f4f4f;
 `;
 
 const IntroductionInput = styled.textarea`
   ${InputBaseStyles}
+  height: 140px;
   color: ${(props) => (props.value === '회원님의 이야기를 작성해주세요!! (200자 이내)' ? '#939393' : '#000')};
-  display: flex;
-  border-radius: 15px;
   padding: 10px;
   width: 453px;
-  height: 147px;
-  font-size: 15px;
   resize: none;
-  font-family: 'KNU20TRUTH-Regular';
 `;
 
-const EmailContainer1 = styled.div`
+const EmailContainer = styled.div`
   display: flex;
-  color: #4f4f4f;
-  padding-left: 2px;
-  padding-top: 23px;
-  font-size: 20px;
+  flex-direction: column;
 `;
 
-const EmailContainer2 = styled.div`
+const EmailInputContainer = styled.div`
   display: flex;
   padding-top: 5px;
-  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 `;
-
-const EmailText = styled.div``;
 
 const UserEmailInput1 = styled.input`
+  ${InputBaseStyles}
   color: #939393;
-  border-radius: 15px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
   width: 224px;
-  height: 40px;
   padding-left: 10px;
-`;
-
-const SymbolContainer = styled.div`
-  display: flex;
-  padding: 9px;
-  padding-top: 20px;
-`;
-
-const AtSymbol = styled.span`
-  color: #939393;
+  border:;
 `;
 
 const UserEmailInput2 = styled.input`
+  ${InputBaseStyles}
   color: #939393;
-  border-radius: 15px;
-  font-family: 'KNU20TRUTH-Regular';
-  font-size: 15px;
   width: 195px;
-  height: 40px;
   padding-left: 10px;
 `;
 
+const AtSymbol = styled.div`
+  color: ${colors.gray};
+`;
+
 const ModifyButton = styled.button`
-  display: flex;
-  background-color: #DCDCDC;
-  border: none;
-  padding: 5px, 15px, 5px, 15px
-  cursor: pointer;
-  border-radius: 10px;
-  width: 99px;
-  height: 34px;
+  font-family: KNU20TRUTH-Regular;
+  width: max-content;
+  display: inline-flex;
+  padding: 5px 15px;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
-  margin-top: 49px;
-  font-family: 'KNU20TRUTH-Regular';
-  margin-left: 530px;
-  margin-bottom: 143px;
+  font-size: 18px;
+  line-height: 122%;
+  border-radius: 10px;
+  border: none;
+  background-color: #e1e1e1;
+  color: black;
+  cursor: pointer;
+  align-self: flex-end;
 `;
 
 export default ProfileEditPage;

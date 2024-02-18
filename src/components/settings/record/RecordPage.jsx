@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SettingsSidebar from '../SettingsSidebar';
 import RecordListItem from './RecordListItem';
 import dummy1 from '../../../assets/dummy/dummy1.jpg';
+import colors from '../../../styles/colors';
 
 function RecordPage() {
   const [recordItems, setRecordItems] = useState([
@@ -78,11 +79,11 @@ function RecordPage() {
         </TitleContainer>
         <Divider />
         <ListContainer>
-          <ListText1>기록물</ListText1>
-          <ListText2>공개상태</ListText2>
-          <ListText3>조회수</ListText3>
-          <ListText4>좋아요</ListText4>
-          <ListText5>댓글</ListText5>
+          <ListItem>기록물</ListItem>
+          <ListItem>공개상태</ListItem>
+          <ListItem>조회수</ListItem>
+          <ListItem>좋아요</ListItem>
+          <ListItem>댓글</ListItem>
         </ListContainer>
         <Divider />
         <RecordList>
@@ -97,26 +98,23 @@ function RecordPage() {
 
 const All = styled.div`
   display: flex;
-  min-height: 100vh;
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
   font-family: 'KNU20TRUTH-Regular';
 `;
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  padding-left: 0;
-  margin-bottom: 20px;
-  justify-content: center;
+  width: 777px;
+  display: flex;
   flex-direction: column;
+  padding: 5vh 0px;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
-  margin-top: 60px;
   flex-direction: column;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.div`
@@ -124,49 +122,30 @@ const Title = styled.div`
 `;
 const Content = styled.div`
   margin-top: 8px;
-  margin-left: 1px;
-  padding-bottom: 38px;
   font-size: 15px;
   color: #a4a4a4;
 `;
 
-const Divider = styled.hr`
-  border: 0;
-  border-top: 2px solid #646464;
-  margin-right: 10px;
+const Divider = styled.div`
+  width: 100%;
+  height: 2px;
+  background-color: ${colors.darkGray};
+  margin: 7px 0px;
 `;
 
 const ListContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 3fr 1.5fr 1fr 1fr 1fr;
   font-size: 15px;
 `;
 
-const ListText1 = styled.div`
-  margin-left: 5px;
-  margin-right: 341px;
-`;
-
-const ListText2 = styled.div`
-  margin-right: 150px;
-`;
-
-const ListText3 = styled.div`
-  margin-right: 48px;
-`;
-
-const ListText4 = styled.div`
-  margin-right: 48px;
-`;
-
-const ListText5 = styled.div`
-  margin-right: 5px;
-`;
+const ListItem = styled.div``;
 
 const RecordList = styled.div`
   display: flex;
   flex-direction: column;
   color: #505050;
+  gap: 10px;
 `;
 
 export default RecordPage;

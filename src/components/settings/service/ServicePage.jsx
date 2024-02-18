@@ -147,17 +147,17 @@ function ServicePage() {
 
 const All = styled.div`
   display: flex;
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 62px);
   font-family: 'KNU20TRUTH-Regular';
 `;
 
 const Container = styled.div`
+  width: 777px;
   display: flex;
-  width: 100%;
-  max-width: 800px;
-  min-width: 600px;
-  margin: 0 auto;
-  justify-content: center;
   flex-direction: column;
+  padding: 5vh 0px;
 `;
 
 const Circle = styled.div`
@@ -169,7 +169,6 @@ const Circle = styled.div`
 
 const TitleContainer = styled.div`
   display: flex;
-  margin-top: 60px;
   flex-direction: column;
   line-height: 122%;
 `;
