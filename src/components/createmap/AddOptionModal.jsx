@@ -1,9 +1,56 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
+import BASE_URL from '../../config/baseUrl';
 
 function AddOptionModal({ setAddOptionModalOpen, folderOptionList, setFolderOptionList }) {
   const [newFolderName, setNewFolderName] = useState('');
+
+  const addFolderOptionHandler = () => {
+    if (folderOptionList.includes(newFolderName) || newFolderName === '') {
+      return;
+    }
+
+    setAddOptionModalOpen(false);
+
+    fetch(`${BASE_URL}/tours/folder?owner=true`, {
+      method: 'POST',
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: newFolderName,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('폴더 추가 실패');
+        }
+        return fetch(`${BASE_URL}/tours/folder?owner=true`, {
+          method: 'GET',
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+            'Content-Type': 'application/json',
+          },
+        });
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('폴더 가져오기 실패');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setFolderOptionList(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <AddOptionModalContainer>
       <div>
@@ -26,11 +73,7 @@ function AddOptionModal({ setAddOptionModalOpen, folderOptionList, setFolderOpti
         </AddOptionModalBtn>
         <AddOptionModalBtn
           onClick={() => {
-            if (folderOptionList.includes(newFolderName) || newFolderName === '') {
-              return;
-            }
-            setAddOptionModalOpen(false);
-            setFolderOptionList((prevFolderOptionList) => prevFolderOptionList.concat(newFolderName));
+            addFolderOptionHandler();
           }}
         >
           확인
