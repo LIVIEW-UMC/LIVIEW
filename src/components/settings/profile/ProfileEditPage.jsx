@@ -22,7 +22,7 @@ const ProfileEditPage = () => {
           headers: {
             'Content-Type': 'application/json',
             Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNzY2MjksImV4cCI6MTcwODI3NzIyOX0.CZFrBDJRdwKMwArVo9BQzlPKBaREbW44wtntHlqsmd8',
           },
         });
         if (!response.ok) {
@@ -31,8 +31,8 @@ const ProfileEditPage = () => {
         const data = await response.json();
         setProfileImage(data.imgUrl);
         const nameParts = data.name.split('');
-        setLastName(nameParts[0]); // 첫 번째 부분을 성으로 설정
-        setFirstName(nameParts.slice(1).join(' ')); // 나머지 부분을 이름으로 설정
+        setLastName(nameParts[0]); // 성
+        setFirstName(nameParts.slice(1).join(' ')); // 이름
         const emailParts = data.email.split('@');
         setUserEmail(emailParts[0]);
         setUserEmail2(emailParts[1]);
@@ -52,6 +52,7 @@ const ProfileEditPage = () => {
       const reader = new FileReader();
       reader.onload = () => {
         setProfileImage(reader.result);
+        setIsModified(true);
       };
       reader.readAsDataURL(selectedImage);
     }
@@ -61,56 +62,15 @@ const ProfileEditPage = () => {
     fileInputRef.current.click();
   };
 
-  const handleFirstNameChange = (e) => {
-    const inputFirstName = e.target.value;
-    const regex = /^[가-힣]*$/;
-
-    if (inputFirstName !== '' && regex.test(inputFirstName)) {
-      setFirstName(inputFirstName);
-      setIsModified(true);
-    } else if (inputFirstName === '') {
-      console.log('이름은 자음+모음으로만 입력 가능합니다.');
-      // 사용자가 입력하지 않은 경우, 원래 이름으로 설정
-      setFirstName(firstName);
-      setIsModified(false);
-    }
-  };
-
-  const handleFirstNameClick = () => {
-    if (firstName === '') {
-      setFirstName(firstName);
-    }
-  };
-
-  const handleLastNameChange = (e) => {
-    const inputLastName = e.target.value;
-    const regex = /^[가-힣]*$/;
-
-    if (inputLastName !== '' && regex.test(inputLastName)) {
-      setLastName(inputLastName);
-      setIsModified(true);
-    } else if (inputLastName === '') {
-      console.log('성은 자음+모음으로만 입력 가능합니다.');
-      // 사용자가 입력하지 않은 경우, 원래 성으로 설정
-      setLastName(lastName);
-      setIsModified(false);
-    }
-  };
-
-  const handleLastNameClick = () => {
-    if (lastName === '') {
-      setLastName(lastName);
-    }
-  };
-
   const handleIntroductionChange = (e) => {
     const inputIntroduction = e.target.value;
 
     if (inputIntroduction.length <= maxIntroductionLength) {
       setIntroduction(inputIntroduction);
+      setIsModified(true); // 소개글이 변경될 때 수정하기 버튼을 활성화
     } else {
       console.log('Introduction exceeds character limit');
-      setIsModified(true);
+      setIsModified(false);
     }
   };
 
@@ -122,12 +82,10 @@ const ProfileEditPage = () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNzY2MjksImV4cCI6MTcwODI3NzIyOX0.CZFrBDJRdwKMwArVo9BQzlPKBaREbW44wtntHlqsmd8',
         },
         body: JSON.stringify({
           userProfile: {
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
             introduction,
           },
           file: profileImage !== null ? profileImage : undefined,
@@ -168,11 +126,12 @@ const ProfileEditPage = () => {
             <NameInput
               type="text"
               defaultValue={firstName}
-              onChange={handleFirstNameChange}
-              onClick={handleFirstNameClick}
-              onBlur={() => {
-                if (firstName === '') setFirstName('');
-              }}
+              readOnly
+              // onChange={handleFirstNameChange}
+              // onClick={handleFirstNameClick}
+              // onBlur={() => {
+              //   if (firstName === '') setFirstName('');
+              // }}
             />
           </NameContainer1>
           <NameContainer2>
@@ -180,11 +139,12 @@ const ProfileEditPage = () => {
             <LastNameInput
               type="text"
               defaultValue={lastName}
-              onChange={handleLastNameChange}
-              onClick={handleLastNameClick}
-              onBlur={() => {
-                if (lastName === '') setLastName('');
-              }}
+              readOnly
+              // onChange={handleLastNameChange}
+              // onClick={handleLastNameClick}
+              // onBlur={() => {
+              //   if (lastName === '') setLastName('');
+              // }}
             />
           </NameContainer2>
         </NameContainer>
@@ -308,14 +268,14 @@ const InputBaseStyles = `
 
 const NameInput = styled.input`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === '' ? '#a4a4a4' : '#000')};
+  color: #939393;
   width: 220px;
   padding-left: 10px;
 `;
 
 const LastNameInput = styled.input`
   ${InputBaseStyles}
-  color: ${(props) => (props.value === '' ? '#a4a4a4' : '#000')};
+  color: #939393;
   width: 220px;
   padding-left: 10px;
 `;

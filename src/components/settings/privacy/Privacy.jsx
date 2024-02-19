@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SettingsSidebar from '../SettingsSidebar';
 
@@ -9,8 +9,13 @@ const PrivacyPage = () => {
   const [autoPrivateSentToServer, setAutoPrivateSentToServer] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
+  useEffect(() => {
+    setIsModified(blockEmailChecked || autoPrivateChecked || blockEmailSentToServer || autoPrivateSentToServer);
+  }, [blockEmailChecked, autoPrivateChecked, blockEmailSentToServer, autoPrivateSentToServer]);
+
   const sendCheckboxStateToServer = (name, checked) => {
     let endpoint;
+
     if (name === 'blockEmail') {
       endpoint = 'https://jin-myserver.shop/users/email-approval';
     } else if (name === 'autoPrivate') {
@@ -20,10 +25,10 @@ const PrivacyPage = () => {
     const headers = {
       'Content-Type': 'application/json',
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNjkzMTksImV4cCI6MTcwODI2OTkxOX0.4-LIBOGeRC_lwE82MCvOR0wYR-a1CiPa8kP8AN5UkzM',
     };
 
-    if (checked && !blockEmailSentToServer && name === 'blockEmail') {
+    if (checked) {
       fetch(endpoint, {
         method: 'PATCH',
         headers,
@@ -32,51 +37,39 @@ const PrivacyPage = () => {
           if (!response.ok) {
             throw new Error('네트워크 응답이 올바르지 않습니다');
           }
-          console.log('blockEmail 요청 성공');
-        })
-        .catch((error) => {
-          console.error('blockEmail 오류:', error);
-        })
-        .finally(() => {
-          setBlockEmailSentToServer(true);
-        });
-    }
-    if (checked && !autoPrivateSentToServer && name === 'autoPrivate') {
-      fetch(endpoint, {
-        method: 'PATCH',
-        headers,
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('네트워크 응답이 올바르지 않습니다');
+          console.log(`${name} 요청 성공`);
+          if (name === 'blockEmail') {
+            setBlockEmailSentToServer(true);
+          } else if (name === 'autoPrivate') {
+            setAutoPrivateSentToServer(true);
           }
-          console.log('autoPrivate 요청 성공');
         })
         .catch((error) => {
-          console.error('autoPrivate 오류:', error);
-        })
-        .finally(() => {
-          setAutoPrivateSentToServer(true);
+          console.error(`${name} 오류:`, error);
         });
+    } else {
+      console.log(`${name} 요청 취소 성공!`);
+      if (name === 'blockEmail') {
+        setBlockEmailSentToServer(false);
+      } else if (name === 'autoPrivate') {
+        setAutoPrivateSentToServer(false);
+      }
     }
   };
 
   const handleCheckboxChange = (name) => {
     if (name === 'blockEmail') {
       setBlockEmailChecked((prev) => !prev);
-      sendCheckboxStateToServer(name, !blockEmailChecked);
     } else if (name === 'autoPrivate') {
       setAutoPrivateChecked((prev) => !prev);
-      sendCheckboxStateToServer(name, !autoPrivateChecked);
     }
-    setIsModified(true);
   };
 
   const handleDataDeletion = () => {
     const headers = {
       'Content-Type': 'application/json',
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcwODEwOTg0NCwiZXhwIjoxNzExNzA5ODQ0fQ.ZfcS8EOZs3MvKauuMCA36TrBcmCgDTmX-02JADV-QXc',
+        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNjkzMTksImV4cCI6MTcwODI2OTkxOX0.4-LIBOGeRC_lwE82MCvOR0wYR-a1CiPa8kP8AN5UkzM',
     };
 
     fetch('https://jin-myserver.shop/users/myInfo', {
@@ -95,6 +88,16 @@ const PrivacyPage = () => {
   };
 
   const handleModify = () => {
+    if (!isModified) return;
+
+    if (blockEmailChecked || blockEmailSentToServer) {
+      sendCheckboxStateToServer('blockEmail', blockEmailChecked);
+    }
+
+    if (autoPrivateChecked || autoPrivateSentToServer) {
+      sendCheckboxStateToServer('autoPrivate', autoPrivateChecked);
+    }
+
     console.log('변경 사항 저장됨!');
     setIsModified(false);
   };
@@ -133,7 +136,7 @@ const PrivacyPage = () => {
           <DataText>데이터 및 계정 삭제</DataText>
           <DataButton onClick={handleDataDeletion}>데이터 삭제</DataButton>
         </DataContainer>
-        <ModifyButton onClick={handleModify} style={{ backgroundColor: isModified ? '#2655FF' : '#dcdcdc' }}>
+        <ModifyButton onClick={handleModify} disabled={!isModified} style={{ backgroundColor: isModified ? '#2655FF' : '#dcdcdc' }}>
           저장하기
         </ModifyButton>
       </Container>
