@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Photo from '../../assets/icon/Photo';
 import colors from '../../styles/colors';
 import Arrow from '../../assets/icon/Arrow';
-import TimeDiff from '../../assets/TimeDiff';
+import TimeDiff from '../../utils/TimeDiff';
 
 function PhotoPost({ photosrc, alt, title, size, time, notSave = false, Click }) {
   const Time = TimeDiff(time);

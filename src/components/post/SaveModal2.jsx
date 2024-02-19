@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
-import PostSaveFolder from '../../api/PostSaveFolder';
+import PostInFolder from '../../api/PostInFolder';
 
-function SaveModal2({ Event1, Event2, Event3 }) {
+function SaveModal2({ Event1, Event2, Event3, tf }) {
   const [name, setName] = useState('');
 
   return (
@@ -18,7 +18,7 @@ function SaveModal2({ Event1, Event2, Event3 }) {
           Left={'160px'}
           onClick={() => {
             Event1();
-            PostSaveFolder(name).then((result) => {
+            PostInFolder(name, tf).then((result) => {
               Event3(result);
               if (result === 'error') Event2();
             });

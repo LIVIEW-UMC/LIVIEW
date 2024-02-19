@@ -4,14 +4,14 @@ import AddButton from '../../assets/icon/AddButton';
 import FolderImg1 from './FolderImg1';
 import PostTour from '../../api/PostTour';
 
-function SaveModal1({ Event1, Event2, Event3, SaveFolder, tourId }) {
+function SaveModal1({ Event1, Event2, Event3, tfFolder, tourId, tf }) {
   return (
     <Container>
       <Title>
         저장 <FolderTitle>모든 폴더</FolderTitle>
       </Title>
       <FolderContainer>
-        {SaveFolder.map((data, index) => (
+        {tfFolder.map((data, index) => (
           <Folder
             onClick={() => {
               Event1();
@@ -20,7 +20,7 @@ function SaveModal1({ Event1, Event2, Event3, SaveFolder, tourId }) {
             }}
           >
             <FolderImgContainer>
-              <FolderImg1 />
+              <FolderImg1 tf={tf} />
             </FolderImgContainer>
             <FolderName key={index}>{data.name}</FolderName>
           </Folder>

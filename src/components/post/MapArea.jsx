@@ -42,7 +42,7 @@ function MapArea({ metadataList, slideIndex }) {
       });
     }
     routeMapRef.current.fitBounds(bounds);
-  }, [metadataList]);
+  }, [slideIndex]);
 
   useEffect(() => {
     const sortedMetadataList = metadataList;
@@ -82,6 +82,7 @@ function MapArea({ metadataList, slideIndex }) {
       .catch((err) => {
         console.error('경로 fetch 에러 발생:', err);
       });
+    console.log('맵 실행');
   }, []);
 
   // 경로 정보가 받아와지면 해당 경로로 폴리라인을 그림
@@ -99,7 +100,7 @@ function MapArea({ metadataList, slideIndex }) {
       strokeOpacity: 1,
       strokeWeight: 3,
     });
-  }, [routeLatLng, metadataList]);
+  }, [routeLatLng, slideIndex]);
 
   return <div id="routeMap" style={{ width: ' 600px', height: '849px', aspectRatio: 1 }} />;
 }

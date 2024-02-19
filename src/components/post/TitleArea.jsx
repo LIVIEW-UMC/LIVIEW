@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import colors from '../../styles/colors';
 import Photo2 from '../../assets/icon/Photo2';
 import CloseButton2 from '../../assets/icon/CloseButton2';
-import TimeDiff from '../../assets/TimeDiff';
+import TimeDiff from '../../utils/TimeDiff';
 
 function TitleArea({ Event, User, TourData, thumbnailDate }) {
   const date = new Date(`${thumbnailDate.createdAt}Z`);

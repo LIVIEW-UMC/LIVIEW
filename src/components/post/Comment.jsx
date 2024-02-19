@@ -61,7 +61,7 @@ function Comment({ isReply = true, Event1 }) {
             <ReplyLikeContainer Width="50px" Gap="2px">
               <LikeContainer onClick={() => setLike((prevState) => !prevState)}>{like ? <FilledHeart /> : <EmptyHeart />}</LikeContainer>
               <KNU20 Color={colors.commentInputColor} style={{ cursor: 'auto' }}>
-                {like ? likeNum + 100 : likeNum}
+                {like ? likeNum + 1 : likeNum}
               </KNU20>
             </ReplyLikeContainer>
           </ReadMoreButton>

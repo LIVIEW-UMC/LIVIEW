@@ -8,8 +8,12 @@ import SaveModal1 from '../components/post/SaveModal1';
 import SaveModal2 from '../components/post/SaveModal2';
 import MapArea from '../components/post/MapArea';
 import GetSaveFolder from '../api/GetSaveFolder';
+import GetMyFolder from '../api/GetMyFolder';
 import GetUser from '../api/GetUser';
 import GetTourDetail from '../api/GetTourDetail';
+import GetMyPost from '../api/GetMyPost';
+import GetPostId from '../api/GetPostId';
+import GetPostLike from '../api/GetPostLike';
 
 function Post() {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -25,8 +29,13 @@ function Post() {
   const [modal2, setModal2] = useState(false);
   const [visible, setVisible] = useState(false);
   const [SaveFolder, setSaveFolder] = useState([]);
+  const [MyFolder, setMyFolder] = useState([]);
+  const [PostLike, setPostLike] = useState('false');
+
   const [TourDetail, setTourDetail] = useState([]);
+  const [PostId, setPostId] = useState('');
   const [User, setUser] = useState([]);
+  const [MyPost, setMyPost] = useState([]);
 
   const [PostError, setPostError] = useState('');
   const { tourId } = useParams();
@@ -38,11 +47,26 @@ function Post() {
     GetTourDetail(tourId).then((result) => {
       setTourDetail(result);
     });
+    GetPostId(tourId).then((result) => {
+      setPostId(result);
+    });
+    GetMyPost().then((result) => {
+      setMyPost(result);
+    });
   }, []);
+
+  useEffect(() => {
+    GetPostLike(PostId).then((result) => {
+      setPostLike(result);
+    });
+  }, [PostId]);
 
   useEffect(() => {
     GetSaveFolder().then((result) => {
       setSaveFolder(result);
+    });
+    GetMyFolder().then((result) => {
+      setMyFolder(result);
     });
   }, [PostError]);
 
@@ -102,6 +126,14 @@ function Post() {
     metadataList = TourDetail.imgList.map((data) => ({ latitude: data.latitude, longitude: data.longitude, title: data.imageLocation }));
   }
 
+  let MyPostData = [{ tourId: null }];
+  let tf = false;
+  if (!(MyPost.length === 0)) {
+    MyPostData = MyPost;
+    tf = MyPostData.some((data) => data.tourId.toString() === tourId);
+  }
+  const tfFolder = tf ? MyFolder : SaveFolder;
+
   if (TourDetail.length === 0) {
     return null;
   }
@@ -112,14 +144,23 @@ function Post() {
       </Map>
       <CommentContainer>
         <TitleArea Event={() => setModal1((prevState) => !prevState)} User={User} TourData={TourData} thumbnailDate={thumbnailDate} />
-        <PostArea User={User} TourData={TourData} slideIndex={slideIndex} handlePrevSlide={handlePrevSlide} handleNextSlide={handleNextSlide} />
+        <PostArea
+          User={User}
+          TourData={TourData}
+          slideIndex={slideIndex}
+          handlePrevSlide={handlePrevSlide}
+          handleNextSlide={handleNextSlide}
+          PostLike={PostLike}
+          PostId={PostId}
+        />
         {modal1 && (
           <SaveModal1
             Event1={() => setModal1((prevState) => !prevState)}
             Event2={() => setModal2(true)}
             Event3={handleButtonClick}
-            SaveFolder={SaveFolder}
+            tfFolder={tfFolder}
             tourId={tourId}
+            tf={tf}
           />
         )}
       </CommentContainer>
@@ -131,7 +172,7 @@ function Post() {
             }
           }}
         >
-          <SaveModal2 Event1={() => setModal2(false)} Event2={handleButtonClick} Event3={(e) => setPostError(e)} />
+          <SaveModal2 Event1={() => setModal2(false)} Event2={handleButtonClick} Event3={(e) => setPostError(e)} tf={tf} />
         </ModalWrapperr>
       )}
       <CompleteModal visible={visible}>{PostError === 'error' ? '같은 이름의 폴더가 존재합니다' : '마이페이지에 저장됨'}</CompleteModal>

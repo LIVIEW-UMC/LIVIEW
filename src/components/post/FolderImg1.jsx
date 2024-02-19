@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import FolderImg from '../../assets/icon/FolderImg';
 
-function FolderImg1() {
+function FolderImg1({ tf }) {
   return (
     <Container>
-      <FolderImg />
+      <FolderImg tf={tf} />
     </Container>
   );
 }

@@ -4,9 +4,10 @@ import colors from '../../styles/colors';
 import CommentInput from './CommentInput';
 import EmptyHeart from '../../assets/icon/EmptyHeart';
 import FilledHeart from '../../assets/icon/FilledHeart';
+import PostPostLike from '../../api/PostPostLike';
 
-function CommentInputBox({ User }) {
-  const [like, setLike] = useState(false);
+function CommentInputBox({ User, PostLike, PostId }) {
+  const [like, setLike] = useState(PostLike);
   const likeNum = 0;
 
   return (
@@ -14,8 +15,15 @@ function CommentInputBox({ User }) {
       <CommentNumLikeContainer>
         댓글 6개
         <ReplyLikeContainer Width="35px" Gap="3px">
-          <LikeContainer onClick={() => setLike((prevState) => !prevState)}>{like ? <FilledHeart /> : <EmptyHeart />}</LikeContainer>
-          <Comment Size="13px">{like ? likeNum + 100 : likeNum}</Comment>
+          <LikeContainer
+            onClick={() => {
+              setLike((prevState) => !prevState);
+              PostPostLike(PostId);
+            }}
+          >
+            {like ? <FilledHeart /> : <EmptyHeart />}
+          </LikeContainer>
+          <Comment Size="13px">{likeNum}</Comment>
         </ReplyLikeContainer>
       </CommentNumLikeContainer>
       <CommentInput User={User} />
