@@ -13,8 +13,7 @@ function RecordPage() {
       const response = await fetch('https://jin-myserver.shop/community/mypost', {
         method: 'GET',
         headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyODY5MDYsImV4cCI6MTcwODI4NzUwNn0.a6BqvGvGjf8vvYhU4cPmxJGQLK1xM66cmEMyMK_GkzU',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json',
         },
       });
@@ -39,8 +38,7 @@ function RecordPage() {
       await fetch(`https://jin-myserver.shop/community/post/${postId}`, {
         method: 'PATCH',
         headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyODY5MDYsImV4cCI6MTcwODI4NzUwNn0.a6BqvGvGjf8vvYhU4cPmxJGQLK1xM66cmEMyMK_GkzU',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ visibility }),

@@ -21,8 +21,7 @@ const ProfileEditPage = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNzY2MjksImV4cCI6MTcwODI3NzIyOX0.CZFrBDJRdwKMwArVo9BQzlPKBaREbW44wtntHlqsmd8',
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
         });
         if (!response.ok) {
@@ -81,8 +80,7 @@ const ProfileEditPage = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNzY2MjksImV4cCI6MTcwODI3NzIyOX0.CZFrBDJRdwKMwArVo9BQzlPKBaREbW44wtntHlqsmd8',
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify({
           userProfile: {

@@ -16,8 +16,7 @@ function AddOptionModal({ setAddOptionModalOpen, folderOptionList, setFolderOpti
     fetch(`${BASE_URL}/tours/folder?owner=true`, {
       method: 'POST',
       headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -31,8 +30,7 @@ function AddOptionModal({ setAddOptionModalOpen, folderOptionList, setFolderOpti
         return fetch(`${BASE_URL}/tours/folder?owner=true`, {
           method: 'GET',
           headers: {
-            Authorization:
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             'Content-Type': 'application/json',
           },
         });

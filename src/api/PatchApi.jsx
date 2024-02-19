@@ -1,11 +1,10 @@
 import AxiosInstance from './AxiosInstance';
-import Token from './Token';
 
 const PatchApi = async (Url, PatchData) => {
   try {
     const response = await AxiosInstance.patch(Url, PatchData, {
       headers: {
-        Authorization: `Bearer ${Token}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
 

@@ -11,8 +11,7 @@ function Gallery({ sortedBy }) {
     fetch(`${BASE_URL}/community?sortedBy=${sortedBy}&page=0`, {
       method: 'GET',
       headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODM0NzU1OCwiZXhwIjoxNzA4MzQ4MTU4fQ.w1qBdDDixisEpQnvjOSxD3XWGpU7fdGOqcLR-gc9wco',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         'Content-Type': 'application/json',
       },
     })

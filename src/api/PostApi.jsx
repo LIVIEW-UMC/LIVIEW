@@ -1,11 +1,10 @@
 import AxiosInstance from './AxiosInstance';
-import Token from './Token';
 
 const PostApi = async (Url, PostData) => {
   try {
     const response = await AxiosInstance.post(Url, PostData, {
       headers: {
-        Authorization: `Bearer ${Token}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
 

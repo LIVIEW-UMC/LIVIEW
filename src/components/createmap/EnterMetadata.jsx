@@ -405,8 +405,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
       method: 'POST',
       body: formData,
       headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     }).catch((error) => {
       console.log(error);

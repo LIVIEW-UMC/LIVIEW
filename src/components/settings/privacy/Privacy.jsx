@@ -24,8 +24,7 @@ const PrivacyPage = () => {
 
     const headers = {
       'Content-Type': 'application/json',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNjkzMTksImV4cCI6MTcwODI2OTkxOX0.4-LIBOGeRC_lwE82MCvOR0wYR-a1CiPa8kP8AN5UkzM',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     };
 
     if (checked) {
@@ -68,8 +67,7 @@ const PrivacyPage = () => {
   const handleDataDeletion = () => {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNjkzMTksImV4cCI6MTcwODI2OTkxOX0.4-LIBOGeRC_lwE82MCvOR0wYR-a1CiPa8kP8AN5UkzM',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     };
 
     fetch('https://jin-myserver.shop/users/myInfo', {

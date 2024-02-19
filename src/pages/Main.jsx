@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Initial from '../components/main/Initial';
 import Login from '../components/login/login';
-import TabNavigator from '../components/main/TabNavigator';
 
 function Main() {
   const navigate = useNavigate();
@@ -18,7 +17,8 @@ function Main() {
   }, []);
   return (
     <MainContainer>
-      <TabNavigator />
+      <Initial />
+      <Login />
     </MainContainer>
   );
 }
