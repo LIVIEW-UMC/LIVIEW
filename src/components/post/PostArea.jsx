@@ -3,11 +3,11 @@ import PostBox from './PostBox';
 import CommentInputBox from './CommentInputBox';
 import Commentbox from './Commentbox';
 
-function PostArea() {
+function PostArea({ User, TourData, slideIndex, handlePrevSlide, handleNextSlide }) {
   return (
     <PostContainer>
-      <PostBox />
-      <CommentInputBox />
+      <PostBox TourData={TourData} slideIndex={slideIndex} handlePrevSlide={handlePrevSlide} handleNextSlide={handleNextSlide} />
+      <CommentInputBox User={User} />
       <Commentbox />
       <Commentbox />
       <Commentbox />

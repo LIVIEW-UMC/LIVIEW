@@ -1,30 +1,41 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import colors from '../../styles/colors';
 import Photo2 from '../../assets/icon/Photo2';
 import CloseButton2 from '../../assets/icon/CloseButton2';
+import TimeDiff from '../../assets/TimeDiff';
 
-function TitleArea({ Event }) {
+function TitleArea({ Event, User, TourData, thumbnailDate }) {
+  const date = new Date(`${thumbnailDate.createdAt}Z`);
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const localDate = date.toLocaleDateString(undefined, options);
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
-    <TitleContainer>
+    <TitleContainer imageURL={thumbnailDate.imageUrl}>
       <TitleImgNum>
-        <Title>부산 맛집 사진/동선</Title>
+        <Title>{TourData.title}</Title>
         <IconContainer>
           <Photo2 />
-          <PostInfo>8</PostInfo>
+          <PostInfo>{TourData.imgList.length}</PostInfo>
         </IconContainer>
       </TitleImgNum>
-      <PostDate>2024. 01. 16</PostDate>
-      <CloseButtonContainer>
+      <PostDate>{localDate}</PostDate>
+      <CloseButtonContainer onClick={handleGoBack}>
         <CloseButton2 />
       </CloseButtonContainer>
-      <UserImg />
+      <UserImg src={User.imgUrl} alt="profileImg" />
       <TagContainer>
-        <Tag>asdf</Tag>
-        <Tag>부산</Tag>
-        <Tag>여행지</Tag>
+        {TourData.hashtag.map((data) => (
+          <Tag>{data}</Tag>
+        ))}
       </TagContainer>
       <SaveButtom onClick={Event}>저장</SaveButtom>
-      <Date>한 달전</Date>
+      <Day>{TimeDiff(thumbnailDate.createdAt)}</Day>
     </TitleContainer>
   );
 }
@@ -33,7 +44,18 @@ const TitleContainer = styled.div`
   width: 100%;
   min-height: 175px;
   position: relative;
-  background-color: black;
+  background-image: url(${(props) => props.imageURL});
+  background-size: cover;
+  background-position: center;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
 `;
 
 const TitleImgNum = styled.div`
@@ -154,7 +176,7 @@ const SaveButtom = styled.div`
   background-color: ${colors.mainColor};
   cursor: pointer;
 `;
-const Date = styled.div`
+const Day = styled.div`
   height: 13px;
   position: absolute;
   bottom: 20px;

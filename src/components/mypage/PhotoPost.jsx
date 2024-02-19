@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import Photo from '../../assets/icon/Photo';
 import colors from '../../styles/colors';
 import Arrow from '../../assets/icon/Arrow';
+import TimeDiff from '../../assets/TimeDiff';
 
-function PhotoPost({ photosrc, alt }) {
+function PhotoPost({ photosrc, alt, title, size, time, notSave = false, Click }) {
+  const Time = TimeDiff(time);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleHover = () => {
@@ -16,22 +18,22 @@ function PhotoPost({ photosrc, alt }) {
   };
 
   return (
-    <PostContainer onMouseEnter={handleHover} onMouseLeave={handleLeave} Hover={isHovered}>
+    <PostContainer onMouseEnter={handleHover} onMouseLeave={handleLeave} Hover={isHovered} onClick={Click}>
       <StyledImageContainer>
         <StyledImage src={photosrc} alt={alt} />
         {isHovered ? (
           <StyledOverlay>
-            지도 보러가기 <Arrow />
+            {notSave ? '지도 만들기' : '지도 보러가기'} <Arrow />
           </StyledOverlay>
         ) : null}
       </StyledImageContainer>
-      <PostTitle>소세지 여행</PostTitle>
+      <PostTitle>{title}</PostTitle>
       <PostInfoContainer>
         <IconContainer>
           <Photo />
-          <PostInfo>8</PostInfo>
+          <PostInfo>{size}</PostInfo>
         </IconContainer>
-        <PostInfo>20분전</PostInfo>
+        <PostInfo>{Time}</PostInfo>
       </PostInfoContainer>
     </PostContainer>
   );
@@ -85,16 +87,18 @@ const StyledOverlay = styled.div`
 
 const PostTitle = styled.div`
   width: 153px;
-  height: 12px;
-  margin: 3.5px;
-  display: flex;
-  align-items: baseline;
+  height: 13px;
+  margin: 3px;
+  display: block;
   font-family: KNU20TRUTH-Regular;
   font-size: 12px;
   font-weight: 400;
-  line-height: 15px;
+  line-height: 13px;
   letter-spacing: 0em;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const PostInfoContainer = styled.div`

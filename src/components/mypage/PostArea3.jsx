@@ -1,17 +1,38 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import PhotoPost from './PhotoPost';
+import GetIncompletedTour from '../../api/GetIncompletedTour';
 
-const imageContext = require.context('../../assets/dummy/popular', false, /\.(png)$/);
+function PostArea3({ Sort }) {
+  const [IncompletedTour, setIncompletedTour] = useState([]);
 
-function PostArea3() {
-  const images = imageContext.keys().map(imageContext);
+  useEffect(() => {
+    GetIncompletedTour().then((result) => {
+      if (Sort === 'option1') {
+        setIncompletedTour(result);
+      } else if (Sort === 'option2') {
+        setIncompletedTour(result.reverse());
+      }
+    });
+  }, [Sort]);
 
   return (
     <Container>
       <Tap>작성중인 파일</Tap>
       <PostContainer>
-        {images.map((image, index) => (
-          <PhotoPost key={index + 1} photosrc={image} alt={`img-${index}`} />
+        {IncompletedTour.map((data, index) => (
+          <Link to={{ pathname: '/createmap', state: data.tourId }}>
+            <PhotoPost
+              key={index + 1}
+              photosrc={data.imageURL}
+              alt={`img-${index}`}
+              title={data.title}
+              size={data.size}
+              time={data.localDateTime}
+              notSave
+            />
+          </Link>
         ))}
       </PostContainer>
     </Container>

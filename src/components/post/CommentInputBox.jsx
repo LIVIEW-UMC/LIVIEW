@@ -5,7 +5,7 @@ import CommentInput from './CommentInput';
 import EmptyHeart from '../../assets/icon/EmptyHeart';
 import FilledHeart from '../../assets/icon/FilledHeart';
 
-function CommentInputBox() {
+function CommentInputBox({ User }) {
   const [like, setLike] = useState(false);
   const likeNum = 0;
 
@@ -18,7 +18,7 @@ function CommentInputBox() {
           <Comment Size="13px">{like ? likeNum + 100 : likeNum}</Comment>
         </ReplyLikeContainer>
       </CommentNumLikeContainer>
-      <CommentInput />
+      <CommentInput User={User} />
       <Line />
     </Container>
   );

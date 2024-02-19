@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 import Nav from './components/header/Nav';
 import Footer from './components/main/Footer';
@@ -27,12 +27,18 @@ const App = () => (
         <Route path="/record" element={<RecordPage />} />
         <Route path="/service" element={<ServicePage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/post" element={<Post />} />
+        <Route path="/post/:tourId" element={<Post />} />
         <Route path="/yourpage" element={<YourPage />} />
       </Routes>
-      {window.location.pathname !== '/post' && <Footer />}
+      <PageFooter />
     </BrowserRouter>
   </div>
 );
+
+const PageFooter = () => {
+  const location = useLocation();
+  const isPostPage = /^\/post\/[^/]+$/.test(location.pathname);
+  return !isPostPage ? <Footer /> : null;
+};
 
 export default App;

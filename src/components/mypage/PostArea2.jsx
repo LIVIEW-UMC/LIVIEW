@@ -1,18 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import styled from 'styled-components';
 import colors from '../../styles/colors';
 import Folder from './Folder';
 import PhotoPost from './PhotoPost';
+import GetMyFolder from '../../api/GetMyFolder';
+import GetSaveFolder from '../../api/GetSaveFolder';
+import GetNotClassificationTour from '../../api/GetNotClassificationTour';
+import GetMyUserId from '../../api/GetMyUserId';
+import GetFolderTour from '../../api/GetFolderTour';
 
-const imageContext = require.context('../../assets/dummy', false, /\.(jpg)$/);
+function PostArea2({ Sort }) {
+  const [MyFolder, setMyFolder] = useState([]);
+  const [SaveFolder, setSaveFolder] = useState([]);
+  const [FolderTour, setFolderTour] = useState([]);
+  const [NotClassificationTour, setNotClassificationTour] = useState([]);
+  const [MyUserId, setMyUserId] = useState(null);
 
-function PostArea2() {
-  const images = imageContext.keys().map(imageContext);
-  const [clickedFile, setClickedFile] = useState('');
+  const [clickedFile, setClickedFile] = useState(null);
   const [tapState, setTapState] = useState('o');
+  const PostFolder = tapState === 's' ? MyFolder : SaveFolder;
+  const FolderId = PostFolder.filter((data) => data.name === clickedFile).map((data) => data.id);
 
-  const Name1 = 'qwe';
-  const Name2 = 'qwer';
+  useEffect(() => {
+    GetMyFolder().then((result) => {
+      setMyFolder(result);
+    });
+    GetSaveFolder().then((result) => {
+      setSaveFolder(result);
+    });
+    GetMyUserId().then((result) => {
+      setMyUserId(result);
+    });
+  }, []);
+
+  useEffect(() => {
+    GetNotClassificationTour(MyUserId).then((result) => {
+      if (Sort === 'option1') {
+        setNotClassificationTour(result);
+      } else if (Sort === 'option2') {
+        setNotClassificationTour(result.reverse());
+      }
+    });
+  }, [MyUserId, Sort]);
+
+  useEffect(() => {
+    GetFolderTour(FolderId, MyUserId).then((result) => {
+      if (Sort === 'option1') {
+        setFolderTour(result);
+      } else if (Sort === 'option2') {
+        setFolderTour(result.reverse());
+      }
+    });
+  }, [clickedFile, Sort]);
 
   return (
     <Container>
@@ -22,7 +63,7 @@ function PostArea2() {
           TapState={tapState === 'o'}
           onClick={() => {
             setTapState('o');
-            setClickedFile('');
+            setClickedFile(null);
           }}
         >
           저장한 게시물
@@ -32,7 +73,7 @@ function PostArea2() {
           TapState={tapState === 's'}
           onClick={() => {
             setTapState('s');
-            setClickedFile('');
+            setClickedFile(null);
           }}
         >
           내 게시물
@@ -43,22 +84,46 @@ function PostArea2() {
         <MainContainer>
           <ClassName>폴더</ClassName>
           <FolderContainer>
-            <Folder
-              ClickedFile={clickedFile === Name1}
-              TapState={tapState === 's'}
-              onClick={() => setClickedFile(clickedFile === Name1 ? null : Name1)}
-            />
-            <Folder
-              ClickedFile={clickedFile === Name2}
-              TapState={tapState === 's'}
-              onClick={() => setClickedFile(clickedFile === Name2 ? null : Name2)}
-            />
+            {PostFolder.map((data, index) => (
+              <Folder
+                key={index + 1}
+                ClickedFile={clickedFile === data.name}
+                TapState={tapState === 's'}
+                Title={data.name}
+                onClick={() => setClickedFile(clickedFile === data.name ? null : data.name)}
+              />
+            ))}
           </FolderContainer>
+          {FolderTour.length === 0 ? null : (
+            <PostContainer style={{ marginTop: '25px', marginBottom: '25px' }}>
+              {FolderTour.map((data, index) => (
+                <Link to={`/post/${data.tourId}`}>
+                  <PhotoPost
+                    key={index + 1}
+                    photosrc={data.imageURL}
+                    alt={`img-${index}`}
+                    title={data.title}
+                    size={data.size}
+                    time={data.localDateTime}
+                  />
+                </Link>
+              ))}
+            </PostContainer>
+          )}
           <Line mode="h" style={{ marginLeft: '4px' }} />
           <ClassName>분류되지 않은 사진집</ClassName>
           <PostContainer>
-            {images.map((image, index) => (
-              <PhotoPost key={index + 1} photosrc={image} alt={`img-${index}`} />
+            {NotClassificationTour.map((data, index) => (
+              <Link to={`/post/${data.tourId}`}>
+                <PhotoPost
+                  key={index + 1}
+                  photosrc={data.imageURL}
+                  alt={`img-${index}`}
+                  title={data.title}
+                  size={data.size}
+                  time={data.localDateTime}
+                />
+              </Link>
             ))}
           </PostContainer>
         </MainContainer>
@@ -135,15 +200,15 @@ const Line = styled.div`
 
 const FolderContainer = styled.div`
   width: 100%;
-  height: 140px;
-  margin-bottom: 23px;
+  height: 170px;
   gap: 20px;
   display: flex;
+  overflow-x: auto;
 `;
 
 const PostContainer = styled.div`
   width: 901px;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-wrap: wrap;
   gap: 23px 20px;

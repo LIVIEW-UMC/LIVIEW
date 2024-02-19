@@ -88,10 +88,11 @@ const Line = styled.div`
 
 const FolderContainer = styled.div`
   width: 100%;
-  height: 140px;
+  height: 170px;
   margin-bottom: 23px;
   gap: 20px;
   display: flex;
+  overflow-x: auto;
 `;
 
 const PostContainer = styled.div`
