@@ -12,12 +12,14 @@ import PrivacyPage from './components/settings/privacy/Privacy';
 import RecordPage from './components/settings/record/RecordPage';
 import ServicePage from './components/settings/service/ServicePage';
 import TabNavigator from './components/main/TabNavigator';
+import TokenRefresher from './components/login/TokenRefresher';
 import Post from './pages/Post';
 import YourPage from './pages/YourPage';
 
 const App = () => (
   <div className="App">
     <BrowserRouter>
+      <TokenRefresher />
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
