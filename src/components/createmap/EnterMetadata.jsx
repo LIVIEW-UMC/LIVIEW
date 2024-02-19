@@ -6,8 +6,9 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 import { NAVER_CLIENT_ID, NAVER_CLIENT_SECRET, NAVER_MAP_CLIENT_ID, NAVER_MAP_CLIENT_SECRET, TMAP_APP_KEY } from '../../config/apiKeys';
 import Check from '../../assets/icon/Check';
+import BASE_URL from '../../config/baseUrl';
 
-function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreateMap, setIsClickedCreateMap }) {
+function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreateMap, setIsClickedCreateMap, tourRequestDTO }) {
   const [metadataList, setMetadataList] = useState([]);
   const [emptyMetadataIdx, setEmptyMetadataIdx] = useState([]);
 
@@ -42,7 +43,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
       if (!metadata || !metadata.CreateDate || !metadata.latitude || !metadata.longitude) {
         updatedMetadataList.push({
           file,
-          title: null,
+          imgLocation: null,
           date: null,
           latitude: null,
           longitude: null,
@@ -52,7 +53,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
       } else {
         updatedMetadataList.push({
           file,
-          title: null,
+          imgLocation: null,
           date: metadata.CreateDate,
           latitude: metadata.latitude,
           longitude: metadata.longitude,
@@ -144,7 +145,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
 
   // 현재 위치 또는 사진의 메타데이터 위치로 지도 생성
   useEffect(() => {
-    if (!currentLocation || searchResult.length !== 0) {
+    if (!currentLocation || searchResult.length !== 0 || metadataList.length === 0) {
       return;
     }
 
@@ -169,7 +170,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
       }
       setSearchResult(poiList[idxBeingWritten].searchPoiInfo.pois.poi.map((original) => convertedSearchResult(original)));
     }
-  }, [currentLocation, poiList]);
+  }, [metadataList, currentLocation, poiList]);
 
   // 메타 데이터가 있는 사진의 경우 해당 위치로 지도 이동 및 POI 생성, 날짜 입력란을 해당 날짜로 설정
   useEffect(() => {
@@ -236,13 +237,15 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
 
   // 선택되지 않은 마커의 아이콘 설정
   const selectedIcon = (item) => ({
-    content: `<div style="display: flex; gap: 4px; background-color: ${colors.mainColor}; border-radius: 40px; justify-content: center; align-items: center; padding: 4px 8px; border: 2px solid white; width: max-content;">
+    content: `<div style="display: flex; gap: 4px; background-color: ${
+      colors.mainColor
+    }; border-radius: 40px; justify-content: center; align-items: center; padding: 4px 8px; border: 2px solid white; width: max-content;">
           <svg width="13" height="26" viewBox="0 0 16 26" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M8.00004 0C3.58146 0 0 3.7189 0 8.30706C0 10.2856 0.669992 12.0997 1.78326 13.5258C2.14211 13.9847 2.74245 14.7074 3.05538 15.2015C4.85725 18.044 7.16889 22.1721 7.84255 25.5599C7.95813 26.1384 8.09744 26.1485 8.24742 25.5787C8.72791 23.752 9.97408 19.7607 12.5476 15.5844C12.8545 15.0863 13.4767 14.3893 13.8629 13.9553C14.4224 13.3262 14.888 12.6059 15.2418 11.8206C15.7242 10.7493 16 9.56339 16 8.30804C16 3.71935 12.4185 0 8.00004 0ZM8.00004 12.7953C5.53382 12.7953 3.53459 10.7194 3.53459 8.15851C3.53459 5.59808 5.53382 3.52222 8.00004 3.52222C10.4663 3.52222 12.4655 5.59817 12.4655 8.15851C12.4655 10.7195 10.4663 12.7953 8.00004 12.7953Z"
         fill="white"
       />
-    </svg><div style="font-size: 14px; color: white">${item.title}</div></div>`,
+    </svg><div style="font-size: 14px; color: white">${item.title ? item.title : item.imgLocation}</div></div>`,
   });
 
   // 선택된 마커의 아이콘 설정
@@ -253,7 +256,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
         d="M8.00004 0C3.58146 0 0 3.7189 0 8.30706C0 10.2856 0.669992 12.0997 1.78326 13.5258C2.14211 13.9847 2.74245 14.7074 3.05538 15.2015C4.85725 18.044 7.16889 22.1721 7.84255 25.5599C7.95813 26.1384 8.09744 26.1485 8.24742 25.5787C8.72791 23.752 9.97408 19.7607 12.5476 15.5844C12.8545 15.0863 13.4767 14.3893 13.8629 13.9553C14.4224 13.3262 14.888 12.6059 15.2418 11.8206C15.7242 10.7493 16 9.56339 16 8.30804C16 3.71935 12.4185 0 8.00004 0ZM8.00004 12.7953C5.53382 12.7953 3.53459 10.7194 3.53459 8.15851C3.53459 5.59808 5.53382 3.52222 8.00004 3.52222C10.4663 3.52222 12.4655 5.59817 12.4655 8.15851C12.4655 10.7195 10.4663 12.7953 8.00004 12.7953Z"
         fill=${colors.mainColor}
       />
-    </svg><div style="font-size: 14px">${item.title}</div></div>`,
+    </svg><div style="font-size: 14px">${item.title ? item.title : item.imgLocation}</div></div>`,
   });
 
   // 장소 검색 시 마커 생성
@@ -355,7 +358,7 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
         if (index === idxBeingWritten) {
           return {
             ...item,
-            title: selectedMarker.item.title,
+            imgLocation: selectedMarker.item.title,
             date: selectedDate,
             latitude: selectedMarker.item.mapy / 1e7,
             longitude: selectedMarker.item.mapx / 1e7,
@@ -372,6 +375,42 @@ function EnterMetadata({ fileList, fileImgSrcList, thumbnailIdx, isClickedCreate
    */
   const handleCreateMap = () => {
     setIsClickedCreateMap(true);
+
+    const multipartFileList = metadataList.map((metadata) => metadata.file);
+
+    const objectList = metadataList.map((metadata) => {
+      const { file, ...otherProperties } = metadata;
+      return otherProperties;
+    });
+
+    const sortedMetadataList = [...metadataList];
+    sortedMetadataList.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const updatedTourRequestDTO = {
+      ...tourRequestDTO,
+      size: metadataList.length,
+      startDay: sortedMetadataList[0].date,
+      endDay: sortedMetadataList[metadataList.length - 1].date,
+      imageMetadataDTOList: objectList,
+    };
+
+    const formData = new FormData();
+    const json = JSON.stringify(updatedTourRequestDTO);
+    formData.append('tourRequestDTO', new Blob([json], { type: 'application/json' }));
+    multipartFileList.forEach((file) => {
+      formData.append('multipartFileList', file);
+    });
+
+    fetch(`${BASE_URL}/tours`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwODE2NDY5MiwiZXhwIjoxNzExNzY0NjkyfQ.dmedwBzZZdtOLDJqSMScpDrBhkx44h5qV2RVyrwpF-I',
+      },
+    }).catch((error) => {
+      console.log(error);
+    });
   };
 
   // 지도 저장하기 버튼이 눌리면 지도 생성 및 장소를 이을 경로를 받아옴
