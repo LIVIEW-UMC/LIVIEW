@@ -1,22 +1,20 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import ImageFile from '../../assets/icon/ImageFile';
-import Emoji from '../../assets/icon/Emoji';
-import colors from '../../styles/colors';
-import userImg from '../../assets/dummy/recent/Ellipse 392 (11).png';
 
-function CommentInput() {
-  const [comment, setComment] = useState(''); // 기본값으로 설정
+import colors from '../../styles/colors';
+
+function CommentInput({ User }) {
+  const [comment, setComment] = useState('');
   const textarea = useRef();
 
   const handleResizeHeight = () => {
-    textarea.current.style.height = 'auto'; // height 초기화
+    textarea.current.style.height = 'auto';
     textarea.current.style.height = `${textarea.current.scrollHeight}px`;
   };
   return (
     <Container>
       <UserImgInputContainer>
-        <UserImg src={userImg} alt="userImg" />
+        <UserImg src={User.imgUrl} alt="profileImg" />
         <InputContainer>
           <InputArea
             rows={1}
@@ -29,8 +27,6 @@ function CommentInput() {
               handleResizeHeight();
             }}
           />
-          <Emoji />
-          <ImageFile />
         </InputContainer>
       </UserImgInputContainer>
       <CommemtButton>작성</CommemtButton>
@@ -75,7 +71,7 @@ const InputArea = styled.textarea`
   line-height: 20px;
   letter-spacing: 0;
   text-align: left;
-  width: 600px;
+  width: 100%;
   max-height: 80px;
   padding: 0px;
   resize: none;

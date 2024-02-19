@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const RecordListItem = ({ item, setRecordItems }) => {
-  const handleToggle = () => {
-    if (setRecordItems) {
-      setRecordItems((prevItems) =>
-        prevItems.map((prevItem) => (prevItem.id === item.id ? { ...prevItem, isChecked: !prevItem.isChecked } : prevItem)),
-      );
-    }
+const RecordListItem = ({ item, updateRecordItem }) => {
+  const toggleVisibility = () => {
+    updateRecordItem((prevItems) =>
+      prevItems.map((prevItem) => (prevItem.id === item.id ? { ...prevItem, isChecked: !prevItem.isChecked } : prevItem)),
+    );
   };
 
   return (
@@ -21,7 +19,7 @@ const RecordListItem = ({ item, setRecordItems }) => {
       </RecordList>
       <PublicContainer>
         <Desc>{item.isChecked ? ' 공개 ' : '비공개'}</Desc>
-        <ToggleContainer onClick={handleToggle}>
+        <ToggleContainer onClick={toggleVisibility}>
           <div className={`toggle-container ${item.isChecked ? 'toggle--checked' : ''}`} />
           <div className={`toggle-circle ${item.isChecked ? 'toggle--checked' : ''}`} />
         </ToggleContainer>

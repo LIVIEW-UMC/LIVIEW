@@ -1,15 +1,8 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
 import CheckMark from '../../assets/icon/CheckMark';
 
-function SortModal({ Name }) {
-  const [selectedOption, setSelectedOption] = useState('option1');
-
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-  };
-
+function SortModal({ Name, Event, Sort }) {
   return (
     <SortModalContainer
       className={Name}
@@ -17,14 +10,14 @@ function SortModal({ Name }) {
         event.stopPropagation();
       }}
     >
-      <Sort>정렬기준</Sort>
-      <SortOptionCotainer onClick={() => handleOptionSelect('option1')}>
+      <SortName>정렬기준</SortName>
+      <SortOptionCotainer onClick={() => Event('option1')}>
         <SortOption>오래된순 분류</SortOption>
-        {selectedOption === 'option1' ? <CheckMark /> : null}
+        {Sort === 'option1' ? <CheckMark /> : null}
       </SortOptionCotainer>
-      <SortOptionCotainer onClick={() => handleOptionSelect('option2')}>
+      <SortOptionCotainer onClick={() => Event('option2')}>
         <SortOption>최신순 분류</SortOption>
-        {selectedOption === 'option2' ? <CheckMark /> : null}
+        {Sort === 'option2' ? <CheckMark /> : null}
       </SortOptionCotainer>
     </SortModalContainer>
   );
@@ -45,7 +38,7 @@ const SortModalContainer = styled.div`
   cursor: auto;
 `;
 
-const Sort = styled.div`
+const SortName = styled.div`
   width: 35px;
   height: 12px;
   display: flex;

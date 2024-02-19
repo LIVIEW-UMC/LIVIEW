@@ -1,18 +1,36 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
-import profileImg from '../../assets/dummy/IMG_0828.jpg';
+import GetUser from '../../api/GetUser';
+
+const BackgroundContext = require.context('../../assets/background', false, /\.(jpg)$/);
 
 function ProfileArea({ FollowerClick, FollowingClick }) {
+  const [User, setUser] = useState([]);
+
+  useEffect(() => {
+    GetUser().then((result) => {
+      setUser(result);
+    });
+  }, []);
+
+  const Background = BackgroundContext.keys().map(BackgroundContext);
+
+  const BackgroundNum = User.following % 16;
+
   return (
     <ProfileContainer>
-      <BackgroundImg src={profileImg} alt="profileImg" />
-      <ProfileImg src={profileImg} alt="profileImg" />
-      <ProfileName>이진성</ProfileName>
-      <ProfileEmail>l50227697@gmail.com</ProfileEmail>
+      <BackgroundImg src={Background[BackgroundNum]} alt="" />
+      <ProfileImg src={User.imgUrl} alt="" />
+      <ProfileName>{User.name}</ProfileName>
+      <ProfileEmail>{User.email}</ProfileEmail>
       <FollowProfileEditContainer>
-        <Follow onClick={FollowerClick}>팔로워 12</Follow>
-        <Follow onClick={FollowingClick}>팔로잉 12</Follow>
-        <ProfileEdit>프로필 수정</ProfileEdit>
+        <Follow onClick={FollowerClick}>팔로워 {User.follower}</Follow>
+        <Follow onClick={FollowingClick}>팔로잉 {User.following}</Follow>
+        <Link to="/profile">
+          <ProfileEdit>프로필 수정</ProfileEdit>
+        </Link>
       </FollowProfileEditContainer>
     </ProfileContainer>
   );

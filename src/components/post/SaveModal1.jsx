@@ -1,57 +1,32 @@
 import styled from 'styled-components';
 import colors from '../../styles/colors';
 import AddButton from '../../assets/icon/AddButton';
-import userImg from '../../assets/dummy/IMG_0562.jpg';
+import FolderImg1 from './FolderImg1';
+import PostTour from '../../api/PostTour';
 
-function SaveModal1({ Event }) {
+function SaveModal1({ Event1, Event2, Event3, SaveFolder, tourId }) {
   return (
     <Container>
       <Title>
         저장 <FolderTitle>모든 폴더</FolderTitle>
       </Title>
       <FolderContainer>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
-        <Folder>
-          <FolderImg src={userImg} alt="userImg" />
-          <FolderName>방문예정 카페 모음방문예정 카페 모음 방문예정 카페 모음방문예정 카페 모음</FolderName>
-        </Folder>
+        {SaveFolder.map((data, index) => (
+          <Folder
+            onClick={() => {
+              Event1();
+              Event3();
+              PostTour(data.id, tourId);
+            }}
+          >
+            <FolderImgContainer>
+              <FolderImg1 />
+            </FolderImgContainer>
+            <FolderName key={index}>{data.name}</FolderName>
+          </Folder>
+        ))}
       </FolderContainer>
-      <FolderAddButton onClick={Event}>
+      <FolderAddButton onClick={Event2}>
         <AddButton />
         폴더 만들기
       </FolderAddButton>
@@ -121,11 +96,13 @@ const Folder = styled.div`
   cursor: pointer;
 `;
 
-const FolderImg = styled.img`
+const FolderImgContainer = styled.div`
   width: 30px;
   height: 30px;
-  border-radius: 5px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const FolderName = styled.div`
   max-width: 135px;

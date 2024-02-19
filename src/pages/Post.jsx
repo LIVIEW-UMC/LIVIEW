@@ -1,16 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import colors from '../styles/colors';
 import TitleArea from '../components/post/TitleArea';
 import PostArea from '../components/post/PostArea';
 import SaveModal1 from '../components/post/SaveModal1';
 import SaveModal2 from '../components/post/SaveModal2';
 import MapArea from '../components/post/MapArea';
+import GetSaveFolder from '../api/GetSaveFolder';
+import GetUser from '../api/GetUser';
+import GetTourDetail from '../api/GetTourDetail';
 
 function Post() {
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  const handlePrevSlide = () => {
+    setSlideIndex((prevIndex) => prevIndex - 1);
+  };
+
+  const handleNextSlide = () => {
+    setSlideIndex((prevIndex) => prevIndex + 1);
+  };
   const [modal1, setModal1] = useState(false);
   const [modal2, setModal2] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [SaveFolder, setSaveFolder] = useState([]);
+  const [TourDetail, setTourDetail] = useState([]);
+  const [User, setUser] = useState([]);
+
+  const [PostError, setPostError] = useState('');
+  const { tourId } = useParams();
+
+  useEffect(() => {
+    GetUser().then((result) => {
+      setUser(result);
+    });
+    GetTourDetail(tourId).then((result) => {
+      setTourDetail(result);
+    });
+  }, []);
+
+  useEffect(() => {
+    GetSaveFolder().then((result) => {
+      setSaveFolder(result);
+    });
+  }, [PostError]);
 
   useEffect(() => {
     let timer;
@@ -30,29 +64,77 @@ function Post() {
     setVisible(true);
   };
 
+  let TourData = {
+    tourId: null,
+    title: null,
+    contents: null,
+    hashtag: [],
+    imgList: [
+      {
+        createdAt: null,
+        updatedAt: null,
+        id: null,
+        imageUrl: null,
+        imageLocation: null,
+        date: null,
+        latitude: null,
+        longitude: null,
+        thumbnail: null,
+      },
+    ],
+  };
+  let thumbnailDate = {
+    createdAt: null,
+    updatedAt: null,
+    id: null,
+    imageUrl: null,
+    imageLocation: null,
+    date: null,
+    latitude: null,
+    longitude: null,
+    thumbnail: null,
+  };
+  let metadataList = [{ latitude: null, longitude: null, title: null }];
+  if (!(TourDetail.length === 0)) {
+    TourData = TourDetail;
+    const filteredItem = TourDetail.imgList.filter((item) => item.thumbnail === true);
+    thumbnailDate = filteredItem.length > 0 ? filteredItem[0] : {};
+    metadataList = TourDetail.imgList.map((data) => ({ latitude: data.latitude, longitude: data.longitude, title: data.imageLocation }));
+  }
+
+  if (TourDetail.length === 0) {
+    return null;
+  }
   return (
     <Container>
       <Map>
-        <MapArea />
+        <MapArea metadataList={metadataList} slideIndex={slideIndex} />
       </Map>
       <CommentContainer>
-        <TitleArea Event={() => setModal1((prevState) => !prevState)} />
-        <PostArea />
-        {modal1 && <SaveModal1 Event={() => setModal2(true)} />}
+        <TitleArea Event={() => setModal1((prevState) => !prevState)} User={User} TourData={TourData} thumbnailDate={thumbnailDate} />
+        <PostArea User={User} TourData={TourData} slideIndex={slideIndex} handlePrevSlide={handlePrevSlide} handleNextSlide={handleNextSlide} />
+        {modal1 && (
+          <SaveModal1
+            Event1={() => setModal1((prevState) => !prevState)}
+            Event2={() => setModal2(true)}
+            Event3={handleButtonClick}
+            SaveFolder={SaveFolder}
+            tourId={tourId}
+          />
+        )}
       </CommentContainer>
       {modal2 && (
         <ModalWrapperr
           onClick={(event) => {
             if (event.target === event.currentTarget) {
-              // 클릭된 요소가 ModalWrapper인 경우에만 setModal2(false) 실행
               setModal2(false);
             }
           }}
         >
-          <SaveModal2 Event1={() => setModal2(false)} Event2={handleButtonClick} />
+          <SaveModal2 Event1={() => setModal2(false)} Event2={handleButtonClick} Event3={(e) => setPostError(e)} />
         </ModalWrapperr>
       )}
-      <CompleteModal visible={visible}>마이페이지에 저장됨</CompleteModal>
+      <CompleteModal visible={visible}>{PostError === 'error' ? '같은 이름의 폴더가 존재합니다' : '마이페이지에 저장됨'}</CompleteModal>
     </Container>
   );
 }
@@ -67,7 +149,6 @@ const Map = styled.div`
   height: 849px;
   display: flex;
   align-items: center;
-  background-color: red;
 `;
 
 const CommentContainer = styled.div`

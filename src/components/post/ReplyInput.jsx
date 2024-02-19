@@ -1,16 +1,15 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
-import ImageFile from '../../assets/icon/ImageFile';
-import Emoji from '../../assets/icon/Emoji';
+
 import colors from '../../styles/colors';
 import userImg from '../../assets/dummy/recent/Ellipse 392 (11).png';
 
 function ReplyInput({ Event1 }) {
-  const [comment, setComment] = useState(''); // 기본값으로 설정
+  const [comment, setComment] = useState('');
   const textarea = useRef();
 
   const handleResizeHeight = () => {
-    textarea.current.style.height = 'auto'; // height 초기화
+    textarea.current.style.height = 'auto';
     textarea.current.style.height = `${textarea.current.scrollHeight}px`;
   };
   return (
@@ -29,8 +28,6 @@ function ReplyInput({ Event1 }) {
               handleResizeHeight();
             }}
           />
-          <Emoji />
-          <ImageFile />
         </InputContainer>
       </UserImgInputContainer>
       <CommemtButton onClick={Event1}>취소</CommemtButton>
@@ -78,7 +75,7 @@ const CommemtInput = styled.textarea`
   line-height: 15px;
   letter-spacing: 0;
   text-align: left;
-  width: 465px;
+  width: 100%;
   max-height: 60px;
   padding: 0px;
   resize: none;

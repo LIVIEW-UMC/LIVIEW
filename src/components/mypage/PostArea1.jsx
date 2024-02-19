@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SortButton from '../../assets/icon/SortButton';
 import SortModal from './SortModal';
 
-function PostArea1() {
+function PostArea1({ Event, Sort }) {
   const [areaClicked, setAreaClicked] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function PostArea1() {
       }}
     >
       <SortButton />
-      {areaClicked ? <SortModal Name="exclude-div" /> : null}
+      {areaClicked ? <SortModal Name="exclude-div" Event={Event} Sort={Sort} /> : null}
     </Container>
   );
 }

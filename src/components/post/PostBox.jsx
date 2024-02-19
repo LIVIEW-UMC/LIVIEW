@@ -1,48 +1,69 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
 import Review from './Review';
 import NextSlide from '../../assets/icon/NextSlide';
 import PrevSlide from '../../assets/icon/PrevSlide';
 
-const imageContext = require.context('../../assets/dummy', false, /\.(jpg)$/);
+function DateCal(TourDate) {
+  const date = new Date(TourDate);
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const localDate = date.toLocaleDateString(undefined, options);
+  return localDate;
+}
+function TimeCal(TourDate) {
+  const date = new Date(TourDate);
 
-function PostBox() {
-  const images = imageContext.keys().map(imageContext);
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
 
-  const [slideIndex, setSlideIndex] = useState(0);
+  let period = '오전';
+  if (hours >= 12) {
+    period = '오후';
+    if (hours > 12) {
+      hours -= 12;
+    }
+  }
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
 
-  const handlePrevSlide = () => {
-    setSlideIndex((prevIndex) => prevIndex - 1);
-  };
-
-  const handleNextSlide = () => {
-    setSlideIndex((prevIndex) => prevIndex + 1);
-  };
+  const localTime = `${period}  ${hours}:${minutes}`;
+  return localTime;
+}
+function PostBox({ TourData, slideIndex, handlePrevSlide, handleNextSlide }) {
   return (
     <Container>
       <PostContainer>
         <StyledImageContainer slideIndex={slideIndex}>
-          {images.map((image, index) => (
+          {TourData.imgList.map((data, index) => (
             <div>
               <StyledImageItems>
-                <StyledImage key={index + 1} src={image} alt={`img-${index}`} />
+                <StyledImage key={index + 1} src={data.imageUrl} alt={`img-${index}`} />
               </StyledImageItems>
               <PostInfoContainer>
                 <PostInfo>
-                  CAMERA <PostInfoComment>iPhone 12</PostInfoComment>
+                  LOCATION
+                  <PostInfoComment>
+                    {data.imageLocation === null ? null : data.imageLocation.replace(/<b>/g, '').replace(/<\/b>/g, '')}
+                  </PostInfoComment>
                 </PostInfo>
                 <PostInfo>
                   EXIF <PostInfoComment>0232</PostInfoComment>
                 </PostInfo>
                 <PostInfo>
-                  DATE <PostInfoComment>2024. 01. 16</PostInfoComment>
+                  DATE <PostInfoComment>{DateCal(data.date)}</PostInfoComment>
                 </PostInfo>
                 <PostInfo>
-                  TIME <PostInfoComment>오전&nbsp;&nbsp;10:20</PostInfoComment>
+                  TIME <PostInfoComment>{TimeCal(data.date)}</PostInfoComment>
                 </PostInfo>
                 <PostInfo>
-                  LATE, LONG <PostInfoComment>33; 11; 51.2491&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;126; 17; 40.1791</PostInfoComment>
+                  LATE, LONG
+                  <PostInfoComment>
+                    {data.latitude}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{data.longitude}
+                  </PostInfoComment>
                 </PostInfo>
               </PostInfoContainer>
             </div>
@@ -54,16 +75,17 @@ function PostBox() {
             <PrevSlide />
           </SlideButton>
         )}
-        {!(slideIndex === images.length - 1) && (
+        {!(slideIndex === TourData.imgList.length - 1) && (
           <SlideButton onClick={handleNextSlide} Right={'10px'}>
             <NextSlide />
           </SlideButton>
         )}
-        <Review />
+        <Review contents={TourData.contents} />
       </PostContainer>
     </Container>
   );
 }
+
 const Container = styled.div`
   width: 840px;
   min-height: 514px;

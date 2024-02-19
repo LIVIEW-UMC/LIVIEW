@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 import OpenArrow from '../../assets/icon/OpenArrow';
 
-function Review() {
+function Review({ contents }) {
   const [open, setOpen] = useState(false);
 
   const OpenClikck = () => {
@@ -13,22 +13,7 @@ function Review() {
     <ReviewContainer>
       <Title>후기글</Title>
       <ReviewComment Open={open}>
-        <Comment Open={open}>
-          {open &&
-            `auto: 요소에 정의된 이벤트가 적용됩니다. 이것이 기본값입니다.none: 요소에 어떤 이벤트도 적용되지 않습니다. 요소 위를 마우스가 지나가거나클릭해도 아무런 반응이 없습니다. inherit: 부모 요소의 pointer-events 값을 상속받습니다. initial: 기본값으로 설정합니다. unset: 상속된 값이
-            있다면 그 값을 사용하고, 그렇지 않은 경우 initial을 사용합니다. 위에서 언급한 pointer-events: none;은 해당 요소에 마우스 이벤트를 적용하지
-            않음을 의미합니다. 따라서 커서 클릭이나 다른 마우스 이벤트를 무시하도록 할 수 있습니다. 이를 활용하여 사용자가 Comment 컴포넌트를 클릭해도
-            아무런 반응이 없도록 설정할 수 있습니다. auto: 요소에 정의된 이벤트가 적용됩니다. 이것이 기본값입니다. none: 요소에 어떤 이벤트도 적용되지
-            않습니다. 요소 위를 마우스가 지나가거나 클릭해도 아무런 반응이 없습니다. inherit: 부모 요소의 pointer-events 값을 상속받습니다. initial:
-            기본값으로 설정합니다. unset: 상속된 값이 있다면 그 값을 사용하고, 그렇지 않은 경우 initial을 사용합니다. 위에서 언급한 pointer-events:
-            none;은 해당 요소에 마우스 이벤트를 적용하지 않음을 의미합니다. 따라서 커서 클릭이나 다른 마우스 이벤트를 무시하도록 할 수 있습니다. 이를
-            활용하여 사용자가 Comment 컴포넌트를 클릭해도 아무런 반응이 없도록 설정할 수 있습니다. auto: 요소에 정의된 이벤트가 적용됩니다. 이것이
-            기본값입니다. none: 요소에 어떤 이벤트도 적용되지 않습니다. 요소 위를 마우스가 지나가거나 클릭해도 아무런 반응이 없습니다. inherit: 부모
-            요소의 pointer-events 값을 상속받습니다. initial: 기본값으로 설정합니다. unset: 상속된 값이 있다면 그 값을 사용하고, 그렇지 않은 경우
-            initial을 사용합니다. 위에서 언급한 pointer-events: none;은 해당 요소에 마우스 이벤트를 적용하지 않음을 의미합니다. 따라서 커서 클릭이나
-            다른 마우스 이벤트를 무시하도록 할 수 있습니다. 이를 활용하여 사용자가 Comment 컴포넌트를 클릭해도 아무런 반응이 없도록 설정할 수
-            있습니다.`}
-        </Comment>
+        <Comment Open={open}>{open && contents}</Comment>
       </ReviewComment>
       <ReviewOpenContainer onClick={OpenClikck}>
         <OpenArrow />
@@ -49,7 +34,8 @@ const ReviewContainer = styled.div`
 
 const ReviewComment = styled.div`
   width: 100%;
-  height: ${({ Open }) => (Open ? '200px' : '0px')};
+  height: ${({ Open }) => (Open ? 'auto' : '0px')};
+  max-height: 200px;
   transition-property: all;
   transition-duration: 0.5s;
 `;
@@ -58,8 +44,9 @@ const Comment = styled.div`
   word-break: break-all;
   white-space: pre-wrap;
   width: 750px;
-  height: ${({ Open }) => (Open ? '200px' : '0px')};
-  margin: ${({ Open }) => (Open ? '45px' : '0px')} 45px;
+  height: ${({ Open }) => (Open ? 'auto' : '0px')};
+  max-height: 200px;
+  margin: ${({ Open }) => (Open ? '45px 45px 0px 45px' : '0px 45px')};
   opacity: ${({ Open }) => (Open ? 1 : 0)};
   transition-property: all;
   transition-duration: 0.5s;

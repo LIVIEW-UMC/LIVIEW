@@ -1,73 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SettingsSidebar from '../SettingsSidebar';
 import RecordListItem from './RecordListItem';
-import dummy1 from '../../../assets/dummy/dummy1.jpg';
+// import dummy1 from '../../../assets/dummy/dummy1.jpg';
 import colors from '../../../styles/colors';
 
 function RecordPage() {
-  const [recordItems, setRecordItems] = useState([
-    {
-      id: 1,
-      imgSrc: dummy1,
-      name: '부산맛집사진 동선',
-      date: '2024년 01월 08일 ~ 2024년 01월 12일',
-      hits: '128회',
-      good: '31회',
-      comment: '100개',
-      isChecked: false,
-    },
-    {
-      id: 2,
-      imgSrc: dummy1,
-      name: '서울 1박 2일 여행 코스',
-      date: '2024년 01월 08일 ~ 2024년 01월 12일',
-      hits: '128회',
-      good: '31회',
-      comment: '7개',
-      isChecked: false,
-    },
-    {
-      id: 3,
-      imgSrc: dummy1,
-      name: '사케 탐방 동선',
-      date: '2024년 01월 08일 ~ 2024년 01월 12일',
-      hits: '128회',
-      good: '31회',
-      comment: '7개',
-      isChecked: false,
-    },
-    {
-      id: 4,
-      imgSrc: dummy1,
-      name: '일본여행 코스',
-      date: '2024년 01월 08일 ~ 2024년 01월 12일',
-      hits: '128회',
-      good: '31회',
-      comment: '7개',
-      isChecked: false,
-    },
-    {
-      id: 5,
-      imgSrc: dummy1,
-      name: '빌딩내 미끄럼틀',
-      date: '2024년 01월 08일 ~ 2024년 01월 12일',
-      hits: '128회',
-      good: '31회',
-      comment: '7개',
-      isChecked: false,
-    },
-    {
-      id: 6,
-      imgSrc: dummy1,
-      name: '부산맛집사진 동선',
-      date: '2024년 01월 08일 ~ 2024년 01월 12일',
-      hits: '128회',
-      good: '31회',
-      comment: '7개',
-      isChecked: false,
-    },
-  ]);
+  const [recordItems, setRecordItems] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://jin-myserver.shop/community/mypost', {
+        method: 'GET',
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyODY5MDYsImV4cCI6MTcwODI4NzUwNn0.a6BqvGvGjf8vvYhU4cPmxJGQLK1xM66cmEMyMK_GkzU',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('서버 응답 실패');
+      }
+
+      const data = await response.json();
+      setRecordItems(data);
+    } catch (error) {
+      console.error('데이터를 가져오는 중 오류 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const toggleVisibility = async (postId, visibility) => {
+    try {
+      await fetch(`https://jin-myserver.shop/community/post/${postId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyODY5MDYsImV4cCI6MTcwODI4NzUwNn0.a6BqvGvGjf8vvYhU4cPmxJGQLK1xM66cmEMyMK_GkzU',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ visibility }),
+      });
+      setRecordItems((prevState) => prevState.map((item) => (item.id === postId ? { ...item, visibility } : item)));
+    } catch (error) {
+      console.error('공개/비공개 처리 중 오류 발생:', error);
+    }
+  };
 
   return (
     <All>
@@ -88,7 +70,7 @@ function RecordPage() {
         <Divider />
         <RecordList>
           {recordItems.map((item) => (
-            <RecordListItem key={item.id} item={item} setRecordItems={setRecordItems} />
+            <RecordListItem key={item.tourId} item={item} toggleVisibility={toggleVisibility} />
           ))}
         </RecordList>
       </Container>
