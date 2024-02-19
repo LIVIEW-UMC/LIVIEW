@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import CreateMapSidebar from '../components/createmap/CreateMapSidebar';
 import UploadContent from '../components/createmap/UploadContent';
 
 function CreateMap() {
+  const [mapItems, setMapItems] = useState([]);
+
   return (
     <MainContainer>
-      <CreateMapSidebar />
-      <UploadContent />
+      <CreateMapSidebar mapItems={mapItems} setMapItems={setMapItems} />
+      <UploadContent mapItems={mapItems} setMapItems={setMapItems} />
     </MainContainer>
   );
 }
