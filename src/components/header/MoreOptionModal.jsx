@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react'; // useState와 useEffect 훅 임포트
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import colors from '../../styles/colors';
@@ -6,6 +7,21 @@ import profile from '../../assets/dummy/IMG_2918.jpg';
 
 function MoreOptionModal({ setMoreOptionModalOpen }) {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    axios({
+      url: 'https://jin-myserver.shop/users',
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        'Content-type': 'application/json',
+      },
+    }).then((response) => {
+      setUserData(response.data);
+    });
+  }, []);
+
   const logoutClick = () => {
     axios({
       url: 'https://jin-myserver.shop/auth/logout',
@@ -27,15 +43,17 @@ function MoreOptionModal({ setMoreOptionModalOpen }) {
     >
       <Login>
         <Title>현재 로그인 계정</Title>
-        <Link to="/mypage">
-          <AccountInfo>
-            <Profile src={profile} alt="프로필 사진" />
-            <UserInfo>
-              <UserName>이진선</UserName>
-              <UserEmail>l50227697@gmail.com</UserEmail>
-            </UserInfo>
-          </AccountInfo>
-        </Link>
+        {userData && (
+          <Link to="/mypage">
+            <AccountInfo>
+              <Profile src={userData.imgUrl || profile} alt="프로필 사진" />
+              <UserInfo>
+                <UserName>{userData.name}</UserName>
+                <UserEmail>{userData.email}</UserEmail>
+              </UserInfo>
+            </AccountInfo>
+          </Link>
+        )}
         <Logout onClick={logoutClick}>로그아웃</Logout>
       </Login>
       <Title>설정 더보기</Title>
