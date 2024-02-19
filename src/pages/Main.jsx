@@ -1,12 +1,10 @@
 import styled from 'styled-components';
-import Initial from '../components/main/Initial';
-import Login from '../components/login/login';
+import TabNavigator from '../components/main/TabNavigator';
 
 function Main() {
   return (
     <MainContainer>
-      <Initial />
-      <Login />
+      <TabNavigator />
     </MainContainer>
   );
 }
