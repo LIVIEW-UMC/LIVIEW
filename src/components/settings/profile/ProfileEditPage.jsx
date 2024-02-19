@@ -21,7 +21,8 @@ const ProfileEditPage = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjExLCJpYXQiOjE3MDgyNzY2MjksImV4cCI6MTcwODI3NzIyOX0.CZFrBDJRdwKMwArVo9BQzlPKBaREbW44wtntHlqsmd8',
           },
         });
         if (!response.ok) {
@@ -75,19 +76,21 @@ const ProfileEditPage = () => {
 
   const handleModify = () => {
     if (isModified) {
-      // 수정된 데이터가 있을 때만 서버로 데이터를 전송
+      const formData = new FormData();
+      formData.append('file', profileImage);
+
+      const userProfileData = {
+        introduction,
+      };
+
+      formData.append('userProfile', JSON.stringify(userProfileData));
+
       fetch('https://jin-myserver.shop/users/myInfo', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          Authorization: 'Bearer YOUR_ACCESS_TOKEN',
         },
-        body: JSON.stringify({
-          userProfile: {
-            introduction,
-          },
-          file: profileImage !== null ? profileImage : undefined,
-        }),
+        body: formData,
       })
         .then((response) => {
           if (!response.ok) {
