@@ -14,6 +14,8 @@ import GetTourDetail from '../api/GetTourDetail';
 import GetMyPost from '../api/GetMyPost';
 import GetPostId from '../api/GetPostId';
 import GetPostLike from '../api/GetPostLike';
+import GetPostUserId from '../api/GetPostUserId';
+import GetOtherUserInfo from '../api/GetOtherUserInfo';
 
 function Post() {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -30,11 +32,14 @@ function Post() {
   const [visible, setVisible] = useState(false);
   const [SaveFolder, setSaveFolder] = useState([]);
   const [MyFolder, setMyFolder] = useState([]);
-  const [PostLike, setPostLike] = useState('false');
+  const [PostLike, setPostLike] = useState(false);
 
   const [TourDetail, setTourDetail] = useState([]);
   const [PostId, setPostId] = useState('');
+  const [PostUserId, setPostUserId] = useState('');
   const [User, setUser] = useState([]);
+  const [OtherUserInfo, setOtherUserInfo] = useState([]);
+
   const [MyPost, setMyPost] = useState([]);
 
   const [PostError, setPostError] = useState('');
@@ -50,10 +55,21 @@ function Post() {
     GetPostId(tourId).then((result) => {
       setPostId(result);
     });
+    GetPostUserId(tourId).then((result) => {
+      setPostUserId(result);
+    });
     GetMyPost().then((result) => {
       setMyPost(result);
     });
   }, []);
+
+  useEffect(() => {
+    if (!(PostUserId === '')) {
+      GetOtherUserInfo(PostUserId).then((result) => {
+        setOtherUserInfo(result);
+      });
+    }
+  }, [PostUserId]);
 
   useEffect(() => {
     GetPostLike(PostId).then((result) => {
@@ -143,7 +159,7 @@ function Post() {
         <MapArea metadataList={metadataList} slideIndex={slideIndex} />
       </Map>
       <CommentContainer>
-        <TitleArea Event={() => setModal1((prevState) => !prevState)} User={User} TourData={TourData} thumbnailDate={thumbnailDate} />
+        <TitleArea Event={() => setModal1((prevState) => !prevState)} User={OtherUserInfo} TourData={TourData} thumbnailDate={thumbnailDate} />
         <PostArea
           User={User}
           TourData={TourData}

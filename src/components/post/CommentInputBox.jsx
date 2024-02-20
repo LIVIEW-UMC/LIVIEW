@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
 import CommentInput from './CommentInput';
@@ -7,8 +7,12 @@ import FilledHeart from '../../assets/icon/FilledHeart';
 import PostPostLike from '../../api/PostPostLike';
 
 function CommentInputBox({ User, PostLike, PostId }) {
-  const [like, setLike] = useState(PostLike);
   const likeNum = 0;
+  const [like, setLike] = useState(PostLike === true);
+
+  useEffect(() => {
+    setLike(PostLike === true);
+  }, [PostLike]);
 
   return (
     <Container>
@@ -23,7 +27,7 @@ function CommentInputBox({ User, PostLike, PostId }) {
           >
             {like ? <FilledHeart /> : <EmptyHeart />}
           </LikeContainer>
-          <Comment Size="13px">{likeNum}</Comment>
+          <Comment Size="13px">{like ? likeNum + 1 : likeNum}</Comment>
         </ReplyLikeContainer>
       </CommentNumLikeContainer>
       <CommentInput User={User} />
